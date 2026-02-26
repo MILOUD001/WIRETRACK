@@ -101,16 +101,6 @@ body::before{
 .login-brand-sub{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
 .login-brand-company{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:1px;margin-top:2px;opacity:.7}
 
-/* Supabase panel */
-.sb-panel{
-  background:var(--bg3);border:1px solid var(--border2);
-  border-radius:12px;padding:16px;margin-bottom:20px;
-  display:none;
-}
-.sb-panel.open{display:block}
-.sb-panel-title{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
-.sb-panel-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;line-height:1}
-.sb-status{font-family:'JetBrains Mono',monospace;font-size:10px;margin-top:8px;min-height:14px}
 
 /* Form elements */
 .f-group{margin-bottom:16px}
@@ -601,26 +591,6 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
       </div>
     </div>
 
-    <!-- Supabase config panel — only shown when not yet configured -->
-    <div class="sb-panel" id="sbPanel">
-      <div class="sb-panel-title">
-        ⚙ Supabase Configuration
-        <button class="sb-panel-close" onclick="document.getElementById('sbPanel').classList.remove('open')">×</button>
-      </div>
-      <div class="f-group" style="margin-bottom:10px">
-        <label class="f-label">Project URL</label>
-        <input class="f-input" id="sbUrl" type="url" placeholder="https://xxxx.supabase.co">
-      </div>
-      <div class="f-group" style="margin-bottom:10px">
-        <label class="f-label">Anon / Public Key</label>
-        <input class="f-input" id="sbKey" type="text" placeholder="eyJhbGciOiJIUzI1NiIs...">
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="saveSupabaseConfig()">Save &amp; Connect</button>
-        <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="useDemoMode()">Demo Mode</button>
-      </div>
-      <div id="sbStatus" class="sb-status"></div>
-    </div>
 
     <!-- Alerts -->
     <div class="alert alert-err" id="loginErr">
@@ -703,8 +673,7 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
     </button>
 
     <div class="login-footer">
-      WireTrack V.4 · Miloud Ezzaky Industry<br>
-      <a class="f-link" style="font-size:11px" id="sbConfigLink" onclick="event.preventDefault();toggleSbPanel()">⚙ Configure Supabase database</a>
+      WireTrack V.4 · Miloud Ezzaky Industry
     </div>
   </div>
 </div>
@@ -865,10 +834,21 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 
 <script>
 'use strict';
+// ╔══════════════════════════════════════════════════════╗
+// ║  WIRETRACK SETUP — PASTE YOUR SUPABASE CREDENTIALS  ║
+// ║  Find SUPABASE_URL and SUPABASE_KEY below and fill  ║
+// ║  them in. Users will never see a config panel.      ║
+// ╚══════════════════════════════════════════════════════╝
 // ════════════════════════════════
 // STATE
 // ════════════════════════════════
 var _sb = null, _user = null, _demo = false;
+// ════════════════════════════════
+// SUPABASE CREDENTIALS
+// Paste your Supabase URL and anon key here once — all users share them
+// ════════════════════════════════
+var SUPABASE_URL = 'https://kvdykwuccqcsaedmhndb.supabase.co';   // e.g. 'https://abcxyz.supabase.co'
+var SUPABASE_KEY = 'sb_publishable_NL-3xOQLa_vLIyJ4xF-q_g_i86mXl3s';   // e.g. 'eyJhbGciOiJIUzI1NiIs...'
 var SB_URL_KEY = 'wt_sb_url', SB_KEY_KEY = 'wt_sb_key';
 
 var refs       = {};   // projectId → [{id,refNum,extra,at}]
@@ -930,54 +910,24 @@ function initSB(url,key){
     return true;
   }catch(e){console.error(e);return false;}
 }
-function toggleSbPanel(){
-  document.getElementById('sbPanel').classList.toggle('open');
-}
+function toggleSbPanel(){ /* removed */ }
 function saveSupabaseConfig(){
-  var url=document.getElementById('sbUrl').value.trim();
-  var key=document.getElementById('sbKey').value.trim();
-  var st=document.getElementById('sbStatus');
-  if(!url||!key){st.style.color='var(--red)';st.textContent='⚠ Enter both URL and Key.';return;}
-  localStorage.setItem(SB_URL_KEY,url);
-  localStorage.setItem(SB_KEY_KEY,key);
-  if(initSB(url,key)){
-    st.style.color='var(--green)';st.textContent='✓ Connected!';
-    // Hide the config link permanently after first successful connect
-    localStorage.setItem('wt_sb_configured','1');
-    setTimeout(function(){
-      document.getElementById('sbPanel').classList.remove('open');
-      updateConfigLinkVisibility();
-    },1000);
-  }else{
-    st.style.color='var(--red)';st.textContent='✗ Connection failed. Check URL and Key.';
+  var url = SUPABASE_URL || '';
+  var key = SUPABASE_KEY || '';
+  if(url && key){
+    localStorage.setItem(SB_URL_KEY, url);
+    localStorage.setItem(SB_KEY_KEY, key);
+    initSB(url, key);
   }
 }
 function loadSavedConfig(){
   try{
-    var url=localStorage.getItem(SB_URL_KEY);
-    var key=localStorage.getItem(SB_KEY_KEY);
-    if(url&&key){
-      document.getElementById('sbUrl').value=url;
-      document.getElementById('sbKey').value=key;
-      if(initSB(url,key)){
-        document.getElementById('sbPanel').classList.remove('open');
-        document.getElementById('sbStatus').style.color='var(--green)';
-        document.getElementById('sbStatus').textContent='✓ Connected';
-        localStorage.setItem('wt_sb_configured','1');
-      }
-    } else {
-      // First time — no config saved yet — show panel automatically
-      document.getElementById('sbPanel').classList.add('open');
-    }
-    updateConfigLinkVisibility();
-  }catch(e){}
+    var url = SUPABASE_URL || localStorage.getItem(SB_URL_KEY) || '';
+    var key = SUPABASE_KEY || localStorage.getItem(SB_KEY_KEY) || '';
+    if(url && key){ initSB(url, key); }
+  }catch(e){ console.warn('loadSavedConfig:',e); }
 }
-// Show/hide the "Configure Supabase" link based on whether it's already set up
-function updateConfigLinkVisibility(){
-  var configured=localStorage.getItem('wt_sb_configured')==='1';
-  var link=document.getElementById('sbConfigLink');
-  if(link)link.style.display=configured?'none':'inline';
-}
+function updateConfigLinkVisibility(){ /* removed */ }
 
 // Tab switching: Sign In / Create Account
 var _authMode='signin';
@@ -1039,9 +989,13 @@ async function doLogin(){
   }
   if(!ok)return;
   if(!_sb){
-    showLoginAlert('err','No database connected. Configure Supabase or use Demo Mode.');
-    document.getElementById('sbPanel').classList.add('open');
-    updateConfigLinkVisibility();
+    var hasHardcoded = !!(SUPABASE_URL && SUPABASE_KEY);
+    if(hasHardcoded){
+      showLoginAlert('err','Database connection error. Please try again.');
+    } else {
+      showLoginAlert('err','No database connected. Contact your administrator or use Demo Mode.');
+      /* panel removed */
+        }
     return;
   }
   setLoading(true);
@@ -1083,8 +1037,14 @@ async function doRegister(){
   }
   if(!ok)return;
   if(!_sb){
-    showLoginAlert('err','No database connected. Configure Supabase first.');
-    document.getElementById('sbPanel').classList.add('open');return;
+    var hasHardcoded2 = !!(SUPABASE_URL && SUPABASE_KEY);
+    if(hasHardcoded2){
+      showLoginAlert('err','Database connection error. Please try again.');
+    } else {
+      showLoginAlert('err','No database connected. Contact your administrator.');
+      /* panel removed */
+    }
+    return;
   }
   setLoading(true);
   try{
@@ -1930,7 +1890,6 @@ function init(){
   // Init auth tab state
   switchTab('signin');
   setTimeout(initAuthSlider,50);
-  updateConfigLinkVisibility();
 }
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
 </script>
