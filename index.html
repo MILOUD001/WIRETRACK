@@ -1341,13 +1341,14 @@ async function dbSaveRef(pid,refObj){
   }catch(e){console.warn('dbSaveRef:',e);}
 }
 async function dbSaveOrder(order){
-  if(!_sb||_demo)return;
+  if(!_sb||_demo)return null;
   setSyncStatus('syncing');
   try{
     var r=await _sb.from('special_orders').upsert({id:order.id,ref_code:order.ref,project_name:order.proj,wire_type:order.type,wire_name:order.wire,quantity:order.qty,order_from:order.from,order_to:order.to,destination:order.go,created_at:order.at,created_by:order.by});
     if(r.error)throw r.error;
     setSyncStatus('synced');
-  }catch(e){console.warn('dbSaveOrder:',e);setSyncStatus('offline');}
+    return r.data;
+  }catch(e){console.warn('dbSaveOrder:',e);setSyncStatus('offline');return null;}
 }
 async function dbDeleteOrder(id){
   if(!_sb||_demo)return;
@@ -1763,7 +1764,7 @@ function selWt(mode,type){
   });
 }
 
-function submitOrder(){
+async function submitOrder(){
   var ref=document.getElementById('o_ref').value.trim();
   var proj=document.getElementById('o_proj').value.trim();
   var type=document.getElementById('o_type').value;
@@ -1785,9 +1786,62 @@ function submitOrder(){
   if(!type){toast('Please select a wire type','error');return;}
   if(errs.length){errs.forEach(function(id){var el=document.getElementById(id);if(el)el.classList.add('err');});toast('Fill in all required fields','error');return;}
 
-  var newOrd={id:'ord'+nOrdId++,ref:ref,proj:proj,type:type,wire:wire,qty:parseInt(qty),from:from,to:to,go:go,at:new Date().toISOString(),by:_user?_user.name:'Unknown'};
-  orders.unshift(newOrd);
-  dbSaveOrder(newOrd);
+  // Create order object WITHOUT id first
+  var orderData = {
+    ref: ref,
+    proj: proj,
+    type: type,
+    wire: wire,
+    qty: parseInt(qty),
+    from: from,
+    to: to,
+    go: go,
+    at: new Date().toISOString(),
+    by: _user ? _user.name : 'Unknown'
+  };
+
+  // If using Supabase, let it generate the ID
+  if(_sb && !_demo) {
+    try {
+      setSyncStatus('syncing');
+      var result = await _sb.from('special_orders').insert({
+        ref_code: ref,
+        project_name: proj,
+        wire_type: type,
+        wire_name: wire,
+        quantity: parseInt(qty),
+        order_from: from,
+        order_to: to,
+        destination: go,
+        created_at: orderData.at,
+        created_by: orderData.by
+      }).select();
+      
+      if(result.error) throw result.error;
+      
+      // Use the ID from Supabase
+      if(result.data && result.data[0]) {
+        var newOrd = {
+          id: result.data[0].id,
+          ...orderData
+        };
+        orders.unshift(newOrd);
+        setSyncStatus('synced');
+      }
+    } catch(e) {
+      console.warn('Error saving order to Supabase:', e);
+      setSyncStatus('error');
+      // Fallback to local ID if Supabase fails
+      var newOrd = {id:'ord'+nOrdId++, ...orderData};
+      orders.unshift(newOrd);
+      setTimeout(function(){setSyncStatus('synced');},2000);
+    }
+  } else {
+    // Demo mode - use local ID
+    var newOrd = {id:'ord'+nOrdId++, ...orderData};
+    orders.unshift(newOrd);
+  }
+  
   clearInterval(_tsInt);
   closeOverlay('newOrderOverlay');
   toast('Order submitted!','success');
@@ -2028,4 +2082,3 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 </script>
 </body>
 </html>
-
