@@ -776,7 +776,7 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 <div class="overlay" id="editOrderOverlay">
   <div class="modal">
     <div class="modal-hd">
-      <div><div class="modal-title">Edit Order <span style="color:var(--amber);font-size:11px;font-family:'JetBrains Mono',monospace">ADMIN</span></div><div class="modal-sub">Only admins can modify history</div></div>
+      <div><div class="modal-title">Edit Order <span style="color:var(--amber);font-size:11px;font-family:'JetBrains Mono',monospace">SUPER ADMIN</span></div><div class="modal-sub">Only ezzaky10mi@gmail.com can modify</div></div>
       <button class="modal-close" onclick="closeOverlay('editOrderOverlay')">×</button>
     </div>
     <div class="modal-body">
@@ -902,6 +902,14 @@ function isDesc(childId,ancId){
 var WT_LABEL = {simple:'SIMPLE',xe:'XE',sp:'SP',tw:'TWIST',mc:'MULTICORE',gs:'GRANDE SECTION'};
 var WT_CLASS = {simple:'w-simple',xe:'w-xe',sp:'w-sp',tw:'w-tw',mc:'w-mc',gs:'w-gs'};
 
+// =====================================================
+// SUPER ADMIN CHECK - Only ezzaky10mi@gmail.com is admin
+// =====================================================
+function isSuperAdmin() {
+    if (!_user) return false;
+    return _user.email === 'ezzaky10mi@gmail.com';
+}
+
 // ════════════════════════════════
 // SUPABASE
 // ════════════════════════════════
@@ -1005,7 +1013,11 @@ async function doLogin(){
     var r=await _sb.auth.signInWithPassword({email:email,password:pass});
     if(r.error)throw r.error;
     var u=r.data.user;
-    _user={id:u.id,email:u.email,name:(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0],role:(u.user_metadata&&u.user_metadata.role)||'operator'};
+    
+    // Set role based on email - only ezzaky10mi@gmail.com is admin
+    var role = (u.email === 'ezzaky10mi@gmail.com') ? 'admin' : 'operator';
+    
+    _user={id:u.id,email:u.email,name:(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0],role:role};
     showLoginAlert('ok','Welcome back, '+_user.name+'!');
     setTimeout(launchApp,700);
   }catch(err){
@@ -1053,7 +1065,7 @@ async function doRegister(){
     var r=await _sb.auth.signUp({
       email:email,
       password:pass,
-      options:{data:{full_name:name,role:'operator'}}
+      options:{data:{full_name:name}}
     });
     if(r.error)throw r.error;
     setLoading(false);
@@ -1063,6 +1075,7 @@ async function doRegister(){
       switchTab('signin');
     } else if(r.data&&r.data.session){
       var u=r.data.user;
+      // New users are always operators (only ezzaky10mi@gmail.com can be admin)
       _user={id:u.id,email:u.email,name:name,role:'operator'};
       showLoginAlert('ok','Account created! Welcome, '+name+'!');
       setTimeout(launchApp,700);
@@ -1074,7 +1087,7 @@ async function doRegister(){
 }
 function useDemoMode(){
   _demo=true;
-  _user={id:'demo',email:'demo@wiretrack.local',name:'Demo User',role:'admin'};
+  _user={id:'demo',email:'demo@wiretrack.local',name:'Demo User',role:'operator'}; // Demo mode is operator, not admin
   launchApp();
 }
 async function forgotPass(e){
@@ -1220,7 +1233,8 @@ function renderUserBox(){
   var box=document.getElementById('userBox');
   if(!_user){box.innerHTML='';return;}
   var ini=_user.name.slice(0,2).toUpperCase();
-  box.innerHTML='<div class="sb-avatar">'+ini+'</div><div style="flex:1;min-width:0"><div class="sb-user-name">'+_user.name+'</div><div class="sb-user-role">'+_user.role+(_demo?' · demo':'')+'</div></div><button class="btn-signout" onclick="doLogout()">Sign out</button>';
+  var roleDisplay = isSuperAdmin() ? 'SUPER ADMIN' : (_user.role === 'admin' ? 'ADMIN' : 'OPERATOR');
+  box.innerHTML='<div class="sb-avatar">'+ini+'</div><div style="flex:1;min-width:0"><div class="sb-user-name">'+_user.name+'</div><div class="sb-user-role">'+roleDisplay+(_demo?' · demo':'')+'</div></div><button class="btn-signout" onclick="doLogout()">Sign out</button>';
 }
 
 // ════════════════════════════════
@@ -1432,9 +1446,19 @@ function renderTopbar(){
       +'>'+c.label+'</span>';
   }).join('');
   var act='';
-  if(curView==='orders')act='<button class="btn btn-primary" onclick="openNewOrder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Order</button>';
-  else if(curRefId!==null)act='<button class="btn btn-success" onclick="triggerCkUpload('+curRefId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Checklist</button>';
-  else if(curProjId!==null&&!hasKids(curProjId))act='<button class="btn btn-success" onclick="triggerRefUpload('+curProjId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Excel</button>';
+  if(curView==='orders'){
+    act='<button class="btn btn-primary" onclick="openNewOrder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Order</button>';
+  } else if(curRefId!==null){
+    // Only super admin can import checklists
+    if(isSuperAdmin()) {
+      act='<button class="btn btn-success" onclick="triggerCkUpload('+curRefId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Checklist</button>';
+    }
+  } else if(curProjId!==null&&!hasKids(curProjId)){
+    // Only super admin can import Excel files
+    if(isSuperAdmin()) {
+      act='<button class="btn btn-success" onclick="triggerRefUpload('+curProjId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Excel</button>';
+    }
+  }
   document.getElementById('tbActions').innerHTML=act;
 }
 function buildCrumbs(){
@@ -1476,7 +1500,7 @@ function renderHome(vc){
       +'<div class="proj-ico '+(isP?'sub':'folder')+'"><svg viewBox="0 0 24 24" fill="none" stroke="'+(isP?'var(--cyan)':'var(--blue)')+'" stroke-width="1.8" width="17" height="17"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>'
       +'<div style="flex:1;min-width:0"><div class="proj-name">'+p.name+'</div><div class="proj-meta">'+(isP?kids(p.id).length+' sections':rc+' references')+'</div></div>'
       +'<div class="proj-actions">'
-      +(!isP?'<button class="icon-btn" onclick="event.stopPropagation();triggerRefUpload('+p.id+')" title="Import Excel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button>':'')
+      +(!isP && isSuperAdmin() ? '<button class="icon-btn" onclick="event.stopPropagation();triggerRefUpload('+p.id+')" title="Import Excel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button>' : '')
       +'<div class="arrow-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>'
       +'</div></div>';
   });
@@ -1495,7 +1519,8 @@ function renderChildren(vc){
     grid.innerHTML+='<div class="proj-card fade-in" style="animation-delay:'+i*25+'ms" onclick="gotoProj('+c.id+')">'
       +'<div class="proj-ico folder"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" width="17" height="17"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>'
       +'<div style="flex:1;min-width:0"><div class="proj-name">'+c.name+'</div><div class="proj-meta">'+rc+' references</div></div>'
-      +'<div class="proj-actions"><button class="icon-btn" onclick="event.stopPropagation();triggerRefUpload('+c.id+')" title="Import Excel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button>'
+      +'<div class="proj-actions">'
+      + (isSuperAdmin() ? '<button class="icon-btn" onclick="event.stopPropagation();triggerRefUpload('+c.id+')" title="Import Excel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button>' : '')
       +'<div class="arrow-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div></div>';
   });
 }
@@ -1561,9 +1586,9 @@ function renderChecklist(vc){
 
     +'<div class="filter-bar"><span class="filter-lbl">Type</span><div class="filter-grp">'
     +mkChip('all',ckFilt.type==='all','a-all',"setCkFilt('type','all')",'All',items.length)
-    +mkChip('xe', ckFilt.type==='xe', 'a-xe',"setCkFilt('type','xe')', 'XE',cXE,'var(--blue)")
-    +mkChip('sp', ckFilt.type==='sp', 'a-sp',"setCkFilt('type','sp')', 'SP',cSP,'var(--green)")
-    +mkChip('tw', ckFilt.type==='tw', 'a-tw',"setCkFilt('type','tw')', 'TWIST',cTW,'var(--cyan)")
+    +mkChip('xe', ckFilt.type==='xe', 'a-xe',"setCkFilt('type','xe')", 'XE',cXE,'var(--blue)')
+    +mkChip('sp', ckFilt.type==='sp', 'a-sp',"setCkFilt('type','sp')", 'SP',cSP,'var(--green)')
+    +mkChip('tw', ckFilt.type==='tw', 'a-tw',"setCkFilt('type','tw')", 'TWIST',cTW,'var(--cyan)')
     +mkChip('simple',ckFilt.type==='simple','a-simple',"setCkFilt('type','simple')",'SIMPLE',cSI,'#94a3b8')
     +mkChip('mc',ckFilt.type==='mc','a-mc',"setCkFilt('type','mc')",'MULTICORE',cMC,'var(--amber)')
     +mkChip('gs',ckFilt.type==='gs','a-gs',"setCkFilt('type','gs')",'GRANDE SEC.',cGS,'#f43f5e')
@@ -1658,7 +1683,7 @@ function updStatus(itemId,field,sel){
 // SPECIAL ORDERS PAGE
 // ════════════════════════════════
 function renderOrdersPage(vc){
-  var isAdmin=_user&&_user.role==='admin';
+  var isAdmin=isSuperAdmin(); // Use our custom function
   var cnt={};
   ['all','simple','xe','sp','tw','mc','gs'].forEach(function(t){cnt[t]=t==='all'?orders.length:orders.filter(function(o){return o.type===t;}).length;});
   var totalQty=orders.reduce(function(s,o){return s+(parseInt(o.qty)||0);},0);
@@ -1676,7 +1701,7 @@ function renderOrdersPage(vc){
     +'<div class="search-box"><div class="search-box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>'
     +'<input id="ordSearchInp" type="text" placeholder="Search orders..." value="'+ordFilt.q+'" oninput="onOrdSearch(this.value)" autocomplete="off">'
     +'<button class="search-box-clear'+(ordFilt.q?' show':'')+'" id="ordClearBtn" onclick="clearOrdSearch()">×</button></div>'
-    +(isAdmin?'<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--amber);border:1px solid rgba(245,158,11,.3);padding:3px 8px;border-radius:6px">⚙ ADMIN</span>':'')
+    +(isAdmin?'<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--amber);border:1px solid rgba(245,158,11,.3);padding:3px 8px;border-radius:6px">⚙ SUPER ADMIN</span>':'')
     +'</div>'
     +'<div class="filter-bar"><span class="filter-lbl">Type</span><div class="filter-grp">'
     +mkChip('all',ordFilt.type==='all','a-all',"setOrdFilt('all')",'All',cnt.all)
@@ -1702,7 +1727,7 @@ function getFilteredOrders(){
 
 function renderOrdRows(){
   var tb=document.getElementById('ordTbody');if(!tb)return;
-  var isAdmin=_user&&_user.role==='admin';
+  var isAdmin=isSuperAdmin(); // Use our custom function
   var filt=getFilteredOrders();
   if(!filt.length){
     var msg=orders.length?'No orders match filters':'No orders yet — click <strong style="color:var(--text2)">New Order</strong>';
@@ -1851,7 +1876,10 @@ async function submitOrder(){
 
 var _delId=null;
 function promptDelete(id){
-  if(!(_user&&_user.role==='admin')){toast('Only admins can delete','error');return;}
+  if(!isSuperAdmin()){ // Only super admin can delete
+    toast('Only the super admin (ezzaky10mi@gmail.com) can delete orders','error');
+    return;
+  }
   _delId=id;
   var o=orders.find(function(x){return x.id===id;});
   document.getElementById('confirmMsg').textContent='Delete order for "'+o.proj+'" ('+o.wire+')? This cannot be undone.';
@@ -1868,7 +1896,10 @@ function doDelete(){
 }
 
 function openEditOrder(id){
-  if(!(_user&&_user.role==='admin')){toast('Only admins can edit','error');return;}
+  if(!isSuperAdmin()){ // Only super admin can edit
+    toast('Only the super admin (ezzaky10mi@gmail.com) can edit orders','error');
+    return;
+  }
   var o=orders.find(function(x){return x.id===id;});if(!o)return;
   document.getElementById('e_id').value=id;
   document.getElementById('e_ref').value=o.ref||'';
@@ -1917,17 +1948,27 @@ function closeOverlay(id){
 // EXCEL IMPORT
 // ════════════════════════════════
 function triggerRefUpload(pid){
+  if(!isSuperAdmin()){
+    toast('Only the super admin (ezzaky10mi@gmail.com) can import Excel files','error');
+    return;
+  }
   var inp=document.getElementById('fileRef');
   inp.value='';
   inp.onchange=function(e){var f=e.target.files[0];if(f)parseXL(f,function(rows){importRefs(pid,rows);});};
   inp.click();
 }
+
 function triggerCkUpload(rid){
+  if(!isSuperAdmin()){
+    toast('Only the super admin (ezzaky10mi@gmail.com) can import checklists','error');
+    return;
+  }
   var inp=document.getElementById('fileChecklist');
   inp.value='';
   inp.onchange=function(e){var f=e.target.files[0];if(f)parseXL(f,function(rows){importChecklist(rid,rows);});};
   inp.click();
 }
+
 function parseXL(file,cb){
   var reader=new FileReader();
   reader.onload=function(e){
@@ -2056,7 +2097,9 @@ function init(){
       var s=r&&r.data&&r.data.session;
       if(s){
         var u=s.user;
-        _user={id:u.id,email:u.email,name:(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0],role:(u.user_metadata&&u.user_metadata.role)||'operator'};
+        // Set role based on email
+        var role = (u.email === 'ezzaky10mi@gmail.com') ? 'admin' : 'operator';
+        _user={id:u.id,email:u.email,name:(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0],role:role};
         launchApp();
       }
     }).catch(function(){});
