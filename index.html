@@ -47,6 +47,12 @@ overscroll-behavior:none;
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+/* ── Global overflow guard ── */
+html,body{max-width:100vw;overflow-x:hidden}
+.main{min-width:0;max-width:100%;overflow-x:hidden}
+.content{min-width:0;overflow-x:hidden}
+.tbl-wrap{max-width:100%;overflow-x:hidden}
+.pg-header{max-width:100%}
 
 /* ── BG TEXTURE ── */
 body::before{
@@ -384,76 +390,167 @@ MODALS
    RESPONSIVE — All breakpoints
 ════════════════════════════════ */
 
-/* ── iPad Pro / large tablets (1024px) ── */
+/* ── iPad Pro (1024px) ── */
 @media(max-width:1024px){
   .stats-row{grid-template-columns:repeat(2,1fr)}
   .proj-grid{grid-template-columns:repeat(2,1fr)}
 }
 
-/* ── iPad / Tablet (900px) — slide-out drawer ── */
+/* ── Tablet / iPad (900px) — sidebar drawer ── */
 @media(max-width:900px){
   .sidebar{transform:translateX(-260px);box-shadow:none}
   .sidebar.open{transform:translateX(0);box-shadow:6px 0 40px rgba(0,0,0,.55)}
-  .main{margin-left:0}
+  .main{margin-left:0;width:100vw;max-width:100vw}
   .hamburger{display:flex}
-  .content{padding:16px;padding-bottom:max(80px,env(safe-area-inset-bottom,20px))}
-  .topbar{padding:0 16px;height:52px}
+  .content{padding:16px;padding-bottom:max(80px,env(safe-area-inset-bottom,20px));width:100%;max-width:100vw;box-sizing:border-box}
+  .topbar{padding:0 12px;height:52px;width:100%;box-sizing:border-box}
   .stats-row{grid-template-columns:repeat(2,1fr)}
   .proj-grid{grid-template-columns:repeat(2,1fr)}
-  .breadcrumb{max-width:calc(100vw - 240px);overflow:hidden;flex-wrap:nowrap}
+  .tb-space{display:none}
+  .breadcrumb{flex:1;min-width:0;overflow:hidden}
 }
 
 /* ── Mobile (600px) ── */
 @media(max-width:600px){
-  .stats-row{grid-template-columns:repeat(2,1fr)}
+  /* Layout */
+  .stats-row{grid-template-columns:repeat(2,1fr);gap:8px}
   .proj-grid{grid-template-columns:1fr}
-  .content{padding:12px;padding-bottom:max(80px,env(safe-area-inset-bottom,20px))}
+  .content{padding:10px;padding-bottom:max(80px,env(safe-area-inset-bottom,20px));width:100vw;max-width:100vw;box-sizing:border-box;overflow-x:hidden}
 
-  /* Stacked card table layout */
+  /* Topbar — strict width, no overflow */
+  .topbar{height:52px;padding:0 8px;gap:6px;width:100vw;max-width:100vw;box-sizing:border-box;overflow:hidden}
+  .tb-space{display:none}
+  .breadcrumb{flex:1;min-width:0;overflow:hidden;white-space:nowrap;font-size:10px}
+  .crumb{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;display:inline-block;vertical-align:middle}
+  .sep{display:inline;vertical-align:middle}
+  .tb-actions{flex-shrink:0;gap:4px}
+  .sync-chip{padding:4px 6px}
+  #syncLbl{display:none}
+  .btn{padding:7px 9px;font-size:11px;gap:3px}
+  .btn svg{width:12px;height:12px;flex-shrink:0}
+
+  /* Page header */
+  .pg-header{display:block !important;margin-bottom:12px}
+  .pg-title{font-size:18px;line-height:1.2;margin-bottom:4px}
+  .pg-sub{font-size:9px}
+  .stat-card{padding:12px}
+  .stat-val{font-size:20px}
+
+  /* Project cards */
+  .proj-card{padding:12px}
+  .proj-name{font-size:12px}
+
+  /* Table wrap */
+  .tbl-wrap{border-radius:10px;max-width:100%;overflow:hidden}
+
+  /* Toolbar */
+  .tbl-toolbar{padding:10px;gap:6px;flex-wrap:wrap}
+  .tbl-title{font-size:12px;flex-shrink:0}
+  .search-box{flex:1;max-width:100%;min-width:0}
+  .search-box input{font-size:12px}
+  .res-badge{width:100%;margin-left:0;font-size:9px}
+
+  /* Filter bar: horizontal scroll, never wraps */
+  .filter-bar{
+    padding:8px 10px;
+    gap:5px;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    max-width:100vw;
+    box-sizing:border-box;
+  }
+  .filter-bar::-webkit-scrollbar{display:none}
+  .filter-lbl{flex-shrink:0;font-size:8px;white-space:nowrap}
+  .filter-grp{display:flex;gap:4px;flex-shrink:0;flex-wrap:nowrap}
+  .filter-divider{flex-shrink:0}
+  .chip{padding:5px 8px;font-size:9px;border-radius:14px;white-space:nowrap;flex-shrink:0;min-height:28px}
+  .chip-cnt{font-size:8px;padding:0 4px}
+
+  /* Stacked card rows */
   thead{display:none}
-  tbody tr{display:block;border:1px solid var(--border);border-radius:var(--r2);margin-bottom:8px;padding:10px;background:var(--bg2)}
+  tbody tr{display:block;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;padding:8px 10px;background:var(--bg2)}
   tbody tr:last-child{border-bottom:1px solid var(--border)}
-  tbody td{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding:7px 0}
-  tbody td:last-child{border-bottom:none}
-  tbody td::before{content:attr(data-label);font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:1px;color:var(--text3);text-transform:uppercase;flex-shrink:0;margin-right:8px}
+  tbody td{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid rgba(30,45,69,.5);padding:6px 0;gap:8px}
+  tbody td:last-child{border-bottom:none;padding-bottom:2px}
+  tbody td::before{content:attr(data-label);font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;letter-spacing:.8px;color:var(--text3);text-transform:uppercase;flex-shrink:0;white-space:nowrap;padding-top:3px;min-width:44px}
+  /* Value side: right-align & truncate */
+  tbody td>*{text-align:right;max-width:calc(100% - 52px);word-break:break-word}
+  tbody td>span,tbody td>div,tbody td>strong{text-align:right}
+  .status-sel{font-size:12px;min-width:0;width:100%;padding:4px 20px 4px 8px;background-size:8px}
+  .ref-code{font-size:11px}
+  .order-meta{font-size:9px;line-height:1.5}
+  .qty-num{font-size:12px}
+  .w-badge{font-size:8px;padding:2px 6px}
+  .mono-sm{font-size:9px}
 
-  /* Bottom-sheet modals on mobile */
-  .modal{border-radius:var(--r2) var(--r2) 0 0;margin:0;max-height:92vh;-webkit-overflow-scrolling:touch}
+  /* Sum chips */
+  .sum-row{gap:8px}
+  .sum-chip{flex:1;padding:8px 10px}
+  .sum-val{font-size:16px}
+  .sum-lbl{font-size:9px}
+
+  /* Modals → bottom sheet */
+  .modal{border-radius:var(--r2) var(--r2) 0 0;margin:0;max-height:94vh;width:100vw;-webkit-overflow-scrolling:touch}
   .overlay{align-items:flex-end;padding:0}
   .m-grid{grid-template-columns:1fr}
   .m-grid .full{grid-column:1}
-  .wt-grid{grid-template-columns:repeat(2,1fr)}
-  .login-card{margin:10px;padding:28px 18px}
+  .wt-grid{grid-template-columns:repeat(3,1fr)}
+  .wt-chip{font-size:9px;min-height:40px;padding:6px 4px}
+  .modal-hd{padding:16px 16px 0}
+  .modal-body{padding:14px 16px}
+  .modal-ft{padding:0 16px 16px;gap:8px}
+  .modal-ft .btn,.modal-ft .btn-cancel{flex:1;justify-content:center;min-height:44px}
 
-  /* Bigger touch targets */
-  .sb-item{min-height:48px}
-  .btn,.btn-cancel,.btn-danger{padding:10px 16px;font-size:13px}
-  .status-sel{min-width:110px}
-  .chip{padding:6px 10px;font-size:10px}
+  /* Login */
+  .login-card{margin:10px;padding:24px 16px}
 
-  /* Search full width */
-  .search-box{max-width:100%;flex:1}
-  .tbl-toolbar{gap:8px}
-  .sum-chip{flex:1;min-width:120px}
+  /* Sidebar items */
+  .sb-item{min-height:48px;font-size:13px}
 
-  /* Topbar */
-  .topbar{height:52px;padding:0 12px}
-  .tb-actions{gap:6px}
-  #syncLbl{display:none}
+  /* Action buttons */
+  .btn-cancel,.btn-danger{padding:10px 14px;min-height:42px}
+  .icon-btn{width:36px;height:36px}
+  .edit-btn{font-size:10px;padding:4px 7px}
+
+  /* Admin badge in toolbar */
+  .tbl-toolbar span[style*="amber"]{font-size:8px;padding:2px 6px}
 }
 
-/* ── Very small phones (380px) ── */
+/* ── Very small phones (≤380px) ── */
 @media(max-width:380px){
-  .stats-row{grid-template-columns:1fr 1fr}
-  .stat-val{font-size:22px}
-  .pg-title{font-size:18px}
-  .login-card{margin:6px;padding:22px 14px}
+  .content{padding:8px}
+  .topbar{padding:0 6px;gap:4px}
+  .stat-val{font-size:18px}
+  .pg-title{font-size:16px}
+  .login-card{margin:6px;padding:20px 12px}
   .wt-grid{grid-template-columns:repeat(2,1fr)}
+  .btn{padding:6px 8px;font-size:10px}
 }
 
 /* ── iOS safe-area / notch ── */
 .sidebar{padding-top:env(safe-area-inset-top,0)}
 .content{padding-bottom:max(60px,calc(env(safe-area-inset-bottom,0px) + 20px))}
+#pwaBanner{padding-bottom:max(12px,env(safe-area-inset-bottom,12px))}
+
+/* ── Touch: kill sticky hover ── */
+@media(hover:none){
+  .proj-card:hover{transform:none;box-shadow:none}
+  .btn-login:hover{transform:none;box-shadow:0 4px 20px rgba(59,130,246,.3)}
+  .sb-item:hover{background:transparent}
+}
+
+/* ── Landscape phone ── */
+@media(max-width:900px) and (orientation:landscape){
+  .content{padding:8px 14px}
+  .overlay{align-items:center;padding:12px}
+  .modal{border-radius:var(--r2);max-height:96vh}
+  .login-card{padding:18px 24px}
+  .stats-row{grid-template-columns:repeat(4,1fr)}
+}
+
 #pwaBanner{padding-bottom:max(12px,env(safe-area-inset-bottom,12px))}
 
 /* ── Touch device: disable sticky hover states ── */
@@ -1114,16 +1211,24 @@ function renderSidebar(){
 
 function renderTopbar(){
   var crumbs=buildCrumbs();
+  var isMob=window.innerWidth<=600;
   var back=document.getElementById('backBtn');
   back.className='topbar-back'+(crumbs.length>1?' show':'');
-  document.getElementById('breadcrumb').innerHTML=crumbs.map(function(c,i){
-    var isLast=i===crumbs.length-1;
-    return(i>0?'<span class="sep">/</span>':'')+'<span class="crumb'+(isLast?' cur':'')+'"'+(!isLast&&c.fn?' onclick="'+c.fn+'"':'')+'>'+c.label+'</span>';
+  // On mobile: show only last crumb + ellipsis if needed
+  var visCrumbs=isMob&&crumbs.length>2?[{label:'…',fn:'gotoHome()'}].concat(crumbs.slice(-1)):crumbs;
+  document.getElementById('breadcrumb').innerHTML=visCrumbs.map(function(c,i){
+    var isLast=i===visCrumbs.length-1;
+    var label=c.label;
+    if(isMob&&label.length>14)label=label.slice(0,12)+'…';
+    return(i>0?'<span class="sep">/</span>':'')+'<span class="crumb'+(isLast?' cur':'')+'"'+(!isLast&&c.fn?' onclick="'+c.fn+'"':'')+'>'+label+'</span>';
   }).join('');
+  // Action buttons — shorter labels on mobile
+  var svgPlus='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+  var svgImp='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>';
   var act='';
-  if(curView==='orders'){act='<button class="btn btn-primary" onclick="openNewOrder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Order</button>';}
-  else if(curRefId!==null){if(isSuperAdmin())act='<button class="btn btn-success" onclick="triggerCkUpload('+curRefId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Checklist</button>';}
-  else if(curProjId!==null&&!hasKids(curProjId)){if(isSuperAdmin())act='<button class="btn btn-success" onclick="triggerRefUpload('+curProjId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Excel</button>';}
+  if(curView==='orders'){act='<button class="btn btn-primary" onclick="openNewOrder()">'+svgPlus+(isMob?'Order':'New Order')+'</button>';}
+  else if(curRefId!==null){if(isSuperAdmin())act='<button class="btn btn-success" onclick="triggerCkUpload('+curRefId+')">'+svgImp+(isMob?'Import':'Import Checklist')+'</button>';}
+  else if(curProjId!==null&&!hasKids(curProjId)){if(isSuperAdmin())act='<button class="btn btn-success" onclick="triggerRefUpload('+curProjId+')">'+svgImp+(isMob?'Import':'Import Excel')+'</button>';}
   document.getElementById('tbActions').innerHTML=act;
 }
 function buildCrumbs(){
@@ -1211,9 +1316,9 @@ function renderChecklist(vc){
   var cGS=items.filter(function(i){return i.type==='gs';}).length;
   var cDone=items.filter(function(i){return i.cutting==='done';}).length;
   var cProg=items.filter(function(i){return i.cutting==='in_progress';}).length;
-  vc.innerHTML='<div class="pg-header fade-in" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">'
-  +'<div><div class="pg-title">'+(ref?ref.refNum:'—')+'</div>'
-  +'<div class="pg-sub" id="ckSub">'+items.length+' wires · '+done+' done · '+pct+'% · '+cSP+' SP / '+cXE+' XE in WPA</div></div>'
+  vc.innerHTML='<div class="pg-header fade-in">'
+  +'<div class="pg-title">'+(ref?ref.refNum:'—')+'</div>'
+  +'<div class="pg-sub" id="ckSub">'+items.length+' wires · '+done+' done · '+pct+'% · '+cSP+' SP / '+cXE+' XE in WPA</div>'
   +'</div>'
   +(items.length?'<div class="prog-wrap fade-in"><div class="prog-lbl"><span>Cutting Progress</span><span style="color:var(--text1);font-weight:600">'+done+'/'+items.length+'</span></div><div class="prog-bar"><div class="prog-fill" id="progFill" style="width:'+pct+'%"></div></div></div>':'')
   +(items.length===0?emptyState('No Wire Checklist','Import an Excel file with Wire ID and Type columns.')
@@ -1289,9 +1394,12 @@ function renderOrdersPage(vc){
   var isAdmin=isSuperAdmin();
   var cnt={};['all','simple','xe','sp','tw','mc','gs'].forEach(function(t){cnt[t]=t==='all'?orders.length:orders.filter(function(o){return o.type===t;}).length;});
   var totalQty=orders.reduce(function(s,o){return s+(parseInt(o.qty)||0);},0);
-  vc.innerHTML='<div class="pg-header fade-in" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">'
-  +'<div><div class="pg-title">Assembly Special Orders</div><div class="pg-sub">'+orders.length+' orders · immutable records</div></div>'
-  +'<button class="btn btn-primary" onclick="openNewOrder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Order</button>'
+  var isMob=window.innerWidth<=600;
+  vc.innerHTML='<div class="pg-header fade-in">'
+  +'<div class="pg-title">Assembly Special Orders</div>'
+  +'<div class="pg-sub">'+orders.length+' orders · immutable records</div>'
+  // Desktop only: "New Order" in page header (mobile uses topbar button)
+  +(isMob?'':'<div style="margin-top:12px"><button class=\"btn btn-primary\" onclick=\"openNewOrder()\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><line x1=\"12\" y1=\"5\" x2=\"12\" y2=\"19\"/><line x1=\"5\" y1=\"12\" x2=\"19\" y2=\"12\"/></svg>New Order</button></div>')
   +'</div>'
   +'<div class="sum-row fade-in">'
   +'<div class="sum-chip"><div class="sum-val">'+orders.length+'</div><div class="sum-lbl">Total Orders</div></div>'
@@ -1667,6 +1775,10 @@ function init(){
 }
 window.addEventListener('online',function(){if(_sb&&_user&&!_demo){setSyncStatus('syncing');dbLoadAll().then(render);}else if(_demo){setSyncStatus('synced');}});
 window.addEventListener('offline',function(){setSyncStatus('offline');});
+// Re-render topbar on orientation/resize so button labels update
+var _rtTimer;
+window.addEventListener('resize',function(){clearTimeout(_rtTimer);_rtTimer=setTimeout(function(){if(_user)renderTopbar();},200);});
+window.addEventListener('orientationchange',function(){setTimeout(function(){if(_user)renderTopbar();},300);});
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
 </script>
 </body>
