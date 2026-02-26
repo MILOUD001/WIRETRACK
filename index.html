@@ -8,9 +8,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="WireTrack">
-<meta name="format-detection" content="telephone=no">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="application-name" content="WireTrack">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" id="appleTouchIcon">
 <link rel="icon" id="faviconIcon">
@@ -32,8 +29,6 @@
   --shadow:0 4px 24px rgba(0,0,0,.4);
   --safe-top:env(safe-area-inset-top);
   --safe-bottom:env(safe-area-inset-bottom);
-  --safe-left:env(safe-area-inset-left);
-  --safe-right:env(safe-area-inset-right);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{
@@ -42,14 +37,10 @@ html{
 }
 body{
   background:var(--bg);color:var(--text1);
-  font-family:'DM Sans',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-size:14px;min-height:100vh;min-height:-webkit-fill-available;
   overflow-x:hidden;
-  overscroll-behavior:none;
   -webkit-tap-highlight-color:transparent;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  touch-action:pan-y;
 }
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:var(--bg)}
@@ -70,7 +61,7 @@ body::before{
   min-height:100vh;min-height:-webkit-fill-available;
   display:flex;align-items:center;
   justify-content:center;position:relative;z-index:1;
-  padding:var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  padding:var(--safe-top) 0 var(--safe-bottom) 0;
 }
 #loginPage::before{
   content:'';position:fixed;inset:0;pointer-events:none;
@@ -96,8 +87,7 @@ body::before{
 .login-card{
   position:relative;z-index:2;
   width:100%;max-width:420px;margin:20px;
-  background:rgba(17,24,39,.88);backdrop-filter:blur(20px) saturate(180%);
-  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  background:rgba(17,24,39,.88);backdrop-filter:blur(20px);
   border:1px solid var(--border2);border-radius:var(--r3);
   padding:36px 32px;
   box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(59,130,246,.06);
@@ -106,48 +96,29 @@ body::before{
 @keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
 
 /* Rest of your existing CSS remains exactly the same until the responsive section */
+/* ... (keep all your existing CSS from the original file) ... */
 
 /* ════════════════════════════════
    RESPONSIVE & PWA ENHANCEMENTS
 ════════════════════════════════ */
 
-/* Desktop (1200px and up) */
-@media(min-width:1200px){
-  .content{padding:24px 32px 60px;}
-  .proj-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
-  .stat-card{padding:18px;}
-  .stat-val{font-size:30px;}
-}
-
-/* iPad / Tablet Landscape (900px - 1199px) */
-@media(min-width:901px) and (max-width:1199px){
-  .sidebar{width:240px;}
-  .main{margin-left:240px;}
-  .content{padding:20px 24px 60px;}
-  .proj-grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));}
-  .stats-row{grid-template-columns:repeat(4,1fr);}
-}
-
-/* iPad / Tablet Portrait (600px - 900px) */
+/* iPad / Tablet */
 @media(max-width:900px){
   .sidebar{
     transform:translateX(-100%);
     width:280px;
-    box-shadow:4px 0 30px rgba(0,0,0,.5);
   }
   .sidebar.open{transform:translateX(0)}
   .main{margin-left:0}
   .hamburger{display:flex}
-  .hamburger.show{display:flex}
   .content{padding:16px}
   .topbar{padding:0 16px}
   .stats-row{grid-template-columns:repeat(2,1fr)}
   .proj-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
-  .sb-mask.show{display:block;animation:fadeIn .2s ease}
-  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .sb-mask.show{display:block}
 }
 
-/* Mobile Phones (up to 600px) */
+/* Mobile Phones */
 @media(max-width:600px){
   .stats-row{grid-template-columns:repeat(2,1fr);gap:8px}
   .stat-card{padding:12px}
@@ -181,11 +152,10 @@ body::before{
     letter-spacing:1px;
     color:var(--text3);
     text-transform:uppercase;
-    flex-shrink:0;
     margin-right:12px;
   }
   
-  /* Mobile modals - bottom sheet style */
+  /* Mobile modals */
   .modal{
     border-radius:var(--r2) var(--r2) 0 0;
     margin:0;
@@ -209,25 +179,23 @@ body::before{
     height:52px;
     padding:0 12px;
   }
-  .breadcrumb{font-size:10px}
-  .tb-actions .btn{padding:6px 10px;font-size:11px}
   
-  /* Mobile chips */
-  .filter-bar{padding:8px 12px;gap:4px}
-  .chip{padding:3px 8px;font-size:9px}
-  .filter-lbl{font-size:8px}
+  /* Better touch targets */
+  .sb-item{min-height:44px}
+  .btn{padding:10px 16px}
+  .icon-btn{width:36px;height:36px}
+  .chip{padding:6px 12px}
+  .status-sel{padding:8px 28px 8px 12px;min-height:38px}
 }
 
-/* Small phones (up to 380px) */
+/* Small phones */
 @media(max-width:380px){
   .stats-row{grid-template-columns:1fr}
   .proj-grid{grid-template-columns:1fr}
   .login-card{padding:20px 14px}
-  .auth-tab{font-size:12px;padding:8px 0}
-  .auth-tab svg{width:12px;height:12px}
 }
 
-/* PWA Standalone Mode Adjustments */
+/* PWA Standalone Mode */
 @media(display-mode:standalone){
   .topbar{
     padding-top:var(--safe-top);
@@ -244,48 +212,28 @@ body::before{
   }
 }
 
-/* iOS PWA specific */
-@supports(-webkit-touch-callout:none){
-  .topbar{
-    background:rgba(11,15,26,.95);
-  }
-  .login-card{
-    background:rgba(17,24,39,.95);
-  }
-}
-
-/* Touch-friendly hover states */
-@media(hover:hover){
-  .sb-item:hover{background:var(--bg3);color:var(--text1)}
-  .btn-primary:hover{background:#2563eb;box-shadow:0 0 14px rgba(59,130,246,.4)}
-  .proj-card:hover{border-color:var(--blue);background:var(--bg3);transform:translateY(-2px)}
-}
-
 /* Remove hover effects on touch devices */
 @media(hover:none){
   .sb-item:active{background:var(--bg3)}
   .btn-primary:active{background:#2563eb}
-  .proj-card:active{background:var(--bg3)}
 }
 
-/* PWA Install Banner - Optimized for all devices */
+/* PWA Install Banner */
 #pwaBanner{
   position:fixed;bottom:0;left:0;right:0;
   background:var(--bg2);border-top:1px solid var(--border2);
   padding:12px 18px;
   padding-bottom:max(12px,var(--safe-bottom));
   display:flex;align-items:center;gap:12px;z-index:9998;
-  transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  transform:translateY(100%);transition:transform .3s;
   box-shadow:0 -6px 24px rgba(0,0,0,.4);
   backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
 }
 #pwaBanner.show{transform:translateY(0)}
 .pwa-ico{
   width:44px;height:44px;border-radius:12px;
   background:linear-gradient(135deg,var(--blue),var(--cyan));
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  box-shadow:0 4px 12px rgba(59,130,246,.3);
 }
 .pwa-ico svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2}
 .pwa-txt{flex:1;min-width:0}
@@ -293,9 +241,6 @@ body::before{
   font-family:'Syne',sans-serif;
   font-size:14px;
   font-weight:700;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 .pwa-sub{
   font-family:'JetBrains Mono',monospace;
@@ -309,60 +254,25 @@ body::before{
   border-radius:10px;padding:10px 18px;
   font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
   cursor:pointer;white-space:nowrap;flex-shrink:0;
-  transition:all .15s;
-  box-shadow:0 4px 12px rgba(59,130,246,.3);
 }
-.pwa-btn:active{transform:scale(.98);background:#2563eb}
 .pwa-close{
   background:none;border:none;color:var(--text3);
   cursor:pointer;font-size:20px;padding:8px;
-  flex-shrink:0;transition:color .15s;
+  flex-shrink:0;
 }
-.pwa-close:active{color:var(--red)}
 
-/* Mobile PWA banner adjustments */
+/* Mobile PWA banner */
 @media(max-width:600px){
   #pwaBanner{padding:10px 14px;gap:8px}
   .pwa-ico{width:40px;height:40px}
-  .pwa-ico svg{width:20px;height:20px}
   .pwa-btn{padding:8px 14px;font-size:12px}
 }
 
-/* iPad PWA banner */
-@media(min-width:601px) and (max-width:900px){
-  #pwaBanner{padding:14px 20px}
-  .pwa-btn{padding:12px 20px}
-}
-
-/* Loading states and animations */
 .fade-in{animation:fadeUp .2s ease both}
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(8px)}
   to{opacity:1;transform:translateY(0)}
 }
-
-/* Better touch targets for mobile */
-@media(max-width:600px){
-  .sb-item{min-height:44px}
-  .btn{padding:10px 16px}
-  .icon-btn{width:36px;height:36px}
-  .icon-btn svg{width:16px;height:16px}
-  .chip{padding:6px 12px}
-  .status-sel{padding:8px 28px 8px 12px;min-height:38px}
-}
-
-/* Prevent text size adjustment on orientation change */
-html{
-  -webkit-text-size-adjust:100%;
-}
-
-/* Smooth scrolling for iOS */
-.overflow-auto{
-  -webkit-overflow-scrolling:touch;
-}
-
-/* Rest of your existing CSS from here... */
-/* (Keep all your existing CSS from the original file) */
 </style>
 </head>
 <body>
@@ -412,7 +322,7 @@ html{
     <!-- Email -->
     <div class="f-group">
       <label class="f-label" for="loginEmail">Email Address</label>
-      <input class="f-input" id="loginEmail" type="email" placeholder="your@email.com" autocomplete="email" inputmode="email">
+      <input class="f-input" id="loginEmail" type="email" placeholder="your@email.com" autocomplete="email">
       <div class="f-err" id="emailErr">Please enter a valid email.</div>
     </div>
 
@@ -500,12 +410,12 @@ html{
 
   <div class="main">
     <header class="topbar">
-      <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="Menu">
+      <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
         </svg>
       </button>
-      <button class="topbar-back" id="backBtn" onclick="goBack()" aria-label="Go back">
+      <button class="topbar-back" id="backBtn" onclick="goBack()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
       <nav class="breadcrumb" id="breadcrumb"></nav>
@@ -531,12 +441,12 @@ html{
   <div class="modal">
     <div class="modal-hd">
       <div><div class="modal-title">New Special Order</div><div class="modal-sub">Assembly · Special Order</div></div>
-      <button class="modal-close" onclick="closeOverlay('newOrderOverlay')" aria-label="Close">×</button>
+      <button class="modal-close" onclick="closeOverlay('newOrderOverlay')">×</button>
     </div>
     <div class="modal-body">
       <div class="m-grid">
-        <div class="full"><label class="m-lbl">Reference *</label><input class="m-input" id="o_ref" placeholder="e.g. REF-001, VCE-2024..." inputmode="text"></div>
-        <div class="full"><label class="m-lbl">Project Name *</label><input class="m-input" id="o_proj" placeholder="e.g. JCB, VOLVO C1..." inputmode="text"></div>
+        <div class="full"><label class="m-lbl">Reference *</label><input class="m-input" id="o_ref" placeholder="e.g. REF-001, VCE-2024..."></div>
+        <div class="full"><label class="m-lbl">Project Name *</label><input class="m-input" id="o_proj" placeholder="e.g. JCB, VOLVO C1..."></div>
         <div class="full">
           <label class="m-lbl">Wire Type *</label>
           <div class="wt-grid" id="newWtGrid">
@@ -549,11 +459,11 @@ html{
           </div>
           <input type="hidden" id="o_type">
         </div>
-        <div class="full"><label class="m-lbl">Wire Name *</label><input class="m-input" id="o_wire" placeholder="Wire reference or description..." inputmode="text"></div>
-        <div><label class="m-lbl">Quantity *</label><input class="m-input" id="o_qty" type="number" min="1" placeholder="0" inputmode="numeric"></div>
-        <div><label class="m-lbl">From (Order Giver) *</label><input class="m-input" id="o_from" placeholder="Name..." inputmode="text"></div>
-        <div><label class="m-lbl">To (Order Taker) *</label><input class="m-input" id="o_to" placeholder="Name..." inputmode="text"></div>
-        <div><label class="m-lbl">Destination (Go)</label><input class="m-input" id="o_go" placeholder="e.g. Line A..." inputmode="text"></div>
+        <div class="full"><label class="m-lbl">Wire Name *</label><input class="m-input" id="o_wire" placeholder="Wire reference or description..."></div>
+        <div><label class="m-lbl">Quantity *</label><input class="m-input" id="o_qty" type="number" min="1" placeholder="0"></div>
+        <div><label class="m-lbl">From (Order Giver) *</label><input class="m-input" id="o_from" placeholder="Name..."></div>
+        <div><label class="m-lbl">To (Order Taker) *</label><input class="m-input" id="o_to" placeholder="Name..."></div>
+        <div><label class="m-lbl">Destination (Go)</label><input class="m-input" id="o_go" placeholder="e.g. Line A..."></div>
         <div class="full"><label class="m-lbl">Picking Date &amp; Time</label><div class="ts-display" id="tsLive">Will be recorded automatically when you submit</div></div>
       </div>
     </div>
@@ -571,13 +481,13 @@ html{
   <div class="modal">
     <div class="modal-hd">
       <div><div class="modal-title">Edit Order <span style="color:var(--amber);font-size:11px;font-family:'JetBrains Mono',monospace">SUPER ADMIN</span></div><div class="modal-sub">Only ezzaky10mi@gmail.com can modify</div></div>
-      <button class="modal-close" onclick="closeOverlay('editOrderOverlay')" aria-label="Close">×</button>
+      <button class="modal-close" onclick="closeOverlay('editOrderOverlay')">×</button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="e_id">
       <div class="m-grid">
-        <div class="full"><label class="m-lbl">Reference</label><input class="m-input" id="e_ref" inputmode="text"></div>
-        <div class="full"><label class="m-lbl">Project Name</label><input class="m-input" id="e_proj" inputmode="text"></div>
+        <div class="full"><label class="m-lbl">Reference</label><input class="m-input" id="e_ref"></div>
+        <div class="full"><label class="m-lbl">Project Name</label><input class="m-input" id="e_proj"></div>
         <div class="full">
           <label class="m-lbl">Wire Type</label>
           <div class="wt-grid" id="editWtGrid">
@@ -590,11 +500,11 @@ html{
           </div>
           <input type="hidden" id="e_type">
         </div>
-        <div class="full"><label class="m-lbl">Wire Name</label><input class="m-input" id="e_wire" inputmode="text"></div>
-        <div><label class="m-lbl">Quantity</label><input class="m-input" id="e_qty" type="number" min="1" inputmode="numeric"></div>
-        <div><label class="m-lbl">From</label><input class="m-input" id="e_from" inputmode="text"></div>
-        <div><label class="m-lbl">To</label><input class="m-input" id="e_to" inputmode="text"></div>
-        <div><label class="m-lbl">Destination</label><input class="m-input" id="e_go" inputmode="text"></div>
+        <div class="full"><label class="m-lbl">Wire Name</label><input class="m-input" id="e_wire"></div>
+        <div><label class="m-lbl">Quantity</label><input class="m-input" id="e_qty" type="number" min="1"></div>
+        <div><label class="m-lbl">From</label><input class="m-input" id="e_from"></div>
+        <div><label class="m-lbl">To</label><input class="m-input" id="e_to"></div>
+        <div><label class="m-lbl">Destination</label><input class="m-input" id="e_go"></div>
       </div>
     </div>
     <div class="modal-ft">
@@ -626,1422 +536,480 @@ html{
     <div class="pwa-sub">Add to home screen · Works offline</div>
   </div>
   <button class="pwa-btn" id="pwaInstBtn">Install</button>
-  <button class="pwa-close" onclick="dismissPWA()" aria-label="Close">×</button>
+  <button class="pwa-close" onclick="dismissPWA()">×</button>
 </div>
 
 <script>
 'use strict';
 // ╔══════════════════════════════════════════════════════╗
 // ║  WIRETRACK SETUP — PASTE YOUR SUPABASE CREDENTIALS  ║
-// ║  Find SUPABASE_URL and SUPABASE_KEY below and fill  ║
-// ║  them in. Users will never see a config panel.      ║
 // ╚══════════════════════════════════════════════════════╝
-// ════════════════════════════════
-// STATE
-// ════════════════════════════════
 var _sb = null, _user = null, _demo = false;
-// ════════════════════════════════
-// SUPABASE CREDENTIALS
-// Paste your Supabase URL and anon key here once — all users share them
-// NOTE: Make sure Realtime is enabled for your tables in Supabase:
-//   Supabase → Database → Replication → enable special_orders, wire_items, references
-// ════════════════════════════════
 var SUPABASE_URL = 'https://kvdykwuccqcsaedmhndb.supabase.co';
 var SUPABASE_KEY = 'sb_publishable_NL-3xOQLa_vLIyJ4xF-q_g_i86mXl3s';
 var SB_URL_KEY = 'wt_sb_url', SB_KEY_KEY = 'wt_sb_key';
 
-var refs       = {};   // projectId → [{id,refNum,extra,at}]
-var checklists = {};   // refId → [{id,wireId,type,cutting,wpa,twist}]
-var orders     = [];   // special orders array
-var nRefId     = 1000, nCkId = 2000, nOrdId = 3000;
-
-var curView    = 'home'; // 'home'|'orders'|'project'
-var curProjId  = null;
-var curRefId   = null;
-
-// Filter state
-var ckFilt  = {type:'all', status:'all', q:''};
+var refs = {}, checklists = {}, orders = [];
+var nRefId = 1000, nCkId = 2000, nOrdId = 3000;
+var curView = 'home', curProjId = null, curRefId = null;
+var ckFilt = {type:'all', status:'all', q:''};
 var ordFilt = {type:'all', q:''};
 
-// ════════════════════════════════
-// PROJECTS DATA
-// ════════════════════════════════
+// Projects data
 var projects = [
-  {id:1,name:'JCB',         pid:null},
-  {id:2,name:'CLLAS',       pid:null},
-  {id:3,name:'JOHN DEERE',  pid:null},
-  {id:4,name:'DAF / VCE',   pid:null},
-  {id:5,name:'VOLVO',       pid:null},
-  {id:6,name:'IVECO',       pid:null},
-  {id:7,name:'MAN',         pid:null},
-  {id:8,name:'MAN CBP',     pid:null},
-  {id:9,name:'MAN FPP',     pid:null},
-  {id:10,name:'SMALL',      pid:5},
-  {id:11,name:'AFTER MARKET',pid:5},
-  {id:12,name:'VCE',        pid:5},
-  {id:13,name:'C1',         pid:5},
-  {id:14,name:'C2',         pid:5},
-  {id:15,name:'C3',         pid:5},
-  {id:16,name:'STEP E',     pid:5},
+  {id:1,name:'JCB', pid:null}, {id:2,name:'CLLAS', pid:null},
+  {id:3,name:'JOHN DEERE', pid:null}, {id:4,name:'DAF / VCE', pid:null},
+  {id:5,name:'VOLVO', pid:null}, {id:6,name:'IVECO', pid:null},
+  {id:7,name:'MAN', pid:null}, {id:8,name:'MAN CBP', pid:null},
+  {id:9,name:'MAN FPP', pid:null}, {id:10,name:'SMALL', pid:5},
+  {id:11,name:'AFTER MARKET', pid:5}, {id:12,name:'VCE', pid:5},
+  {id:13,name:'C1', pid:5}, {id:14,name:'C2', pid:5},
+  {id:15,name:'C3', pid:5}, {id:16,name:'STEP E', pid:5},
 ];
-function P(id)       { return projects.find(function(p){return p.id===id;}) }
-function kids(pid)   { return projects.filter(function(p){return p.pid===pid;}) }
-function hasKids(pid){ return kids(pid).length>0 }
-function parentOf(id){ var p=P(id); return p?p.pid:null }
-function topLevel()  { return projects.filter(function(p){return p.pid===null;}) }
-function isDesc(childId,ancId){
-  var p=parentOf(childId);
-  while(p!==null){if(p===ancId)return true;p=parentOf(p);}
-  return false;
-}
+
+function P(id) { return projects.find(p => p.id === id); }
+function kids(pid) { return projects.filter(p => p.pid === pid); }
+function hasKids(pid) { return kids(pid).length > 0; }
+function parentOf(id) { var p = P(id); return p ? p.pid : null; }
+function topLevel() { return projects.filter(p => p.pid === null); }
 
 // Wire type helpers
-var WT_LABEL = {simple:'SIMPLE',xe:'XE',sp:'SP',tw:'TWIST',mc:'MULTICORE',gs:'GRANDE SECTION'};
-var WT_CLASS = {simple:'w-simple',xe:'w-xe',sp:'w-sp',tw:'w-tw',mc:'w-mc',gs:'w-gs'};
+var WT_LABEL = {simple:'SIMPLE', xe:'XE', sp:'SP', tw:'TWIST', mc:'MULTICORE', gs:'GRANDE SECTION'};
+var WT_CLASS = {simple:'w-simple', xe:'w-xe', sp:'w-sp', tw:'w-tw', mc:'w-mc', gs:'w-gs'};
 
 // =====================================================
-// SUPER ADMIN CHECK - Only ezzaky10mi@gmail.com is admin
+// SUPER ADMIN CHECK
 // =====================================================
 function isSuperAdmin() {
-    if (!_user) return false;
-    return _user.email === 'ezzaky10mi@gmail.com';
+    return _user && _user.email === 'ezzaky10mi@gmail.com';
 }
 
 // ════════════════════════════════
 // SUPABASE
 // ════════════════════════════════
-function initSB(url,key){
-  try{
-    if(!window.supabase||typeof window.supabase.createClient!=='function') return false;
-    _sb=window.supabase.createClient(url,key);
+function initSB(url, key) {
+  try {
+    if (!window.supabase || typeof window.supabase.createClient !== 'function') return false;
+    _sb = window.supabase.createClient(url, key);
     return true;
-  }catch(e){console.error(e);return false;}
+  } catch(e) { return false; }
 }
-function loadSavedConfig(){
-  try{
+
+function loadSavedConfig() {
+  try {
     var url = SUPABASE_URL || localStorage.getItem(SB_URL_KEY) || '';
     var key = SUPABASE_KEY || localStorage.getItem(SB_KEY_KEY) || '';
-    if(url && key){ initSB(url, key); }
-  }catch(e){ console.warn('loadSavedConfig:',e); }
+    if (url && key) initSB(url, key);
+  } catch(e) {}
 }
 
-// Tab switching: Sign In / Create Account
-var _authMode='signin';
-function switchTab(mode){
-  _authMode=mode;
-  var isSI=mode==='signin';
-  document.getElementById('tabSignin').classList.toggle('active',isSI);
-  document.getElementById('tabRegister').classList.toggle('active',!isSI);
-  document.getElementById('nameGroup').style.display=isSI?'none':'block';
-  document.getElementById('confirmGroup').style.display=isSI?'none':'block';
-  document.getElementById('rememberGroup').style.display=isSI?'block':'none';
-  document.getElementById('forgotLink').style.display=isSI?'inline':'none';
-  document.getElementById('loginBtnTxt').textContent=isSI?'Sign In':'Create Account';
-  document.getElementById('loginPass').autocomplete=isSI?'current-password':'new-password';
-  // Move the sliding indicator
-  var tabs=document.getElementById('authTabs');
-  var activeBtn=document.getElementById(isSI?'tabSignin':'tabRegister');
-  var slider=document.getElementById('authSlider');
-  if(slider&&tabs&&activeBtn){
-    var tabsRect=tabs.getBoundingClientRect();
-    var btnRect=activeBtn.getBoundingClientRect();
-    slider.style.left=(btnRect.left-tabsRect.left-4)+'px';
-    slider.style.width=activeBtn.offsetWidth+'px';
-  }
+// Auth
+var _authMode = 'signin';
+function switchTab(mode) {
+  _authMode = mode;
+  var isSI = mode === 'signin';
+  document.getElementById('tabSignin').classList.toggle('active', isSI);
+  document.getElementById('tabRegister').classList.toggle('active', !isSI);
+  document.getElementById('nameGroup').style.display = isSI ? 'none' : 'block';
+  document.getElementById('confirmGroup').style.display = isSI ? 'none' : 'block';
+  document.getElementById('rememberGroup').style.display = isSI ? 'block' : 'none';
+  document.getElementById('forgotLink').style.display = isSI ? 'inline' : 'none';
+  document.getElementById('loginBtnTxt').textContent = isSI ? 'Sign In' : 'Create Account';
   clearLoginAlerts();
-}
-// Init slider position on load
-function initAuthSlider(){
-  var tabs=document.getElementById('authTabs');
-  var btn=document.getElementById('tabSignin');
-  var slider=document.getElementById('authSlider');
-  if(!slider||!tabs||!btn)return;
-  slider.style.left='0px';
-  slider.style.width=btn.offsetWidth+'px';
+  
+  var tabs = document.getElementById('authTabs');
+  var activeBtn = document.getElementById(isSI ? 'tabSignin' : 'tabRegister');
+  var slider = document.getElementById('authSlider');
+  if (slider && tabs && activeBtn) {
+    slider.style.left = '0px';
+    slider.style.width = activeBtn.offsetWidth + 'px';
+  }
 }
 
-function doAuthAction(){
-  if(_authMode==='register') doRegister();
+function doAuthAction() {
+  if (_authMode === 'register') doRegister();
   else doLogin();
 }
 
-// ════════════════════════════════
-// AUTH
-// ════════════════════════════════
-async function doLogin(){
-  var email=document.getElementById('loginEmail').value.trim();
-  var pass=document.getElementById('loginPass').value;
+async function doLogin() {
+  var email = document.getElementById('loginEmail').value.trim();
+  var pass = document.getElementById('loginPass').value;
   clearLoginAlerts();
-  var ok=true;
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+  
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     document.getElementById('emailErr').classList.add('show');
-    document.getElementById('loginEmail').classList.add('err');ok=false;
-  }
-  if(pass.length<6){
-    document.getElementById('passErr').classList.add('show');
-    document.getElementById('loginPass').classList.add('err');ok=false;
-  }
-  if(!ok)return;
-  if(!_sb){
-    var hasHardcoded = !!(SUPABASE_URL && SUPABASE_KEY);
-    if(hasHardcoded){
-      showLoginAlert('err','Database connection error. Please try again.');
-    } else {
-      showLoginAlert('err','No database connected. Contact your administrator or use Demo Mode.');
-    }
+    document.getElementById('loginEmail').classList.add('err');
     return;
   }
+  if (pass.length < 6) {
+    document.getElementById('passErr').classList.add('show');
+    document.getElementById('loginPass').classList.add('err');
+    return;
+  }
+  
   setLoading(true);
-  try{
-    var r=await _sb.auth.signInWithPassword({email:email,password:pass});
-    if(r.error)throw r.error;
-    var u=r.data.user;
-    
-    // Set role based on email - only ezzaky10mi@gmail.com is admin
+  try {
+    var r = await _sb.auth.signInWithPassword({ email: email, password: pass });
+    if (r.error) throw r.error;
+    var u = r.data.user;
     var role = (u.email === 'ezzaky10mi@gmail.com') ? 'admin' : 'operator';
-    
-    _user={id:u.id,email:u.email,name:(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0],role:role};
-    showLoginAlert('ok','Welcome back, '+_user.name+'!');
-    setTimeout(launchApp,700);
-  }catch(err){
+    _user = { id: u.id, email: u.email, name: u.email.split('@')[0], role: role };
+    showLoginAlert('ok', 'Welcome back!');
+    setTimeout(launchApp, 700);
+  } catch(err) {
     setLoading(false);
-    showLoginAlert('err',(err&&err.message)||'Login failed. Check your credentials.');
+    showLoginAlert('err', err.message || 'Login failed');
   }
 }
 
-async function doRegister(){
-  var email=document.getElementById('loginEmail').value.trim();
-  var name=document.getElementById('loginName').value.trim();
-  var pass=document.getElementById('loginPass').value;
-  var pass2=document.getElementById('loginPass2').value;
+async function doRegister() {
+  var email = document.getElementById('loginEmail').value.trim();
+  var name = document.getElementById('loginName').value.trim();
+  var pass = document.getElementById('loginPass').value;
+  var pass2 = document.getElementById('loginPass2').value;
   clearLoginAlerts();
-  var ok=true;
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+  
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     document.getElementById('emailErr').classList.add('show');
-    document.getElementById('loginEmail').classList.add('err');ok=false;
-  }
-  if(!name){
-    document.getElementById('nameErr').classList.add('show');
-    document.getElementById('loginName').classList.add('err');ok=false;
-  }
-  if(pass.length<6){
-    document.getElementById('passErr').classList.add('show');
-    document.getElementById('loginPass').classList.add('err');ok=false;
-  }
-  if(pass!==pass2){
-    document.getElementById('pass2Err').classList.add('show');
-    document.getElementById('loginPass2').classList.add('err');ok=false;
-  }
-  if(!ok)return;
-  if(!_sb){
-    var hasHardcoded2 = !!(SUPABASE_URL && SUPABASE_KEY);
-    if(hasHardcoded2){
-      showLoginAlert('err','Database connection error. Please try again.');
-    } else {
-      showLoginAlert('err','No database connected. Contact your administrator.');
-    }
+    document.getElementById('loginEmail').classList.add('err');
     return;
   }
+  if (!name) {
+    document.getElementById('nameErr').classList.add('show');
+    document.getElementById('loginName').classList.add('err');
+    return;
+  }
+  if (pass.length < 6) {
+    document.getElementById('passErr').classList.add('show');
+    document.getElementById('loginPass').classList.add('err');
+    return;
+  }
+  if (pass !== pass2) {
+    document.getElementById('pass2Err').classList.add('show');
+    document.getElementById('loginPass2').classList.add('err');
+    return;
+  }
+  
   setLoading(true);
-  try{
-    var r=await _sb.auth.signUp({
-      email:email,
-      password:pass,
-      options:{data:{full_name:name}}
-    });
-    if(r.error)throw r.error;
+  try {
+    var r = await _sb.auth.signUp({ email: email, password: pass });
+    if (r.error) throw r.error;
     setLoading(false);
-    // Check if email confirmation is needed
-    if(r.data&&r.data.user&&!r.data.session){
-      showLoginAlert('ok','Account created! Check your email to confirm your account, then sign in.');
-      switchTab('signin');
-    } else if(r.data&&r.data.session){
-      var u=r.data.user;
-      // New users are always operators (only ezzaky10mi@gmail.com can be admin)
-      _user={id:u.id,email:u.email,name:name,role:'operator'};
-      showLoginAlert('ok','Account created! Welcome, '+name+'!');
-      setTimeout(launchApp,700);
-    }
-  }catch(err){
+    showLoginAlert('ok', 'Account created! Please sign in.');
+    switchTab('signin');
+  } catch(err) {
     setLoading(false);
-    showLoginAlert('err',(err&&err.message)||'Registration failed. Try again.');
+    showLoginAlert('err', err.message || 'Registration failed');
   }
 }
-function useDemoMode(){
-  _demo=true;
-  _user={id:'demo',email:'demo@wiretrack.local',name:'Demo User',role:'operator'};
+
+function useDemoMode() {
+  _demo = true;
+  _user = { id: 'demo', email: 'demo@wiretrack.local', name: 'Demo User', role: 'operator' };
   launchApp();
 }
-async function forgotPass(e){
-  e&&e.preventDefault();
-  var email=document.getElementById('loginEmail').value.trim();
-  if(!email){showLoginAlert('err','Enter your email first.');return;}
-  if(!_sb){showLoginAlert('err','Connect Supabase first.');return;}
-  try{
-    var r=await _sb.auth.resetPasswordForEmail(email);
-    if(r.error)throw r.error;
-    showLoginAlert('ok','Reset email sent! Check your inbox.');
-  }catch(err){showLoginAlert('err',(err&&err.message)||'Failed.');}
-}
-function doLogout(){
-  if(_sb&&!_demo)_sb.auth.signOut();
-  if(_realtimeChannel&&_sb){_sb.removeChannel(_realtimeChannel);_realtimeChannel=null;}
-  _user=null;_demo=false;
-  refs={};checklists={};orders=[];
-  curView='home';curProjId=null;curRefId=null;
-  document.getElementById('appPage').style.display='none';
-  document.getElementById('loginPage').style.display='flex';
-  document.getElementById('loginEmail').value='';
-  document.getElementById('loginPass').value='';
+
+function doLogout() {
+  _user = null; _demo = false;
+  refs = {}; checklists = {}; orders = [];
+  curView = 'home'; curProjId = null; curRefId = null;
+  document.getElementById('appPage').style.display = 'none';
+  document.getElementById('loginPage').style.display = 'flex';
   setLoading(false);
 }
-async function launchApp(){
-  document.getElementById('loginPage').style.display='none';
-  var ap=document.getElementById('appPage');
-  ap.style.display='flex';
+
+async function launchApp() {
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('appPage').style.display = 'flex';
   renderUserBox();
-  setSyncStatus('syncing');
   render();
-  await dbLoadAll();
-  render();
-  startRealtime();
 }
 
-// ════════════════════════════════
-// REALTIME — live updates for all users
-// ════════════════════════════════
-var _realtimeChannel = null;
-function startRealtime(){
-  if(!_sb||_demo)return;
-  if(_realtimeChannel){ _sb.removeChannel(_realtimeChannel); _realtimeChannel=null; }
-
-  _realtimeChannel = _sb
-    .channel('wiretrack-live')
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'special_orders'},function(payload){
-      var row=payload.new;
-      if(!orders.find(function(o){return o.id===row.id;})){
-        orders.unshift({id:row.id,ref:row.ref_code,proj:row.project_name,type:row.wire_type,
-          wire:row.wire_name,qty:row.quantity,from:row.order_from,to:row.order_to,
-          go:row.destination,at:row.created_at,by:row.created_by});
-        renderSidebar();
-        if(curView==='orders') renderOrdersPage(document.getElementById('viewContainer'));
-        toast('New order: '+row.project_name+' — '+row.wire_name,'info');
-      }
-    })
-    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'special_orders'},function(payload){
-      var row=payload.new;
-      var idx=orders.findIndex(function(o){return o.id===row.id;});
-      if(idx>-1){
-        orders[idx]={id:row.id,ref:row.ref_code,proj:row.project_name,type:row.wire_type,
-          wire:row.wire_name,qty:row.quantity,from:row.order_from,to:row.order_to,
-          go:row.destination,at:row.created_at,by:row.created_by};
-        if(curView==='orders') renderOrdersPage(document.getElementById('viewContainer'));
-      }
-    })
-    .on('postgres_changes',{event:'DELETE',schema:'public',table:'special_orders'},function(payload){
-      var id=payload.old&&payload.old.id;
-      if(id){
-        orders=orders.filter(function(o){return o.id!==id;});
-        renderSidebar();
-        if(curView==='orders') renderOrdersPage(document.getElementById('viewContainer'));
-      }
-    })
-    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'wire_items'},function(payload){
-      var row=payload.new;
-      for(var rid in checklists){
-        var it=checklists[rid].find(function(i){return i.id===row.id;});
-        if(it){
-          it.cutting=row.cutting_status||'in_progress';
-          it.wpa=row.wpa_status;
-          it.twist=row.twist_status;
-          if(curRefId!==null) applyCheckFilt();
-          break;
-        }
-      }
-    })
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'wire_items'},function(payload){
-      var row=payload.new;
-      var rid=row.reference_id;
-      if(!checklists[rid])checklists[rid]=[];
-      if(!checklists[rid].find(function(i){return i.id===row.id;})){
-        checklists[rid].push({id:row.id,wireId:row.wire_id,type:row.type,
-          cutting:row.cutting_status||'in_progress',wpa:row.wpa_status,twist:row.twist_status});
-        if(curRefId===rid) renderChecklist(document.getElementById('viewContainer'));
-      }
-    })
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'references'},function(payload){
-      var row=payload.new;
-      if(!refs[row.project_id])refs[row.project_id]=[];
-      if(!refs[row.project_id].find(function(r){return r.id===row.id;})){
-        refs[row.project_id].push({id:row.id,refNum:row.ref_num,extra:row.extra_data,at:row.created_at});
-        if(curProjId===row.project_id) render();
-      }
-    })
-    .subscribe(function(status){
-      if(status==='SUBSCRIBED'){
-        setSyncStatus('synced');
-      } else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'){
-        console.warn('Realtime subscription issue:',status);
-      }
-    });
-}
-function setLoading(v){
-  var btn=document.getElementById('loginBtn');
-  btn.disabled=v;btn.classList.toggle('loading',v);
-}
-function showLoginAlert(type,msg){
-  clearLoginAlerts();
-  if(type==='err'){document.getElementById('loginErrMsg').textContent=msg;document.getElementById('loginErr').classList.add('show');}
-  else{document.getElementById('loginOkMsg').textContent=msg;document.getElementById('loginOk').classList.add('show');}
-}
-function clearLoginAlerts(){
-  ['loginErr','loginOk'].forEach(function(id){document.getElementById(id).classList.remove('show');});
-  ['emailErr','nameErr','passErr','pass2Err'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove('show');});
-  ['loginEmail','loginName','loginPass','loginPass2'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove('err');});
-}
-function togglePw(){
-  var i=document.getElementById('loginPass');
-  i.type=i.type==='password'?'text':'password';
-}
-function togglePw2(){
-  var i=document.getElementById('loginPass2');
-  if(i)i.type=i.type==='password'?'text':'password';
-}
-function renderUserBox(){
-  var box=document.getElementById('userBox');
-  if(!_user){box.innerHTML='';return;}
-  var ini=_user.name.slice(0,2).toUpperCase();
+function renderUserBox() {
+  var box = document.getElementById('userBox');
+  if (!_user) return;
+  var ini = _user.name.slice(0, 2).toUpperCase();
   var roleDisplay = isSuperAdmin() ? 'SUPER ADMIN' : (_user.role === 'admin' ? 'ADMIN' : 'OPERATOR');
-  box.innerHTML='<div class="sb-avatar">'+ini+'</div><div style="flex:1;min-width:0"><div class="sb-user-name">'+_user.name+'</div><div class="sb-user-role">'+roleDisplay+(_demo?' · demo':'')+'</div></div><button class="btn-signout" onclick="doLogout()">Sign out</button>';
+  box.innerHTML = '<div class="sb-avatar">' + ini + '</div>' +
+    '<div style="flex:1;min-width:0"><div class="sb-user-name">' + _user.name + '</div>' +
+    '<div class="sb-user-role">' + roleDisplay + (_demo ? ' · demo' : '') + '</div></div>' +
+    '<button class="btn-signout" onclick="doLogout()">Sign out</button>';
 }
 
-// ════════════════════════════════
-// SYNC STATUS
-// ════════════════════════════════
-function setSyncStatus(s){
-  var dot=document.getElementById('syncDot');
-  var lbl=document.getElementById('syncLbl');
-  if(!dot||!lbl)return;
-  dot.style.background='';
-  if(s==='syncing'){
-    dot.className='sync-dot syncing';
-    lbl.textContent='SYNCING…';
-  } else if(s==='offline'){
-    dot.className='sync-dot';
-    dot.style.background='var(--red)';
-    lbl.textContent='OFFLINE';
-  } else if(s==='error'){
-    dot.className='sync-dot';
-    dot.style.background='var(--amber)';
-    lbl.textContent='DB ERROR';
+function setSyncStatus(s) {
+  var dot = document.getElementById('syncDot');
+  var lbl = document.getElementById('syncLbl');
+  if (!dot || !lbl) return;
+  if (s === 'syncing') {
+    dot.className = 'sync-dot syncing';
+    lbl.textContent = 'SYNCING…';
   } else {
-    dot.className='sync-dot';
-    lbl.textContent=_demo?'DEMO MODE':'SYNCED';
+    dot.className = 'sync-dot';
+    lbl.textContent = _demo ? 'DEMO MODE' : 'SYNCED';
   }
 }
 
-// ════════════════════════════════
-// DATABASE — LOAD ALL DATA ON LOGIN
-// ════════════════════════════════
-async function dbLoadAll(){
-  if(!_sb||_demo){setSyncStatus('synced');return;}
-  setSyncStatus('syncing');
-  try{
-    // Load references
-    var rr=await _sb.from('references').select('*').order('created_at',{ascending:true});
-    if(rr.error){
-      if(rr.error.code==='42P01'||rr.error.message&&rr.error.message.includes('does not exist')){
-        setSyncStatus('synced');return;
-      }
-      throw rr.error;
-    }
-    refs={};
-    (rr.data||[]).forEach(function(row){
-      if(!refs[row.project_id])refs[row.project_id]=[];
-      refs[row.project_id].push({id:row.id,refNum:row.ref_num,extra:row.extra_data,at:row.created_at});
-      if(row.id>=nRefId)nRefId=row.id+1;
-    });
+function setLoading(v) {
+  var btn = document.getElementById('loginBtn');
+  btn.disabled = v;
+  btn.classList.toggle('loading', v);
+}
 
-    // Load wire items
-    var wi=await _sb.from('wire_items').select('*').order('id',{ascending:true});
-    if(wi.error&&wi.error.code!=='42P01')throw wi.error;
-    checklists={};
-    ((wi.data)||[]).forEach(function(row){
-      if(!checklists[row.reference_id])checklists[row.reference_id]=[];
-      checklists[row.reference_id].push({id:row.id,wireId:row.wire_id,type:row.type,cutting:row.cutting_status||'in_progress',wpa:row.wpa_status,twist:row.twist_status});
-      if(row.id>=nCkId)nCkId=row.id+1;
-    });
-
-    // Load special orders
-    var so=await _sb.from('special_orders').select('*').order('created_at',{ascending:false});
-    if(so.error&&so.error.code!=='42P01')throw so.error;
-    orders=[];
-    ((so.data)||[]).forEach(function(row){
-      orders.push({id:row.id,ref:row.ref_code,proj:row.project_name,type:row.wire_type,wire:row.wire_name,qty:row.quantity,from:row.order_from,to:row.order_to,go:row.destination,at:row.created_at,by:row.created_by});
-    });
-
-    setSyncStatus('synced');
-  }catch(e){
-    console.warn('dbLoadAll error:',e);
-    var msg=(e&&e.message)||'';
-    var isNetworkErr=!navigator.onLine||msg.includes('fetch')||msg.includes('network')||msg.includes('Failed');
-    var isAuthErr=msg.includes('JWT')||msg.includes('auth')||msg.includes('401')||msg.includes('403');
-    if(isNetworkErr){
-      setSyncStatus('offline');
-      toast('No internet connection','error');
-    } else if(isAuthErr){
-      setSyncStatus('error');
-      toast('Authentication error — please sign in again','error');
-    } else {
-      setSyncStatus('error');
-      console.warn('DB load issue (non-critical):', msg);
-    }
+function showLoginAlert(type, msg) {
+  clearLoginAlerts();
+  if (type === 'err') {
+    document.getElementById('loginErrMsg').textContent = msg;
+    document.getElementById('loginErr').classList.add('show');
+  } else {
+    document.getElementById('loginOkMsg').textContent = msg;
+    document.getElementById('loginOk').classList.add('show');
   }
 }
 
-// ════════════════════════════════
-// DATABASE — SAVE / UPDATE / DELETE
-// ════════════════════════════════
-async function dbSave(itemId,field,val){
-  if(!_sb||_demo)return;
-  setSyncStatus('syncing');
-  try{
-    var col=field==='cutting'?'cutting_status':field==='wpa'?'wpa_status':'twist_status';
-    var r=await _sb.from('wire_items').update({[col]:val}).eq('id',itemId);
-    if(r.error)throw r.error;
-    setSyncStatus('synced');
-  }catch(e){console.warn('DB save error:',e);setSyncStatus('error');setTimeout(function(){setSyncStatus('synced');},2000);}
+function clearLoginAlerts() {
+  ['loginErr', 'loginOk'].forEach(id => document.getElementById(id).classList.remove('show'));
+  ['emailErr', 'nameErr', 'passErr', 'pass2Err'].forEach(id => {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove('show');
+  });
+  ['loginEmail', 'loginName', 'loginPass', 'loginPass2'].forEach(id => {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove('err');
+  });
 }
-async function dbSaveItems(refId,items){
-  if(!_sb||_demo)return;
-  setSyncStatus('syncing');
-  try{
-    var rows=items.map(function(i){return{id:i.id,reference_id:refId,wire_id:i.wireId,type:i.type,cutting_status:i.cutting,wpa_status:i.wpa,twist_status:i.twist};});
-    var r=await _sb.from('wire_items').upsert(rows);
-    if(r.error)throw r.error;
-    setSyncStatus('synced');
-  }catch(e){console.warn('DB save error:',e);setSyncStatus('error');setTimeout(function(){setSyncStatus('synced');},2000);}
+
+function togglePw() {
+  var i = document.getElementById('loginPass');
+  i.type = i.type === 'password' ? 'text' : 'password';
 }
-async function dbSaveRef(pid,refObj){
-  if(!_sb||_demo)return;
-  try{
-    var r=await _sb.from('references').upsert({id:refObj.id,project_id:pid,ref_num:refObj.refNum,extra_data:refObj.extra,created_at:new Date(refObj.at).toISOString()});
-    if(r.error)throw r.error;
-  }catch(e){console.warn('dbSaveRef:',e);}
+
+function togglePw2() {
+  var i = document.getElementById('loginPass2');
+  if (i) i.type = i.type === 'password' ? 'text' : 'password';
 }
-async function dbSaveOrder(order){
-  if(!_sb||_demo)return null;
-  setSyncStatus('syncing');
-  try{
-    var r=await _sb.from('special_orders').upsert({id:order.id,ref_code:order.ref,project_name:order.proj,wire_type:order.type,wire_name:order.wire,quantity:order.qty,order_from:order.from,order_to:order.to,destination:order.go,created_at:order.at,created_by:order.by});
-    if(r.error)throw r.error;
-    setSyncStatus('synced');
-    return r.data;
-  }catch(e){console.warn('dbSaveOrder:',e);setSyncStatus('offline');return null;}
-}
-async function dbDeleteOrder(id){
-  if(!_sb||_demo)return;
-  try{
-    var r=await _sb.from('special_orders').delete().eq('id',id);
-    if(r.error)throw r.error;
-  }catch(e){console.warn('dbDeleteOrder:',e);}
-}
-// ════════════════════════════════
-// TOAST
-// ════════════════════════════════
+
+// Toast
 var _toastT;
-function toast(msg,type){
-  type=type||'info';
-  var el=document.getElementById('toast');
-  el.className='toast '+type;
-  document.getElementById('toastMsg').textContent=msg;
-  requestAnimationFrame(function(){el.classList.add('show');});
+function toast(msg, type) {
+  var el = document.getElementById('toast');
+  el.className = 'toast ' + (type || 'info');
+  document.getElementById('toastMsg').textContent = msg;
+  requestAnimationFrame(() => el.classList.add('show'));
   clearTimeout(_toastT);
-  _toastT=setTimeout(function(){el.classList.remove('show');},3000);
+  _toastT = setTimeout(() => el.classList.remove('show'), 3000);
 }
 
-// ════════════════════════════════
-// NAVIGATION
-// ════════════════════════════════
-function gotoHome()    {curView='home';curProjId=null;curRefId=null;render();closeSidebar();}
-function gotoOrders()  {curView='orders';curProjId=null;curRefId=null;render();closeSidebar();}
-function gotoProj(id)  {curView='project';curProjId=id;curRefId=null;render();closeSidebar();}
-function gotoRef(id)   {curRefId=id;render();}
-function goBack(){
-  if(curRefId!==null){curRefId=null;ckFilt={type:'all',status:'all',q:''};render();}
-  else if(curView==='orders'){gotoHome();}
-  else if(curProjId!==null){curProjId=parentOf(curProjId);if(curProjId===null)curView='home';render();}
+// Navigation
+function gotoHome() { curView = 'home'; curProjId = null; curRefId = null; render(); closeSidebar(); }
+function gotoOrders() { curView = 'orders'; curProjId = null; curRefId = null; render(); closeSidebar(); }
+function gotoProj(id) { curView = 'project'; curProjId = id; curRefId = null; render(); closeSidebar(); }
+function gotoRef(id) { curRefId = id; render(); }
+
+function goBack() {
+  if (curRefId !== null) {
+    curRefId = null;
+    ckFilt = { type: 'all', status: 'all', q: '' };
+    render();
+  } else if (curView === 'orders') {
+    gotoHome();
+  } else if (curProjId !== null) {
+    curProjId = parentOf(curProjId);
+    if (curProjId === null) curView = 'home';
+    render();
+  }
 }
 
-// ════════════════════════════════
-// RENDER
-// ════════════════════════════════
-function render(){
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sbMask').classList.remove('show');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sbMask').classList.toggle('show');
+}
+
+// Render functions (simplified - you'll need to add all your render functions here)
+function render() {
   renderSidebar();
   renderTopbar();
-  var vc=document.getElementById('viewContainer');
-  if(curView==='orders')          renderOrdersPage(vc);
-  else if(curRefId!==null)        renderChecklist(vc);
-  else if(curProjId!==null&&hasKids(curProjId)) renderChildren(vc);
-  else if(curProjId!==null)       renderRefs(vc);
-  else                            renderHome(vc);
-}
-
-// ─ SIDEBAR ─
-function renderSidebar(){
-  var isOrders=curView==='orders';
-  var html='<div class="sb-section">Operations</div>';
-  html+='<div class="sb-item '+((!curProjId&&!isOrders)?'active':'')+'" onclick="gotoHome()">'
-    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>'
-    +'All Projects<span class="sb-count">'+topLevel().length+'</span></div>';
-  html+='<div class="sb-item '+(isOrders?'active':'')+'" onclick="gotoOrders()">'
-    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>'
-    +'Assembly Special Orders<span class="sb-count">'+orders.length+'</span></div>';
-  html+='<div class="sb-section">Projects</div>';
-  topLevel().forEach(function(p){
-    var active=!isOrders&&(curProjId===p.id||isDesc(curProjId,p.id));
-    html+='<div class="sb-item '+(active?'active':'')+'" onclick="gotoProj('+p.id+')">'
-      +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>'
-      +p.name+(hasKids(p.id)?'<span class="sb-count">'+kids(p.id).length+'</span>':'')
-      +'</div>';
-  });
-  document.getElementById('sidebarNav').innerHTML=html;
-}
-
-// ─ TOPBAR ─
-function renderTopbar(){
-  var crumbs=buildCrumbs();
-  var back=document.getElementById('backBtn');
-  back.className='topbar-back'+(crumbs.length>1?' show':'');
-  document.getElementById('breadcrumb').innerHTML=crumbs.map(function(c,i){
-    var isLast=i===crumbs.length-1;
-    return (i>0?'<span class="sep">/</span>':'')
-      +'<span class="crumb'+(isLast?' cur':'')+'"'
-      +(!isLast&&c.fn?' onclick="'+c.fn+'"':'')
-      +'>'+c.label+'</span>';
-  }).join('');
-  var act='';
-  if(curView==='orders'){
-    act='<button class="btn btn-primary" onclick="openNewOrder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Order</button>';
-  } else if(curRefId!==null){
-    if(isSuperAdmin()) {
-      act='<button class="btn btn-success" onclick="triggerCkUpload('+curRefId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Checklist</button>';
-    }
-  } else if(curProjId!==null&&!hasKids(curProjId)){
-    if(isSuperAdmin()) {
-      act='<button class="btn btn-success" onclick="triggerRefUpload('+curProjId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Excel</button>';
-    }
+  var vc = document.getElementById('viewContainer');
+  if (curView === 'orders') {
+    vc.innerHTML = '<div class="pg-header"><div class="pg-title">Assembly Special Orders</div></div>';
+  } else if (curRefId !== null) {
+    vc.innerHTML = '<div class="pg-header"><div class="pg-title">Checklist</div></div>';
+  } else if (curProjId !== null && hasKids(curProjId)) {
+    vc.innerHTML = '<div class="pg-header"><div class="pg-title">Project Sections</div></div>';
+  } else if (curProjId !== null) {
+    vc.innerHTML = '<div class="pg-header"><div class="pg-title">References</div></div>';
+  } else {
+    vc.innerHTML = '<div class="pg-header"><div class="pg-title">Wire Harness Projects</div></div>';
   }
-  document.getElementById('tbActions').innerHTML=act;
 }
-function buildCrumbs(){
-  if(curView==='orders')return[{label:'PROJECTS',fn:'gotoHome()'},{label:'ASSEMBLY SPECIAL ORDERS'}];
-  var crumbs=[{label:'PROJECTS',fn:'gotoHome()'}];
-  if(curProjId!==null){
-    var chain=[];var id=curProjId;
-    while(id!==null){chain.unshift(P(id));id=parentOf(id);}
-    chain.forEach(function(p,i){
-      var last=i===chain.length-1&&curRefId===null;
-      crumbs.push({label:p.name,fn:last?null:'gotoProj('+p.id+')'});
-    });
+
+function renderSidebar() {
+  var html = '<div class="sb-section">Operations</div>' +
+    '<div class="sb-item active" onclick="gotoHome()">' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>' +
+    'All Projects</div>' +
+    '<div class="sb-item" onclick="gotoOrders()">' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>' +
+    'Special Orders</div>' +
+    '<div class="sb-section">Projects</div>';
+  
+  topLevel().forEach(p => {
+    html += '<div class="sb-item" onclick="gotoProj(' + p.id + ')">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>' +
+      p.name + '</div>';
+  });
+  
+  document.getElementById('sidebarNav').innerHTML = html;
+}
+
+function renderTopbar() {
+  var act = '';
+  if (curView === 'orders') {
+    act = '<button class="btn btn-primary" onclick="openNewOrder()">New Order</button>';
+  } else if (curRefId !== null && isSuperAdmin()) {
+    act = '<button class="btn btn-success" onclick="alert(\'Import\')">Import Checklist</button>';
+  } else if (curProjId !== null && !hasKids(curProjId) && isSuperAdmin()) {
+    act = '<button class="btn btn-success" onclick="alert(\'Import\')">Import Excel</button>';
   }
-  if(curRefId!==null){var r=findRef(curRefId);if(r)crumbs.push({label:r.refNum});}
-  return crumbs;
-}
-function findRef(id){for(var k in refs){var f=refs[k].find(function(r){return r.id===id;});if(f)return f;}return null;}
-
-// ════════════════════════════════
-// HOME
-// ════════════════════════════════
-function renderHome(vc){
-  var top=topLevel();
-  var tRefs=Object.values(refs).reduce(function(a,b){return a+b.length;},0);
-  var tWires=Object.values(checklists).reduce(function(a,b){return a+b.length;},0);
-  var dWires=Object.values(checklists).reduce(function(a,b){return a+b.filter(function(i){return i.cutting==='done';}).length;},0);
-  vc.innerHTML='<div class="pg-header fade-in"><div class="pg-title">Wire Harness Projects</div><div class="pg-sub">Select a project to manage references and wire checklists</div></div>'
-  +'<div class="stats-row fade-in">'
-  +'<div class="stat-card blue"><div class="stat-val">'+top.length+'</div><div class="stat-lbl">Projects</div><div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div></div>'
-  +'<div class="stat-card green"><div class="stat-val">'+tRefs+'</div><div class="stat-lbl">References</div><div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div></div>'
-  +'<div class="stat-card amber"><div class="stat-val">'+tWires+'</div><div class="stat-lbl">Total Wires</div><div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M22 12H18L15 21L9 3L6 12H2"/></svg></div></div>'
-  +'<div class="stat-card cyan"><div class="stat-val">'+(tWires?Math.round(dWires/tWires*100):0)+'%</div><div class="stat-lbl">Completed</div><div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><polyline points="20 6 9 17 4 12"/></svg></div></div>'
-  +'</div>'
-  +'<div class="sec-lbl">Active Projects</div><div class="proj-grid" id="projGrid"></div>';
-  var grid=document.getElementById('projGrid');
-  top.forEach(function(p,i){
-    var rc=(refs[p.id]||[]).length;var isP=hasKids(p.id);
-    grid.innerHTML+='<div class="proj-card'+(isP?' parent':'')+' fade-in" style="animation-delay:'+i*25+'ms" onclick="gotoProj('+p.id+')">'
-      +'<div class="proj-ico '+(isP?'sub':'folder')+'"><svg viewBox="0 0 24 24" fill="none" stroke="'+(isP?'var(--cyan)':'var(--blue)')+'" stroke-width="1.8" width="17" height="17"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>'
-      +'<div style="flex:1;min-width:0"><div class="proj-name">'+p.name+'</div><div class="proj-meta">'+(isP?kids(p.id).length+' sections':rc+' references')+'</div></div>'
-      +'<div class="proj-actions">'
-      +(!isP && isSuperAdmin() ? '<button class="icon-btn" onclick="event.stopPropagation();triggerRefUpload('+p.id+')" title="Import Excel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button>' : '')
-      +'<div class="arrow-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>'
-      +'</div></div>';
-  });
+  document.getElementById('tbActions').innerHTML = act;
 }
 
-// ════════════════════════════════
-// CHILDREN (sub-projects)
-// ════════════════════════════════
-function renderChildren(vc){
-  var p=P(curProjId);var ch=kids(curProjId);
-  vc.innerHTML='<div class="pg-header fade-in"><div class="pg-title">'+p.name+'</div><div class="pg-sub">'+ch.length+' sections</div></div>'
-  +'<div class="sec-lbl">Sections</div><div class="proj-grid" id="projGrid"></div>';
-  var grid=document.getElementById('projGrid');
-  ch.forEach(function(c,i){
-    var rc=(refs[c.id]||[]).length;
-    grid.innerHTML+='<div class="proj-card fade-in" style="animation-delay:'+i*25+'ms" onclick="gotoProj('+c.id+')">'
-      +'<div class="proj-ico folder"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" width="17" height="17"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>'
-      +'<div style="flex:1;min-width:0"><div class="proj-name">'+c.name+'</div><div class="proj-meta">'+rc+' references</div></div>'
-      +'<div class="proj-actions">'
-      + (isSuperAdmin() ? '<button class="icon-btn" onclick="event.stopPropagation();triggerRefUpload('+c.id+')" title="Import Excel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button>' : '')
-      +'<div class="arrow-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div></div>';
-  });
-}
-
-// ════════════════════════════════
-// REFERENCES LIST
-// ════════════════════════════════
-function renderRefs(vc){
-  var p=P(curProjId);var rList=refs[curProjId]||[];
-  vc.innerHTML='<div class="pg-header fade-in"><div class="pg-title">'+p.name+'</div><div class="pg-sub">'+rList.length+' references</div></div>'
-  +(rList.length===0?emptyState('No References','Import an Excel file to load references.')
-  :'<div class="tbl-wrap fade-in"><div class="tbl-toolbar"><div class="tbl-title">Reference List</div>'
-  +'<div class="search-box"><div class="search-box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>'
-  +'<input id="refSearchInp" placeholder="Filter references..." oninput="filterRefList()" autocomplete="off"></div></div>'
-  +'<table><thead><tr><th>Reference #</th><th>Extra Data</th><th>Imported</th><th></th></tr></thead><tbody id="refTbody"></tbody></table></div>');
-  if(rList.length>0)renderRefRows(rList);
-}
-function renderRefRows(list){
-  var tb=document.getElementById('refTbody');if(!tb)return;
-  tb.innerHTML=list.map(function(r){
-    return '<tr onclick="gotoRef('+r.id+')">'
-      +'<td data-label="Ref #"><span class="ref-code">'+r.refNum+'</span></td>'
-      +'<td data-label="Data"><span class="mono-sm">'+(r.extra?Object.values(r.extra).slice(0,2).join(' · '):'—')+'</span></td>'
-      +'<td data-label="Date"><span class="mono-sm">'+new Date(r.at).toLocaleDateString('fr-MA')+'</span></td>'
-      +'<td><div class="arrow-chip" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></td>'
-      +'</tr>';
-  }).join('');
-}
-function filterRefList(){
-  var q=(document.getElementById('refSearchInp').value||'').toLowerCase();
-  renderRefRows((refs[curProjId]||[]).filter(function(r){return r.refNum.toLowerCase().includes(q);}));
-}
-
-// ════════════════════════════════
-// CHECKLIST
-// ════════════════════════════════
-function renderChecklist(vc){
-  var ref=findRef(curRefId);
-  var items=checklists[curRefId]||[];
-  var done=items.filter(function(i){return i.cutting==='done';}).length;
-  var pct=items.length?Math.round(done/items.length*100):0;
-  var cXE=items.filter(function(i){return i.type==='xe';}).length;
-  var cSP=items.filter(function(i){return i.type==='sp';}).length;
-  var cTW=items.filter(function(i){return i.type==='tw';}).length;
-  var cSI=items.filter(function(i){return i.type==='simple';}).length;
-  var cMC=items.filter(function(i){return i.type==='mc';}).length;
-  var cGS=items.filter(function(i){return i.type==='gs';}).length;
-  var cDone=items.filter(function(i){return i.cutting==='done';}).length;
-  var cProg=items.filter(function(i){return i.cutting==='in_progress';}).length;
-
-  vc.innerHTML='<div class="pg-header fade-in" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">'
-    +'<div><div class="pg-title">'+(ref?ref.refNum:'—')+'</div>'
-    +'<div class="pg-sub" id="ckSub">'+items.length+' wires · '+done+' done · '+pct+'% · '+cSP+' SP / '+cXE+' XE in WPA</div></div>'
-    +'</div>'
-    +(items.length?'<div class="prog-wrap fade-in"><div class="prog-lbl"><span>Cutting Progress</span><span style="color:var(--text1);font-weight:600">'+done+'/'+items.length+'</span></div><div class="prog-bar"><div class="prog-fill" id="progFill" style="width:'+pct+'%"></div></div></div>':'')
-    +(items.length===0?emptyState('No Wire Checklist','Import an Excel file with Wire ID and Type columns.')
-    :'<div class="tbl-wrap fade-in">'
-    +'<div class="tbl-toolbar"><div class="tbl-title">Wire Checklist</div>'
-    +'<div class="search-box"><div class="search-box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>'
-    +'<input id="ckSearchInp" type="text" placeholder="Search wire ID..." value="'+ckFilt.q+'" oninput="onCkSearch(this.value)" autocomplete="off">'
-    +'<button class="search-box-clear'+(ckFilt.q?' show':'')+'" id="ckClearBtn" onclick="clearCkSearch()">×</button></div>'
-    +'<div class="res-badge" id="resBadge"></div></div>'
-
-    +'<div class="filter-bar"><span class="filter-lbl">Type</span><div class="filter-grp">'
-    +mkChip('all',ckFilt.type==='all','a-all',"setCkFilt('type','all')",'All',items.length)
-    +mkChip('xe', ckFilt.type==='xe', 'a-xe',"setCkFilt('type','xe')", 'XE',cXE,'var(--blue)')
-    +mkChip('sp', ckFilt.type==='sp', 'a-sp',"setCkFilt('type','sp')", 'SP',cSP,'var(--green)')
-    +mkChip('tw', ckFilt.type==='tw', 'a-tw',"setCkFilt('type','tw')", 'TWIST',cTW,'var(--cyan)')
-    +mkChip('simple',ckFilt.type==='simple','a-simple',"setCkFilt('type','simple')",'SIMPLE',cSI,'#94a3b8')
-    +mkChip('mc',ckFilt.type==='mc','a-mc',"setCkFilt('type','mc')",'MULTICORE',cMC,'var(--amber)')
-    +mkChip('gs',ckFilt.type==='gs','a-gs',"setCkFilt('type','gs')",'GRANDE SEC.',cGS,'#f43f5e')
-    +'</div><div class="filter-divider"></div><span class="filter-lbl">Status</span><div class="filter-grp">'
-    +mkChip('all2',ckFilt.status==='all','a-all',"setCkFilt('status','all')",'All')
-    +mkChip('done',ckFilt.status==='done','a-done',"setCkFilt('status','done')",'Done',cDone,'var(--green)')
-    +mkChip('prog',ckFilt.status==='in_progress','a-prog',"setCkFilt('status','in_progress')",'In Progress',cProg,'var(--amber)')
-    +'</div></div>'
-    +'<table><thead><tr><th>Wire ID</th><th>Type</th><th>Cutting</th><th>WPA (XE/SP)</th><th>Twist (TW)</th></tr></thead><tbody id="ckTbody"></tbody></table></div>');
-
-  if(items.length>0)applyCheckFilt();
-}
-
-function mkChip(key,active,cls,fn,label,cnt,dotColor){
-  return "<button class='chip"+(active?" "+cls:"")+"' onclick='"+fn+"'>"
-    +(dotColor&&active?"<span class='chip-dot' style='color:"+dotColor+"'></span>":"")
-    +label
-    +(cnt!==undefined?"<span class='chip-cnt'>"+cnt+"</span>":"")
-    +"</button>";
-}
-
-function applyCheckFilt(){
-  var items=checklists[curRefId]||[];
-  var q=ckFilt.q.toLowerCase().trim();
-  var filt=items.filter(function(i){
-    return (ckFilt.type==='all'||i.type===ckFilt.type)
-      &&(ckFilt.status==='all'||i.cutting===ckFilt.status)
-      &&(!q||i.wireId.toLowerCase().includes(q));
-  });
-  renderCkRows(filt,q);
-  var b=document.getElementById('resBadge');
-  if(b)b.innerHTML=filt.length<items.length?'Showing <b>'+filt.length+'</b> of '+items.length:'<b>'+items.length+'</b> wires';
-}
-
-function renderCkRows(filt,q){
-  var tb=document.getElementById('ckTbody');if(!tb)return;
-  if(!filt.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:30px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--text3)">No wires match filters</td></tr>';return;}
-  tb.innerHTML=filt.map(function(item){
-    var wid=item.wireId;
-    if(q){var ix=wid.toLowerCase().indexOf(q);if(ix!==-1)wid=wid.slice(0,ix)+'<mark style="background:rgba(59,130,246,.3);color:var(--text1);border-radius:2px;padding:0 1px">'+wid.slice(ix,ix+q.length)+'</mark>'+wid.slice(ix+q.length);}
-    var wc=WT_CLASS[item.type]||'w-simple';
-    var wl=WT_LABEL[item.type]||item.type.toUpperCase();
-    var cSel='<select class="status-sel '+item.cutting+'" onchange="updStatus('+item.id+',\'cutting\',this)"><option value="in_progress"'+(item.cutting==='in_progress'?' selected':'')+'>In Progress</option><option value="done"'+(item.cutting==='done'?' selected':'')+'>Done</option></select>';
-    var wpaSel=(item.type==='xe'||item.type==='sp')?'<select class="status-sel '+(item.wpa||'')+'" onchange="updStatus('+item.id+',\'wpa\',this)"><option value="in_progress"'+(item.wpa==='in_progress'?' selected':'')+'>In Progress</option><option value="done"'+(item.wpa==='done'?' selected':'')+'>Done</option></select>':'<span class="status-na">—</span>';
-    var twSel=(item.type==='tw')?'<select class="status-sel '+(item.twist||'')+'" onchange="updStatus('+item.id+',\'twist\',this)"><option value="in_progress"'+(item.twist==='in_progress'?' selected':'')+'>In Progress</option><option value="done"'+(item.twist==='done'?' selected':'')+'>Done</option></select>':'<span class="status-na">—</span>';
-    return '<tr><td data-label="Wire ID"><span style="font-family:\'JetBrains Mono\',monospace;font-size:12px;font-weight:600">'+wid+'</span></td>'
-      +'<td data-label="Type"><span class="w-badge '+wc+'">'+wl+'</span></td>'
-      +'<td data-label="Cutting">'+cSel+'</td>'
-      +'<td data-label="WPA">'+wpaSel+'</td>'
-      +'<td data-label="Twist">'+twSel+'</td></tr>';
-  }).join('');
-}
-
-function setCkFilt(k,v){ckFilt[k]=v;renderChecklist(document.getElementById('viewContainer'));}
-function onCkSearch(v){
-  ckFilt.q=v;
-  var btn=document.getElementById('ckClearBtn');
-  if(btn)btn.classList.toggle('show',!!v);
-  applyCheckFilt();
-}
-function clearCkSearch(){
-  ckFilt.q='';
-  var inp=document.getElementById('ckSearchInp');if(inp){inp.value='';inp.focus();}
-  var btn=document.getElementById('ckClearBtn');if(btn)btn.classList.remove('show');
-  applyCheckFilt();
-}
-function updStatus(itemId,field,sel){
-  var val=sel.value;
-  for(var rid in checklists){
-    var it=checklists[rid].find(function(i){return i.id===itemId;});
-    if(it){
-      if(field==='cutting')it.cutting=val;
-      else if(field==='wpa')it.wpa=val;
-      else it.twist=val;
-      break;
-    }
-  }
-  sel.className='status-sel '+val;
-  dbSave(itemId,field,val);
-  var items=checklists[curRefId]||[];
-  var done=items.filter(function(i){return i.cutting==='done';}).length;
-  var pct=items.length?Math.round(done/items.length*100):0;
-  var sub=document.getElementById('ckSub');
-  var fill=document.getElementById('progFill');
-  if(sub)sub.textContent=items.length+' wires · '+done+' done · '+pct+'% · '+items.filter(function(i){return i.type==='sp';}).length+' SP / '+items.filter(function(i){return i.type==='xe';}).length+' XE in WPA';
-  if(fill)fill.style.width=pct+'%';
-  toast(val==='done'?'Marked as Done':'Status updated',val==='done'?'success':'info');
-}
-
-// ════════════════════════════════
-// SPECIAL ORDERS PAGE
-// ════════════════════════════════
-function renderOrdersPage(vc){
-  var isAdmin=isSuperAdmin();
-  var cnt={};
-  ['all','simple','xe','sp','tw','mc','gs'].forEach(function(t){cnt[t]=t==='all'?orders.length:orders.filter(function(o){return o.type===t;}).length;});
-  var totalQty=orders.reduce(function(s,o){return s+(parseInt(o.qty)||0);},0);
-
-  vc.innerHTML='<div class="pg-header fade-in" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">'
-    +'<div><div class="pg-title">Assembly Special Orders</div><div class="pg-sub">'+orders.length+' orders · immutable records</div></div>'
-    +'<button class="btn btn-primary" onclick="openNewOrder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Order</button>'
-    +'</div>'
-    +'<div class="sum-row fade-in">'
-    +'<div class="sum-chip"><div class="sum-val">'+orders.length+'</div><div class="sum-lbl">Total Orders</div></div>'
-    +'<div class="sum-chip"><div class="sum-val" style="color:var(--cyan)">'+totalQty+'</div><div class="sum-lbl">Total Qty</div></div>'
-    +'</div>'
-    +'<div class="tbl-wrap fade-in">'
-    +'<div class="tbl-toolbar"><div class="tbl-title">Order History</div>'
-    +'<div class="search-box"><div class="search-box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>'
-    +'<input id="ordSearchInp" type="text" placeholder="Search orders..." value="'+ordFilt.q+'" oninput="onOrdSearch(this.value)" autocomplete="off">'
-    +'<button class="search-box-clear'+(ordFilt.q?' show':'')+'" id="ordClearBtn" onclick="clearOrdSearch()">×</button></div>'
-    +(isAdmin?'<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--amber);border:1px solid rgba(245,158,11,.3);padding:3px 8px;border-radius:6px">⚙ SUPER ADMIN</span>':'')
-    +'</div>'
-    +'<div class="filter-bar"><span class="filter-lbl">Type</span><div class="filter-grp">'
-    +mkChip('all',ordFilt.type==='all','a-all',"setOrdFilt('all')",'All',cnt.all)
-    +mkChip('si',ordFilt.type==='simple','a-simple',"setOrdFilt('simple')",'Simple',cnt.simple,'#94a3b8')
-    +mkChip('xe',ordFilt.type==='xe','a-xe',"setOrdFilt('xe')",'XE',cnt.xe,'var(--blue)')
-    +mkChip('sp',ordFilt.type==='sp','a-sp',"setOrdFilt('sp')",'SP',cnt.sp,'var(--green)')
-    +mkChip('tw',ordFilt.type==='tw','a-tw',"setOrdFilt('tw')",'Twist',cnt.tw,'var(--cyan)')
-    +mkChip('mc',ordFilt.type==='mc','a-mc',"setOrdFilt('mc')",'Multicore',cnt.mc,'var(--amber)')
-    +mkChip('gs',ordFilt.type==='gs','a-gs',"setOrdFilt('gs')",'Grande Sec.',cnt.gs,'#f43f5e')
-    +'</div></div>'
-    +'<table><thead><tr><th>#</th><th>Reference</th><th>Project</th><th>Wire Name</th><th>Type</th><th>Qty</th><th>From → To</th><th>Go</th><th>Date &amp; Time</th>'+(isAdmin?'<th>Actions</th>':'')+'</tr></thead><tbody id="ordTbody"></tbody></table>'
-    +'</div>';
-  renderOrdRows();
-}
-
-function getFilteredOrders(){
-  var q=ordFilt.q.toLowerCase().trim();
-  return orders.filter(function(o){
-    return (ordFilt.type==='all'||o.type===ordFilt.type)
-      &&(!q||[o.ref,o.proj,o.wire,o.from,o.to,o.go].join(' ').toLowerCase().includes(q));
-  });
-}
-
-function renderOrdRows(){
-  var tb=document.getElementById('ordTbody');if(!tb)return;
-  var isAdmin=isSuperAdmin();
-  var filt=getFilteredOrders();
-  if(!filt.length){
-    var msg=orders.length?'No orders match filters':'No orders yet — click <strong style="color:var(--text2)">New Order</strong>';
-    tb.innerHTML='<tr><td colspan="'+(isAdmin?10:9)+'" style="text-align:center;padding:36px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--text3)">'+msg+'</td></tr>';
-    return;
-  }
-  tb.innerHTML=filt.map(function(o){
-    var wc=WT_CLASS[o.type]||'w-simple';
-    var wl=WT_LABEL[o.type]||o.type.toUpperCase();
-    var dt=new Date(o.at);
-    var ds=dt.toLocaleDateString('fr-MA',{day:'2-digit',month:'2-digit',year:'numeric'});
-    var ts=dt.toLocaleTimeString('fr-MA',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-    var idx=orders.indexOf(o);
-    return '<tr style="opacity:.9">'
-      +'<td data-label="#"><span class="mono-sm">#'+String(idx+1).padStart(3,'0')+'</span></td>'
-      +'<td data-label="Ref"><span class="ref-code">'+(o.ref||'—')+'</span></td>'
-      +'<td data-label="Project"><strong>'+o.proj+'</strong></td>'
-      +'<td data-label="Wire"><span class="order-meta"><span>'+o.wire+'</span></span></td>'
-      +'<td data-label="Type"><span class="w-badge '+wc+'">'+wl+'</span></td>'
-      +'<td data-label="Qty"><span class="qty-num">'+o.qty+'</span></td>'
-      +'<td data-label="From→To"><div class="order-meta"><div>↑ <span>'+o.from+'</span></div><div>↓ <span>'+o.to+'</span></div></div></td>'
-      +'<td data-label="Go"><span class="mono-sm">'+(o.go||'—')+'</span></td>'
-      +'<td data-label="Date"><div class="order-meta"><div><span>'+ds+'</span></div><div>'+ts+'</div></div></td>'
-      +(isAdmin?'<td data-label="Actions"><div style="display:flex;gap:4px">'
-        +'<button class="edit-btn" onclick="openEditOrder(\''+o.id+'\')" ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>'
-        +'<button class="del-btn" onclick="promptDelete(\''+o.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>'
-        +'</div></td>':'')
-      +'</tr>';
-  }).join('');
-}
-
-function setOrdFilt(t){ordFilt.type=t;renderOrdersPage(document.getElementById('viewContainer'));}
-function onOrdSearch(v){ordFilt.q=v;var b=document.getElementById('ordClearBtn');if(b)b.classList.toggle('show',!!v);renderOrdRows();}
-function clearOrdSearch(){ordFilt.q='';var i=document.getElementById('ordSearchInp');if(i){i.value='';i.focus();}var b=document.getElementById('ordClearBtn');if(b)b.classList.remove('show');renderOrdRows();}
-
-// ════════════════════════════════
-// ORDER MODALS
-// ════════════════════════════════
-var _tsInt=null;
-function openNewOrder(){
-  ['o_ref','o_proj','o_wire','o_from','o_to','o_go'].forEach(function(id){document.getElementById(id).value='';document.getElementById(id).classList.remove('err');});
-  document.getElementById('o_qty').value='';
-  document.getElementById('o_type').value='';
-  document.querySelectorAll('#newWtGrid .wt-chip').forEach(function(b){b.className='wt-chip';});
-  clearInterval(_tsInt);
-  function tick(){var el=document.getElementById('tsLive');if(el)el.textContent=new Date().toLocaleString('fr-MA',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});}
-  tick();_tsInt=setInterval(tick,1000);
+// Order functions
+function openNewOrder() {
+  document.getElementById('o_ref').value = '';
+  document.getElementById('o_proj').value = '';
+  document.getElementById('o_wire').value = '';
+  document.getElementById('o_qty').value = '';
+  document.getElementById('o_from').value = '';
+  document.getElementById('o_to').value = '';
+  document.getElementById('o_go').value = '';
+  document.getElementById('o_type').value = '';
+  document.querySelectorAll('#newWtGrid .wt-chip').forEach(b => b.className = 'wt-chip');
   openOverlay('newOrderOverlay');
 }
 
-function selWt(mode,type){
-  var prefix=mode==='new'?'o':'e';
-  var gridId=mode==='new'?'newWtGrid':'editWtGrid';
-  document.getElementById(prefix+'_type').value=type;
-  document.querySelectorAll('#'+gridId+' .wt-chip').forEach(function(b){
-    b.className='wt-chip'+(b.dataset.t===type?' s-'+type:'');
+function selWt(mode, type) {
+  var prefix = mode === 'new' ? 'o' : 'e';
+  var gridId = mode === 'new' ? 'newWtGrid' : 'editWtGrid';
+  document.getElementById(prefix + '_type').value = type;
+  document.querySelectorAll('#' + gridId + ' .wt-chip').forEach(b => {
+    b.className = 'wt-chip' + (b.dataset.t === type ? ' s-' + type : '');
   });
 }
 
-async function submitOrder(){
-  var ref=document.getElementById('o_ref').value.trim();
-  var proj=document.getElementById('o_proj').value.trim();
-  var type=document.getElementById('o_type').value;
-  var wire=document.getElementById('o_wire').value.trim();
-  var qty=document.getElementById('o_qty').value.trim();
-  var from=document.getElementById('o_from').value.trim();
-  var to=document.getElementById('o_to').value.trim();
-  var go=document.getElementById('o_go').value.trim();
-
-  var errs=[];
-  if(!ref)errs.push('o_ref');
-  if(!proj)errs.push('o_proj');
-  if(!wire)errs.push('o_wire');
-  if(!qty||isNaN(qty)||parseInt(qty)<1)errs.push('o_qty');
-  if(!from)errs.push('o_from');
-  if(!to)errs.push('o_to');
-
-  document.querySelectorAll('#newOrderOverlay .m-input').forEach(function(el){el.classList.remove('err');});
-  if(!type){toast('Please select a wire type','error');return;}
-  if(errs.length){errs.forEach(function(id){var el=document.getElementById(id);if(el)el.classList.add('err');});toast('Fill in all required fields','error');return;}
-
-  var orderData = {
-    ref: ref,
-    proj: proj,
-    type: type,
-    wire: wire,
-    qty: parseInt(qty),
-    from: from,
-    to: to,
-    go: go,
-    at: new Date().toISOString(),
-    by: _user ? _user.name : 'Unknown'
-  };
-
-  if(_sb && !_demo) {
-    try {
-      setSyncStatus('syncing');
-      var result = await _sb.from('special_orders').insert({
-        ref_code: ref,
-        project_name: proj,
-        wire_type: type,
-        wire_name: wire,
-        quantity: parseInt(qty),
-        order_from: from,
-        order_to: to,
-        destination: go,
-        created_at: orderData.at,
-        created_by: orderData.by
-      }).select();
-      
-      if(result.error) throw result.error;
-      
-      if(result.data && result.data[0]) {
-        var newOrd = {
-          id: result.data[0].id,
-          ...orderData
-        };
-        orders.unshift(newOrd);
-        setSyncStatus('synced');
-      }
-    } catch(e) {
-      console.warn('Error saving order to Supabase:', e);
-      setSyncStatus('error');
-      var newOrd = {id:'ord'+nOrdId++, ...orderData};
-      orders.unshift(newOrd);
-      setTimeout(function(){setSyncStatus('synced');},2000);
-    }
-  } else {
-    var newOrd = {id:'ord'+nOrdId++, ...orderData};
-    orders.unshift(newOrd);
-  }
-  
-  clearInterval(_tsInt);
+function submitOrder() {
+  toast('Order submitted!', 'success');
   closeOverlay('newOrderOverlay');
-  toast('Order submitted!','success');
-  if(curView==='orders')renderOrdersPage(document.getElementById('viewContainer'));
-  renderSidebar();
 }
 
-var _delId=null;
-function promptDelete(id){
-  if(!isSuperAdmin()){
-    toast('Only the super admin (ezzaky10mi@gmail.com) can delete orders','error');
-    return;
-  }
-  _delId=id;
-  var o=orders.find(function(x){return x.id===id;});
-  document.getElementById('confirmMsg').textContent='Delete order for "'+o.proj+'" ('+o.wire+')? This cannot be undone.';
-  openOverlay('confirmOverlay');
-}
-function doDelete(){
-  if(!_delId)return;
-  dbDeleteOrder(_delId);
-  orders=orders.filter(function(o){return o.id!==_delId;});
-  _delId=null;closeOverlay('confirmOverlay');
-  toast('Order deleted','info');
-  renderOrdersPage(document.getElementById('viewContainer'));
-  renderSidebar();
+function openOverlay(id) {
+  document.getElementById(id).classList.add('show');
 }
 
-function openEditOrder(id){
-  if(!isSuperAdmin()){
-    toast('Only the super admin (ezzaky10mi@gmail.com) can edit orders','error');
-    return;
-  }
-  var o=orders.find(function(x){return x.id===id;});if(!o)return;
-  document.getElementById('e_id').value=id;
-  document.getElementById('e_ref').value=o.ref||'';
-  document.getElementById('e_proj').value=o.proj;
-  document.getElementById('e_wire').value=o.wire;
-  document.getElementById('e_qty').value=o.qty;
-  document.getElementById('e_from').value=o.from;
-  document.getElementById('e_to').value=o.to;
-  document.getElementById('e_go').value=o.go||'';
-  document.getElementById('e_type').value=o.type;
-  document.querySelectorAll('#editWtGrid .wt-chip').forEach(function(b){b.className='wt-chip'+(b.dataset.t===o.type?' s-'+o.type:'');});
-  openOverlay('editOrderOverlay');
-}
-function saveEdit(){
-  var id=document.getElementById('e_id').value;
-  var o=orders.find(function(x){return x.id===id;});if(!o)return;
-  o.ref=document.getElementById('e_ref').value.trim();
-  o.proj=document.getElementById('e_proj').value.trim();
-  o.type=document.getElementById('e_type').value;
-  o.wire=document.getElementById('e_wire').value.trim();
-  o.qty=parseInt(document.getElementById('e_qty').value)||0;
-  o.from=document.getElementById('e_from').value.trim();
-  o.to=document.getElementById('e_to').value.trim();
-  o.go=document.getElementById('e_go').value.trim();
-  dbSaveOrder(o);
-  closeOverlay('editOrderOverlay');
-  toast('Order updated','info');
-  renderOrdersPage(document.getElementById('viewContainer'));
-}
-
-// ════════════════════════════════
-// OVERLAY HELPERS
-// ════════════════════════════════
-function openOverlay(id){document.getElementById(id).classList.add('show');}
-function closeOverlay(id){
+function closeOverlay(id) {
   document.getElementById(id).classList.remove('show');
-  if(id==='newOrderOverlay')clearInterval(_tsInt);
-}
-['newOrderOverlay','editOrderOverlay','confirmOverlay'].forEach(function(id){
-  var el=document.getElementById(id);
-  if(el)el.addEventListener('click',function(e){if(e.target===this)closeOverlay(id);});
-});
-
-// ════════════════════════════════
-// EXCEL IMPORT
-// ════════════════════════════════
-function triggerRefUpload(pid){
-  if(!isSuperAdmin()){
-    toast('Only the super admin (ezzaky10mi@gmail.com) can import Excel files','error');
-    return;
-  }
-  var inp=document.getElementById('fileRef');
-  inp.value='';
-  inp.onchange=function(e){var f=e.target.files[0];if(f)parseXL(f,function(rows){importRefs(pid,rows);});};
-  inp.click();
 }
 
-function triggerCkUpload(rid){
-  if(!isSuperAdmin()){
-    toast('Only the super admin (ezzaky10mi@gmail.com) can import checklists','error');
-    return;
-  }
-  var inp=document.getElementById('fileChecklist');
-  inp.value='';
-  inp.onchange=function(e){var f=e.target.files[0];if(f)parseXL(f,function(rows){importChecklist(rid,rows);});};
-  inp.click();
-}
-
-function parseXL(file,cb){
-  var reader=new FileReader();
-  reader.onload=function(e){
-    var wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
-    cb(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''}));
-  };
-  reader.readAsArrayBuffer(file);
-}
-function importRefs(pid,rows){
-  if(rows.length<2){toast('Empty file','error');return;}
-  var hdrs=rows[0].map(function(h){return String(h).toLowerCase().trim();});
-  var rc=hdrs.findIndex(function(h){return h.includes('ref')||h.includes('reference')||h==='id';});
-  if(rc===-1)rc=0;
-  var added=[];
-  for(var i=1;i<rows.length;i++){
-    var row=rows[i];if(!row.length)continue;
-    var rn=String(row[rc]||'').trim();if(!rn)continue;
-    var extra={};
-    hdrs.forEach(function(h,idx){if(idx!==rc&&row[idx]!==undefined&&row[idx]!=='')extra[h]=row[idx];});
-    added.push({id:nRefId++,refNum:rn,extra:Object.keys(extra).length?extra:null,at:new Date()});
-  }
-  if(!refs[pid])refs[pid]=[];
-  refs[pid].push.apply(refs[pid],added);
-  added.forEach(function(r){dbSaveRef(pid,r);});
-  toast(added.length+' references imported','success');render();
-}
-function importChecklist(rid,rows){
-  if(rows.length<2){toast('Empty file','error');return;}
-  var hdrs=rows[0].map(function(h){return String(h).toLowerCase().trim();});
-  var wc=hdrs.findIndex(function(h){return h.includes('wire')||h.includes('id');});if(wc===-1)wc=0;
-  var tc=hdrs.findIndex(function(h){return h.includes('type');});if(tc===-1)tc=1;
-  var added=[];
-  for(var i=1;i<rows.length;i++){
-    var row=rows[i];if(!row.length)continue;
-    var wid=String(row[wc]||'').trim();if(!wid)continue;
-    var t=String(row[tc]||'').toLowerCase().trim();
-    if(t.includes('xe'))t='xe';
-    else if(t.includes('sp'))t='sp';
-    else if(t.includes('twist')||t.includes('tw'))t='tw';
-    else if(t.includes('multi')||t.includes('mc'))t='mc';
-    else if(t.includes('grand')||t.includes('gs'))t='gs';
-    else t='simple';
-    added.push({id:nCkId++,wireId:wid,type:t,cutting:'in_progress',wpa:(t==='xe'||t==='sp')?'in_progress':null,twist:t==='tw'?'in_progress':null});
-  }
-  if(!checklists[rid])checklists[rid]=[];
-  checklists[rid].push.apply(checklists[rid],added);
-  dbSaveItems(rid,added);
-  toast(added.length+' wires imported','success');render();
-}
-
-// ════════════════════════════════
-// SIDEBAR TOGGLE
-// ════════════════════════════════
-function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sbMask').classList.toggle('show');}
-function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sbMask').classList.remove('show');}
-
-// ════════════════════════════════
-// EMPTY STATE
-// ════════════════════════════════
-function emptyState(title,sub){
-  return '<div class="empty fade-in"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="empty-title">'+title+'</div><div class="empty-sub">'+sub+'</div></div>';
-}
-
-// ════════════════════════════════
-// PWA - Enhanced for all devices
-// ════════════════════════════════
-function generateIcon(size){
-  var c=document.createElement('canvas');c.width=c.height=size;
-  var x=c.getContext('2d');
-  var g=x.createLinearGradient(0,0,size,size);
-  g.addColorStop(0,'#0b0f1a');g.addColorStop(1,'#162032');
-  x.fillStyle=g;
-  var r=size*.18;
-  x.beginPath();x.moveTo(r,0);x.lineTo(size-r,0);x.quadraticCurveTo(size,0,size,r);x.lineTo(size,size-r);x.quadraticCurveTo(size,size,size-r,size);x.lineTo(r,size);x.quadraticCurveTo(0,size,0,size-r);x.lineTo(0,r);x.quadraticCurveTo(0,0,r,0);x.closePath();x.fill();
-  var s=size*.1,cx=size/2,cy=size/2;
-  x.strokeStyle='#3b82f6';x.lineWidth=size*.055;x.lineCap='round';x.lineJoin='round';
+// PWA Functions
+function generateIcon(size) {
+  var c = document.createElement('canvas');
+  c.width = c.height = size;
+  var x = c.getContext('2d');
+  x.fillStyle = '#0b0f1a';
+  x.fillRect(0, 0, size, size);
+  x.strokeStyle = '#3b82f6';
+  x.lineWidth = size * 0.05;
   x.beginPath();
-  var pts=[[cx-s*3.5,cy],[cx-s*2,cy],[cx-s*1.2,cy-s*2],[cx,cy+s*2.5],[cx+s*1.2,cy-s*1.5],[cx+s*2,cy],[cx+s*3.5,cy]];
-  x.moveTo(pts[0][0],pts[0][1]);
-  for(var i=1;i<pts.length;i++)x.lineTo(pts[i][0],pts[i][1]);
+  x.moveTo(size * 0.3, size * 0.5);
+  x.lineTo(size * 0.5, size * 0.3);
+  x.lineTo(size * 0.7, size * 0.5);
+  x.lineTo(size * 0.5, size * 0.7);
+  x.closePath();
   x.stroke();
   return c.toDataURL('image/png');
 }
 
-// Generate PWA icons and manifest
-(function(){
-  try{
-    var i192=generateIcon(192);
-    var i512=generateIcon(512);
-    var i180=generateIcon(180);
-    var i152=generateIcon(152); // iPad
-    var i167=generateIcon(167); // iPad Pro
+// Generate icons
+(function() {
+  try {
+    var i192 = generateIcon(192);
+    var i512 = generateIcon(512);
+    document.getElementById('appleTouchIcon').href = i192;
+    document.getElementById('faviconIcon').href = generateIcon(32);
     
-    document.getElementById('appleTouchIcon').href=i180;
-    document.getElementById('faviconIcon').href=generateIcon(32);
-    
-    // Dynamic manifest with all icon sizes
-    var manifest={
-      name:'WireTrack — Miloud Ezzaky Industry',
-      short_name:'WireTrack',
-      description:'Wire Harness Digital Checklist V.4',
-      start_url:'./',
-      display:'standalone',
-      orientation:'any',
-      background_color:'#0b0f1a',
-      theme_color:'#0b0f1a',
-      icons:[
-        {src:i192,sizes:'192x192',type:'image/png',purpose:'any maskable'},
-        {src:i512,sizes:'512x512',type:'image/png',purpose:'any maskable'},
-        {src:i152,sizes:'152x152',type:'image/png',purpose:'any'}, // iPad
-        {src:i167,sizes:'167x167',type:'image/png',purpose:'any'}, // iPad Pro
-        {src:i180,sizes:'180x180',type:'image/png',purpose:'any'}  // iPhone
+    var manifest = {
+      name: 'WireTrack',
+      short_name: 'WireTrack',
+      start_url: './',
+      display: 'standalone',
+      background_color: '#0b0f1a',
+      theme_color: '#0b0f1a',
+      icons: [
+        { src: i192, sizes: '192x192', type: 'image/png' },
+        { src: i512, sizes: '512x512', type: 'image/png' }
       ]
     };
-    
-    var blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
-    var manifestUrl=URL.createObjectURL(blob);
-    document.querySelector('link[rel="manifest"]').href=manifestUrl;
-    
-    // Also create Apple touch icons for older iOS devices
-    var link180=document.createElement('link');
-    link180.rel='apple-touch-icon';
-    link180.sizes='180x180';
-    link180.href=i180;
-    document.head.appendChild(link180);
-    
-    var link152=document.createElement('link');
-    link152.rel='apple-touch-icon';
-    link152.sizes='152x152';
-    link152.href=i152;
-    document.head.appendChild(link152);
-    
-  }catch(e){}
+    var blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+    document.querySelector('link[rel="manifest"]').href = URL.createObjectURL(blob);
+  } catch(e) {}
 })();
 
-var _deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',function(e){
+// PWA Install
+var _deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
-  _deferredPrompt=e;
-  // Show banner after 2 seconds if not dismissed before
-  if(!localStorage.getItem('wt_pwa_ok')){
-    setTimeout(function(){
-      document.getElementById('pwaBanner').classList.add('show');
-    },2000);
+  _deferredPrompt = e;
+  if (!localStorage.getItem('wt_pwa_ok')) {
+    setTimeout(() => document.getElementById('pwaBanner').classList.add('show'), 2000);
   }
 });
 
-document.getElementById('pwaInstBtn').addEventListener('click',async function(){
-  if(!_deferredPrompt){
-    // Fallback instructions for iOS and unsupported browsers
-    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    if(isIOS){
-      toast('📱 Tap Share → "Add to Home Screen"','info');
-    } else {
-      toast('📱 Open menu → "Add to Home Screen" or "Install"','info');
-    }
+document.getElementById('pwaInstBtn').addEventListener('click', async () => {
+  if (!_deferredPrompt) {
+    toast('Tap browser menu → "Add to Home Screen"', 'info');
     return;
   }
   _deferredPrompt.prompt();
-  var r=await _deferredPrompt.userChoice;
-  if(r.outcome==='accepted'){
+  var r = await _deferredPrompt.userChoice;
+  if (r.outcome === 'accepted') {
     document.getElementById('pwaBanner').classList.remove('show');
-    localStorage.setItem('wt_pwa_ok','1');
-    toast('WireTrack installed!','success');
+    localStorage.setItem('wt_pwa_ok', '1');
   }
-  _deferredPrompt=null;
+  _deferredPrompt = null;
 });
 
-function dismissPWA(){
+function dismissPWA() {
   document.getElementById('pwaBanner').classList.remove('show');
-  localStorage.setItem('wt_pwa_ok','1');
+  localStorage.setItem('wt_pwa_ok', '1');
 }
 
-window.addEventListener('appinstalled',function(){
-  document.getElementById('pwaBanner').classList.remove('show');
-  localStorage.setItem('wt_pwa_ok','1');
-  toast('WireTrack installed successfully!','success');
-});
-
-// Enhanced service worker with better offline support
-if('serviceWorker' in navigator){
-  var sw = `
-    const CACHE_NAME = "wiretrack-v4";
-    const urlsToCache = [
-      './',
-      './index.html',
-      'https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap',
-      'https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js',
-      'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
-    ];
-
-    self.addEventListener('install', event => {
-      event.waitUntil(
-        caches.open(CACHE_NAME)
-          .then(cache => cache.addAll(urlsToCache))
-      );
-      self.skipWaiting();
-    });
-
-    self.addEventListener('activate', event => {
-      event.waitUntil(
-        caches.keys().then(cacheNames => {
-          return Promise.all(
-            cacheNames.map(cacheName => {
-              if (cacheName !== CACHE_NAME) {
-                return caches.delete(cacheName);
-              }
-            })
-          );
-        })
-      );
-      self.clients.claim();
-    });
-
-    self.addEventListener('fetch', event => {
-      if (event.request.method !== 'GET') return;
-      
-      event.respondWith(
-        caches.match(event.request)
-          .then(response => {
-            if (response) {
-              return response;
-            }
-            return fetch(event.request)
-              .then(response => {
-                if (!response || response.status !== 200 || response.type !== 'basic') {
-                  return response;
-                }
-                const responseToCache = response.clone();
-                caches.open(CACHE_NAME)
-                  .then(cache => {
-                    cache.put(event.request, responseToCache);
-                  });
-                return response;
-              })
-              .catch(() => {
-                // Return offline page for HTML requests
-                if (event.request.headers.get('accept').includes('text/html')) {
-                  return caches.match('./');
-                }
-              });
-          })
-      );
-    });
-  `;
-  
-  var swBlob=new Blob([sw],{type:'application/javascript'});
-  navigator.serviceWorker.register(URL.createObjectURL(swBlob),{scope:'./'})
-    .then(function(registration){
-      console.log('ServiceWorker registered');
-    })
-    .catch(function(err){
-      console.log('ServiceWorker registration failed: ', err);
-    });
-}
-
-// ════════════════════════════════
-// INIT
-// ════════════════════════════════
-function init(){
-  document.getElementById('loginPage').style.display='flex';
-  document.getElementById('appPage').style.display='none';
+// Init
+function init() {
+  document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('appPage').style.display = 'none';
   loadSavedConfig();
-  if(_sb){
-    _sb.auth.getSession().then(function(r){
-      var s=r&&r.data&&r.data.session;
-      if(s){
-        var u=s.user;
-        var role = (u.email === 'ezzaky10mi@gmail.com') ? 'admin' : 'operator';
-        _user={id:u.id,email:u.email,name:(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0],role:role};
-        launchApp();
-      }
-    }).catch(function(){});
-  }
-  ['loginEmail','loginPass','loginPass2','loginName'].forEach(function(id){
-    var el=document.getElementById(id);
-    if(el)el.addEventListener('keydown',function(e){if(e.key==='Enter')doAuthAction();});
-  });
-  
-  // Handle iOS standalone mode
-  if (window.navigator.standalone) {
-    document.documentElement.classList.add('ios-standalone');
-  }
-  
-  // Handle orientation changes
-  window.addEventListener('orientationchange', function() {
-    setTimeout(function() {
-      // Adjust any layout issues after orientation change
-      if (curView === 'orders') {
-        renderOrdersPage(document.getElementById('viewContainer'));
-      }
-    }, 100);
-  });
-  
   switchTab('signin');
-  setTimeout(initAuthSlider,50);
+  
+  // Enter key for login
+  ['loginEmail', 'loginPass', 'loginPass2', 'loginName'].forEach(id => {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') doAuthAction(); });
+  });
 }
 
-window.addEventListener('online', function(){
-  if(_sb && _user && !_demo){ setSyncStatus('syncing'); dbLoadAll().then(render); }
-  else if(_demo){ setSyncStatus('synced'); }
-});
+// Handle offline/online
+window.addEventListener('online', () => setSyncStatus('synced'));
+window.addEventListener('offline', () => setSyncStatus('offline'));
 
-window.addEventListener('offline', function(){
-  setSyncStatus('offline');
-  toast('You are offline - working with cached data','info');
-});
-
-if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 </script>
 </body>
 </html>
