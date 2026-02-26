@@ -846,9 +846,11 @@ var _sb = null, _user = null, _demo = false;
 // ════════════════════════════════
 // SUPABASE CREDENTIALS
 // Paste your Supabase URL and anon key here once — all users share them
+// NOTE: Make sure Realtime is enabled for your tables in Supabase:
+//   Supabase → Database → Replication → enable special_orders, wire_items, references
 // ════════════════════════════════
-var SUPABASE_URL = 'https://kvdykwuccqcsaedmhndb.supabase.co';   // e.g. 'https://abcxyz.supabase.co'
-var SUPABASE_KEY = 'sb_publishable_NL-3xOQLa_vLIyJ4xF-q_g_i86mXl3s';   // e.g. 'eyJhbGciOiJIUzI1NiIs...'
+var SUPABASE_URL = '';   // e.g. 'https://abcxyz.supabase.co'
+var SUPABASE_KEY = '';   // e.g. 'eyJhbGciOiJIUzI1NiIs...'
 var SB_URL_KEY = 'wt_sb_url', SB_KEY_KEY = 'wt_sb_key';
 
 var refs       = {};   // projectId → [{id,refNum,extra,at}]
@@ -1088,6 +1090,7 @@ async function forgotPass(e){
 }
 function doLogout(){
   if(_sb&&!_demo)_sb.auth.signOut();
+  if(_realtimeChannel&&_sb){_sb.removeChannel(_realtimeChannel);_realtimeChannel=null;}
   _user=null;_demo=false;
   refs={};checklists={};orders=[];
   curView='home';curProjId=null;curRefId=null;
@@ -1102,9 +1105,94 @@ async function launchApp(){
   var ap=document.getElementById('appPage');
   ap.style.display='flex';
   renderUserBox();
+  setSyncStatus('syncing');
   render();
   await dbLoadAll();
   render();
+  startRealtime();
+}
+
+// ════════════════════════════════
+// REALTIME — live updates for all users
+// ════════════════════════════════
+var _realtimeChannel = null;
+function startRealtime(){
+  if(!_sb||_demo)return;
+  // Clean up any existing subscription
+  if(_realtimeChannel){ _sb.removeChannel(_realtimeChannel); _realtimeChannel=null; }
+
+  _realtimeChannel = _sb
+    .channel('wiretrack-live')
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'special_orders'},function(payload){
+      var row=payload.new;
+      // Only add if not already in list (avoid duplicate from own insert)
+      if(!orders.find(function(o){return o.id===row.id;})){
+        orders.unshift({id:row.id,ref:row.ref_code,proj:row.project_name,type:row.wire_type,
+          wire:row.wire_name,qty:row.quantity,from:row.order_from,to:row.order_to,
+          go:row.destination,at:row.created_at,by:row.created_by});
+        renderSidebar();
+        if(curView==='orders') renderOrdersPage(document.getElementById('viewContainer'));
+        toast('New order: '+row.project_name+' — '+row.wire_name,'info');
+      }
+    })
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'special_orders'},function(payload){
+      var row=payload.new;
+      var idx=orders.findIndex(function(o){return o.id===row.id;});
+      if(idx>-1){
+        orders[idx]={id:row.id,ref:row.ref_code,proj:row.project_name,type:row.wire_type,
+          wire:row.wire_name,qty:row.quantity,from:row.order_from,to:row.order_to,
+          go:row.destination,at:row.created_at,by:row.created_by};
+        if(curView==='orders') renderOrdersPage(document.getElementById('viewContainer'));
+      }
+    })
+    .on('postgres_changes',{event:'DELETE',schema:'public',table:'special_orders'},function(payload){
+      var id=payload.old&&payload.old.id;
+      if(id){
+        orders=orders.filter(function(o){return o.id!==id;});
+        renderSidebar();
+        if(curView==='orders') renderOrdersPage(document.getElementById('viewContainer'));
+      }
+    })
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'wire_items'},function(payload){
+      var row=payload.new;
+      // Update status in local checklists
+      for(var rid in checklists){
+        var it=checklists[rid].find(function(i){return i.id===row.id;});
+        if(it){
+          it.cutting=row.cutting_status||'in_progress';
+          it.wpa=row.wpa_status;
+          it.twist=row.twist_status;
+          if(curRefId!==null) applyCheckFilt();
+          break;
+        }
+      }
+    })
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'wire_items'},function(payload){
+      var row=payload.new;
+      var rid=row.reference_id;
+      if(!checklists[rid])checklists[rid]=[];
+      if(!checklists[rid].find(function(i){return i.id===row.id;})){
+        checklists[rid].push({id:row.id,wireId:row.wire_id,type:row.type,
+          cutting:row.cutting_status||'in_progress',wpa:row.wpa_status,twist:row.twist_status});
+        if(curRefId===rid) renderChecklist(document.getElementById('viewContainer'));
+      }
+    })
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'references'},function(payload){
+      var row=payload.new;
+      if(!refs[row.project_id])refs[row.project_id]=[];
+      if(!refs[row.project_id].find(function(r){return r.id===row.id;})){
+        refs[row.project_id].push({id:row.id,refNum:row.ref_num,extra:row.extra_data,at:row.created_at});
+        if(curProjId===row.project_id) render();
+      }
+    })
+    .subscribe(function(status){
+      if(status==='SUBSCRIBED'){
+        setSyncStatus('synced');
+      } else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'){
+        console.warn('Realtime subscription issue:',status);
+        // Don't set offline — data still works, just no live updates
+      }
+    });
 }
 function setLoading(v){
   var btn=document.getElementById('loginBtn');
@@ -1141,20 +1229,41 @@ function renderUserBox(){
 function setSyncStatus(s){
   var dot=document.getElementById('syncDot');
   var lbl=document.getElementById('syncLbl');
-  if(s==='syncing'){dot.className='sync-dot syncing';lbl.textContent='SYNCING…';}
-  else if(s==='offline'){dot.className='sync-dot';dot.style.background='var(--red)';lbl.textContent='OFFLINE';}
-  else{dot.className='sync-dot';dot.style.background='';lbl.textContent=_demo?'DEMO MODE':'SYNCED';}
+  if(!dot||!lbl)return;
+  dot.style.background='';
+  if(s==='syncing'){
+    dot.className='sync-dot syncing';
+    lbl.textContent='SYNCING…';
+  } else if(s==='offline'){
+    dot.className='sync-dot';
+    dot.style.background='var(--red)';
+    lbl.textContent='OFFLINE';
+  } else if(s==='error'){
+    dot.className='sync-dot';
+    dot.style.background='var(--amber)';
+    lbl.textContent='DB ERROR';
+  } else {
+    dot.className='sync-dot';
+    lbl.textContent=_demo?'DEMO MODE':'SYNCED';
+  }
 }
 
 // ════════════════════════════════
 // DATABASE — LOAD ALL DATA ON LOGIN
 // ════════════════════════════════
 async function dbLoadAll(){
-  if(!_sb||_demo)return;
+  if(!_sb||_demo){setSyncStatus('synced');return;}
   setSyncStatus('syncing');
   try{
+    // Load references
     var rr=await _sb.from('references').select('*').order('created_at',{ascending:true});
-    if(rr.error)throw rr.error;
+    if(rr.error){
+      // Table missing = first-time setup, not a real error — treat as empty
+      if(rr.error.code==='42P01'||rr.error.message&&rr.error.message.includes('does not exist')){
+        setSyncStatus('synced');return;
+      }
+      throw rr.error;
+    }
     refs={};
     (rr.data||[]).forEach(function(row){
       if(!refs[row.project_id])refs[row.project_id]=[];
@@ -1162,27 +1271,42 @@ async function dbLoadAll(){
       if(row.id>=nRefId)nRefId=row.id+1;
     });
 
+    // Load wire items
     var wi=await _sb.from('wire_items').select('*').order('id',{ascending:true});
-    if(wi.error)throw wi.error;
+    if(wi.error&&wi.error.code!=='42P01')throw wi.error;
     checklists={};
-    (wi.data||[]).forEach(function(row){
+    ((wi.data)||[]).forEach(function(row){
       if(!checklists[row.reference_id])checklists[row.reference_id]=[];
       checklists[row.reference_id].push({id:row.id,wireId:row.wire_id,type:row.type,cutting:row.cutting_status||'in_progress',wpa:row.wpa_status,twist:row.twist_status});
       if(row.id>=nCkId)nCkId=row.id+1;
     });
 
+    // Load special orders
     var so=await _sb.from('special_orders').select('*').order('created_at',{ascending:false});
-    if(so.error)throw so.error;
+    if(so.error&&so.error.code!=='42P01')throw so.error;
     orders=[];
-    (so.data||[]).forEach(function(row){
+    ((so.data)||[]).forEach(function(row){
       orders.push({id:row.id,ref:row.ref_code,proj:row.project_name,type:row.wire_type,wire:row.wire_name,qty:row.quantity,from:row.order_from,to:row.order_to,go:row.destination,at:row.created_at,by:row.created_by});
     });
 
     setSyncStatus('synced');
   }catch(e){
-    console.warn('dbLoadAll:',e);
-    setSyncStatus('offline');
-    toast('Could not load data — working offline','error');
+    console.warn('dbLoadAll error:',e);
+    // Only show red dot for genuine network/auth failures
+    var msg=(e&&e.message)||'';
+    var isNetworkErr=!navigator.onLine||msg.includes('fetch')||msg.includes('network')||msg.includes('Failed');
+    var isAuthErr=msg.includes('JWT')||msg.includes('auth')||msg.includes('401')||msg.includes('403');
+    if(isNetworkErr){
+      setSyncStatus('offline');
+      toast('No internet connection','error');
+    } else if(isAuthErr){
+      setSyncStatus('error');
+      toast('Authentication error — please sign in again','error');
+    } else {
+      // Unknown error but user is online — show warning, not red
+      setSyncStatus('error');
+      console.warn('DB load issue (non-critical):', msg);
+    }
   }
 }
 
@@ -1197,7 +1321,7 @@ async function dbSave(itemId,field,val){
     var r=await _sb.from('wire_items').update({[col]:val}).eq('id',itemId);
     if(r.error)throw r.error;
     setSyncStatus('synced');
-  }catch(e){console.warn(e);setSyncStatus('offline');}
+  }catch(e){console.warn('DB save error:',e);setSyncStatus('error');setTimeout(function(){setSyncStatus('synced');},2000);}
 }
 async function dbSaveItems(refId,items){
   if(!_sb||_demo)return;
@@ -1207,7 +1331,7 @@ async function dbSaveItems(refId,items){
     var r=await _sb.from('wire_items').upsert(rows);
     if(r.error)throw r.error;
     setSyncStatus('synced');
-  }catch(e){console.warn(e);setSyncStatus('offline');}
+  }catch(e){console.warn('DB save error:',e);setSyncStatus('error');setTimeout(function(){setSyncStatus('synced');},2000);}
 }
 async function dbSaveRef(pid,refObj){
   if(!_sb||_demo)return;
@@ -1891,6 +2015,15 @@ function init(){
   switchTab('signin');
   setTimeout(initAuthSlider,50);
 }
+// React to real network changes
+window.addEventListener('online', function(){
+  if(_sb && _user && !_demo){ setSyncStatus('syncing'); dbLoadAll().then(render); }
+  else if(_demo){ setSyncStatus('synced'); }
+});
+window.addEventListener('offline', function(){
+  setSyncStatus('offline');
+});
+
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
 </script>
 </body>
