@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
-<title>WireTrack V.5 — Miloud Ezzaky Industry</title>
+<title>AMKM V.5 — Miloud Ezzaky Industry</title>
 <meta name="theme-color" content="#0b0f1a">
 <meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="WireTrack">
+<meta name="apple-mobile-web-app-title" content="AMKM">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" id="appleTouchIcon">
 <link rel="icon" id="faviconIcon">
@@ -421,8 +421,8 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 <div class="login-brand">
 <div class="login-brand-icon"><svg viewBox="0 0 24 24"><path d="M22 12H18L15 21L9 3L6 12H2"/></svg></div>
 <div>
-<div class="login-brand-name">WIRE<span>TRACK</span></div>
-<div class="login-brand-sub">Digital Checklist System</div>
+<div class="login-brand-name">AFTER<span>MARKET</span></div>
+<div class="login-brand-sub">Kits Manager System</div>
 <div class="login-brand-company">MILOUD EZZAKY INDUSTRY · V.5</div>
 </div>
 </div>
@@ -445,7 +445,7 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 <button class="btn-login" id="loginBtn" onclick="doAuthAction()"><span class="btn-txt" id="loginBtnTxt">Sign In</span><div class="spin"></div></button>
 <div class="divider"><span>or</span></div>
 <button class="btn-outline" onclick="useDemoMode()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>Continue in Demo Mode</button>
-<div class="login-footer">WireTrack V.5 · Miloud Ezzaky Industry</div>
+<div class="login-footer">AMKM V.5 · Miloud Ezzaky Industry</div>
 </div>
 </div>
 
@@ -455,7 +455,7 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 <aside class="sidebar" id="sidebar">
 <div class="sb-brand">
 <div class="sb-brand-top"><div class="sb-brand-icon"><svg viewBox="0 0 24 24"><path d="M22 12H18L15 21L9 3L6 12H2"/></svg></div>
-<div><div class="sb-brand-name">WIRE<span>TRACK</span></div><div class="sb-brand-sub">Digital Checklist</div><div class="sb-brand-co">MILOUD EZZAKY INDUSTRY · V.5</div></div>
+<div><div class="sb-brand-name">AFTER<span>MARKET</span></div><div class="sb-brand-sub">Kits Manager</div><div class="sb-brand-co">MILOUD EZZAKY INDUSTRY · V.5</div></div>
 </div>
 </div>
 <nav class="sb-nav" id="sidebarNav"></nav>
@@ -491,12 +491,12 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 <div class="chatbot-panel" id="chatbotPanel">
 <div class="chatbot-hd">
 <div class="chatbot-avatar"><svg viewBox="0 0 24 24"><path d="M22 12H18L15 21L9 3L6 12H2"/></svg></div>
-<div><div class="chatbot-name">WireBot</div><div class="chatbot-status">● ONLINE</div></div>
+<div><div class="chatbot-name">KitBot</div><div class="chatbot-status">● ONLINE</div></div>
 <button class="chatbot-close" onclick="toggleChatbot()">×</button>
 </div>
 <div class="chatbot-messages" id="chatMessages"></div>
 <div class="chat-suggestions" id="chatSuggestions"></div>
-<div class="chatbot-input-row"><input class="chatbot-input" id="chatInput" placeholder="Ask about progress..." onkeydown="if(event.key==='Enter')sendChat()"><button class="chatbot-send" onclick="sendChat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div>
+<div class="chatbot-input-row"><input class="chatbot-input" id="chatInput" placeholder="Ask about kit progress..." onkeydown="if(event.key==='Enter')sendChat()"><button class="chatbot-send" onclick="sendChat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div>
 </div>
 
 <!-- TOAST -->
@@ -507,12 +507,12 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 <!-- NEW ORDER MODAL -->
 <div class="overlay" id="newOrderOverlay">
 <div class="modal">
-<div class="modal-hd"><div><div class="modal-title">New Special Order</div><div class="modal-sub">Assembly · Special Order</div></div><button class="modal-close" onclick="closeOverlay('newOrderOverlay')">×</button></div>
+<div class="modal-hd"><div><div class="modal-title">New Kit Order</div><div class="modal-sub">Aftermarket · Kit Order</div></div><button class="modal-close" onclick="closeOverlay('newOrderOverlay')">×</button></div>
 <div class="modal-body">
 <div class="m-grid">
-<div class="full"><label class="m-lbl">Reference *</label><input class="m-input" id="o_ref" placeholder="e.g. REF-001, VCE-2024..."></div>
+<div class="full"><label class="m-lbl">Reference *</label><input class="m-input" id="o_ref" placeholder="e.g. KIT-001, VCE-2024..."></div>
 <div class="full"><label class="m-lbl">Project Name *</label><input class="m-input" id="o_proj" placeholder="e.g. JCB, VOLVO C1..."></div>
-<div class="full"><label class="m-lbl">Wire Type *</label>
+<div class="full"><label class="m-lbl">Kit Type *</label>
 <div class="wt-grid" id="newWtGrid">
 <button class="wt-chip" data-t="simple" onclick="selWt('new','simple')">SIMPLE</button>
 <button class="wt-chip" data-t="xe" onclick="selWt('new','xe')">XE</button>
@@ -520,10 +520,10 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 <button class="wt-chip" data-t="tw" onclick="selWt('new','tw')">TWIST</button>
 <button class="wt-chip" data-t="mc" onclick="selWt('new','mc')">MULTICORE</button>
 <button class="wt-chip" data-t="gs" onclick="selWt('new','gs')">GRANDE SECTION</button>
-<button class="wt-chip" data-t="complete" onclick="selWt('new','complete')" style="grid-column:1/-1">COMPLETE</button>
+<button class="wt-chip" data-t="complete" onclick="selWt('new','complete')" style="grid-column:1/-1">COMPLETE KIT</button>
 </div>
 <input type="hidden" id="o_type"></div>
-<div class="full"><label class="m-lbl">Wire Name *</label><input class="m-input" id="o_wire" placeholder="Wire reference or description..."></div>
+<div class="full"><label class="m-lbl">Kit Name *</label><input class="m-input" id="o_wire" placeholder="Kit reference or description..."></div>
 <div><label class="m-lbl">Quantity *</label><input class="m-input" id="o_qty" type="number" min="1" placeholder="0" inputmode="numeric"></div>
 <div><label class="m-lbl">From (Order Giver) *</label><input class="m-input" id="o_from" placeholder="Name..."></div>
 <div><label class="m-lbl">To (Order Taker) *</label><input class="m-input" id="o_to" placeholder="Name..."></div>
@@ -538,13 +538,13 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 <!-- EDIT ORDER MODAL -->
 <div class="overlay" id="editOrderOverlay">
 <div class="modal">
-<div class="modal-hd"><div><div class="modal-title">Edit Order <span style="color:var(--amber);font-size:11px;font-family:'JetBrains Mono',monospace">SUPER ADMIN</span></div><div class="modal-sub">Only ezzaky10mi@gmail.com can modify</div></div><button class="modal-close" onclick="closeOverlay('editOrderOverlay')">×</button></div>
+<div class="modal-hd"><div><div class="modal-title">Edit Kit Order <span style="color:var(--amber);font-size:11px;font-family:'JetBrains Mono',monospace">SUPER ADMIN</span></div><div class="modal-sub">Only ezzaky10mi@gmail.com can modify</div></div><button class="modal-close" onclick="closeOverlay('editOrderOverlay')">×</button></div>
 <div class="modal-body">
 <input type="hidden" id="e_id">
 <div class="m-grid">
 <div class="full"><label class="m-lbl">Reference</label><input class="m-input" id="e_ref"></div>
 <div class="full"><label class="m-lbl">Project Name</label><input class="m-input" id="e_proj"></div>
-<div class="full"><label class="m-lbl">Wire Type</label>
+<div class="full"><label class="m-lbl">Kit Type</label>
 <div class="wt-grid" id="editWtGrid">
 <button class="wt-chip" data-t="simple" onclick="selWt('edit','simple')">SIMPLE</button>
 <button class="wt-chip" data-t="xe" onclick="selWt('edit','xe')">XE</button>
@@ -552,10 +552,10 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 <button class="wt-chip" data-t="tw" onclick="selWt('edit','tw')">TWIST</button>
 <button class="wt-chip" data-t="mc" onclick="selWt('edit','mc')">MULTICORE</button>
 <button class="wt-chip" data-t="gs" onclick="selWt('edit','gs')">GRANDE SECTION</button>
-<button class="wt-chip" data-t="complete" onclick="selWt('edit','complete')" style="grid-column:1/-1">COMPLETE</button>
+<button class="wt-chip" data-t="complete" onclick="selWt('edit','complete')" style="grid-column:1/-1">COMPLETE KIT</button>
 </div>
 <input type="hidden" id="e_type"></div>
-<div class="full"><label class="m-lbl">Wire Name</label><input class="m-input" id="e_wire"></div>
+<div class="full"><label class="m-lbl">Kit Name</label><input class="m-input" id="e_wire"></div>
 <div><label class="m-lbl">Quantity</label><input class="m-input" id="e_qty" type="number" min="1" inputmode="numeric"></div>
 <div><label class="m-lbl">From</label><input class="m-input" id="e_from"></div>
 <div><label class="m-lbl">To</label><input class="m-input" id="e_to"></div>
@@ -583,9 +583,9 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 <!-- ADD REFERENCE MODAL -->
 <div class="overlay" id="addRefOverlay">
 <div class="modal" style="max-width:400px">
-<div class="modal-hd"><div><div class="modal-title">Add Reference</div><div class="modal-sub">Super Admin Only</div></div><button class="modal-close" onclick="closeOverlay('addRefOverlay')">×</button></div>
+<div class="modal-hd"><div><div class="modal-title">Add Kit Reference</div><div class="modal-sub">Super Admin Only</div></div><button class="modal-close" onclick="closeOverlay('addRefOverlay')">×</button></div>
 <div class="modal-body">
-<div class="f-group"><label class="m-lbl">Reference Number *</label><input class="m-input" id="nr_num" placeholder="e.g. REF-001..."></div>
+<div class="f-group"><label class="m-lbl">Reference Number *</label><input class="m-input" id="nr_num" placeholder="e.g. KIT-001..."></div>
 <input type="hidden" id="nr_pid">
 </div>
 <div class="modal-ft"><button class="btn-cancel" onclick="closeOverlay('addRefOverlay')">Cancel</button><button class="btn btn-primary" onclick="doAddRef()">Add Reference</button></div>
@@ -604,7 +604,7 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 <!-- PWA BANNER -->
 <div id="pwaBanner">
 <div class="pwa-ico"><svg viewBox="0 0 24 24"><path d="M22 12H18L15 21L9 3L6 12H2"/></svg></div>
-<div class="pwa-txt"><div class="pwa-title">Install WireTrack</div><div class="pwa-sub">ADD TO HOME SCREEN · WORKS OFFLINE</div></div>
+<div class="pwa-txt"><div class="pwa-title">Install AMKM</div><div class="pwa-sub">ADD TO HOME SCREEN · WORKS OFFLINE</div></div>
 <button class="pwa-btn" id="pwaInstBtn">Install</button>
 <button class="pwa-close" onclick="dismissPWA()">×</button>
 </div>
@@ -644,7 +644,7 @@ function topLevel(){return projects.filter(function(p){return p.pid===null;})}
 function isDesc(childId,ancId){var p=parentOf(childId);while(p!==null){if(p===ancId)return true;p=parentOf(p);}return false;}
 function allLeafProjects(){return projects.filter(function(p){return !hasKids(p.id);});}
 
-var WT_LABEL={simple:'SIMPLE',xe:'XE',sp:'SP',tw:'TWIST',mc:'MULTICORE',gs:'GRANDE SECTION',complete:'COMPLETE'};
+var WT_LABEL={simple:'SIMPLE',xe:'XE',sp:'SP',tw:'TWIST',mc:'MULTICORE',gs:'GRANDE SECTION',complete:'COMPLETE KIT'};
 var WT_CLASS={simple:'w-simple',xe:'w-xe',sp:'w-sp',tw:'w-tw',mc:'w-mc',gs:'w-gs',complete:'w-complete'};
 
 // ══════════════════════════
@@ -673,7 +673,7 @@ function addNotif(type,title,msg){
   updateNotifBadge();renderNotifList();
   // OS notification if permission granted
   if(window.Notification&&Notification.permission==='granted'){
-    try{new Notification('WireTrack: '+title,{body:msg,icon:'data:image/png;base64,iVBORw0KGgo='});}catch(e){}
+    try{new Notification('AMKM: '+title,{body:msg,icon:'data:image/png;base64,iVBORw0KGgo='});}catch(e){}
   }
   return n;
 }
@@ -728,7 +728,7 @@ function toggleChatbot(){
   document.getElementById('chatbotPanel').classList.toggle('show',_chatOpen);
   document.getElementById('notifPanel').classList.remove('show');
   if(_chatOpen&&document.getElementById('chatMessages').children.length===0){
-    addBotMsg('👋 Hi! I\'m WireBot. Ask me about any reference progress, wire stats, or project completion rates!');
+    addBotMsg('👋 Hi! I\'m KitBot. Ask me about any kit progress, component stats, or project completion rates!');
     renderChatSuggestions();
   }
 }
@@ -743,7 +743,7 @@ function addUserMsg(text){
   document.getElementById('chatMessages').scrollTop=9999;
 }
 function renderChatSuggestions(){
-  var sugs=['Show all projects','Top incomplete refs','Overall progress','Orders today','Completed references'];
+  var sugs=['Show all projects','Top incomplete kits','Overall progress','Orders today','Completed kits'];
   document.getElementById('chatSuggestions').innerHTML=sugs.map(function(s){
     return '<button class="chat-sug" onclick="chatQuery(\''+s+'\')">'+''+s+'</button>';
   }).join('');
@@ -768,7 +768,7 @@ function chatQuery(q){
     var tW=0,dW=0;
     Object.values(checklists).forEach(function(arr){tW+=arr.length;dW+=arr.filter(function(i){return i.cutting==='done';}).length;});
     var pct=tW?Math.round(dW/tW*100):0;
-    reply='📊 Overall Progress:\n• Total wires: '+tW+'\n• Done: '+dW+'\n• Completion: '+pct+'%\n• Total orders: '+orders.length;
+    reply='📊 Overall Progress:\n• Total components: '+tW+'\n• Done: '+dW+'\n• Completion: '+pct+'%\n• Total orders: '+orders.length;
   }
   // Orders today
   else if(ql.includes('order')){
@@ -778,7 +778,7 @@ function chatQuery(q){
   }
   // Completed references
   else if(ql.includes('complet')){
-    var cmp=completedHistory;reply='✅ Completed References: '+cmp.length;
+    var cmp=completedHistory;reply='✅ Completed Kits: '+cmp.length;
     if(cmp.length){reply+='\n';cmp.slice(0,5).forEach(function(h){reply+='• '+h.refNum+' ('+h.proj+') — '+new Date(h.at).toLocaleDateString('fr-MA')+'\n';});}
   }
   // Top incomplete
@@ -786,20 +786,20 @@ function chatQuery(q){
     var incs=[];
     for(var rid in checklists){var arr=checklists[rid];if(!arr.length)continue;var d=arr.filter(function(i){return i.cutting==='done';}).length;var pct=Math.round(d/arr.length*100);if(pct<100){var r=findRef(parseInt(rid));incs.push({ref:r?r.refNum:'#'+rid,pct:pct,done:d,total:arr.length});}}
     incs.sort(function(a,b){return a.pct-b.pct;});
-    reply='⚠️ Top Incomplete References:\n';
-    incs.slice(0,6).forEach(function(x){reply+='• '+x.ref+': '+x.pct+'% ('+x.done+'/'+x.total+')\n';});
-    if(!incs.length)reply='🎉 All references are complete!';
+    reply='⚠️ Top Incomplete Kits:\n';
+    incs.slice(0,6).forEach(function(x){reply+='• '+x.ref+': '+x.pct+'% ('+x.done+'/'+x.total+' components)\n';});
+    if(!incs.length)reply='🎉 All kits are complete!';
   }
   // Specific ref query
-  else if(ql.includes('ref')||ql.includes('#')){
-    var term=ql.replace(/ref(erence)?/i,'').replace('#','').trim();
+  else if(ql.includes('ref')||ql.includes('kit')||ql.includes('#')){
+    var term=ql.replace(/ref(erence)?/i,'').replace(/kit/i,'').replace('#','').trim();
     var found=[];
     for(var k in refs){refs[k].forEach(function(r){if(r.refNum.toLowerCase().includes(term)){var ck=checklists[r.id]||[];var d=ck.filter(function(i){return i.cutting==='done';}).length;found.push({ref:r.refNum,total:ck.length,done:d,pct:ck.length?Math.round(d/ck.length*100):0});}});}
-    if(found.length){reply='🔍 Found '+found.length+' reference(s):\n';found.slice(0,6).forEach(function(f){reply+='• '+f.ref+': '+f.pct+'% done ('+f.done+'/'+f.total+' wires)\n';});}
-    else reply='No reference matching "'+term+'" found.';
+    if(found.length){reply='🔍 Found '+found.length+' kit(s):\n';found.slice(0,6).forEach(function(f){reply+='• '+f.ref+': '+f.pct+'% done ('+f.done+'/'+f.total+' components)\n';});}
+    else reply='No kit matching "'+term+'" found.';
   }
   else{
-    reply='I can help with:\n• "All projects" — project list\n• "Overall progress" — completion stats\n• "Orders today" — today\'s orders\n• "Completed references" — history\n• "Top incomplete" — refs needing work\n• "ref [name]" — specific ref status';
+    reply='I can help with:\n• "All projects" — project list\n• "Overall progress" — completion stats\n• "Orders today" — today\'s orders\n• "Completed kits" — history\n• "Top incomplete" — kits needing work\n• "kit [name]" — specific kit status';
   }
   setTimeout(function(){addBotMsg(reply);renderChatSuggestions();},300);
 }
@@ -860,7 +860,7 @@ async function doRegister(){
     else if(r.data&&r.data.session){var u=r.data.user;_user={id:u.id,email:u.email,name:name,role:'operator'};showLoginAlert('ok','Account created! Welcome, '+name+'!');setTimeout(launchApp,700);}
   }catch(err){setLoading(false);showLoginAlert('err',(err&&err.message)||'Registration failed.');}
 }
-function useDemoMode(){_demo=true;_user={id:'demo',email:'demo@wiretrack.local',name:'Demo User',role:'operator'};launchApp();}
+function useDemoMode(){_demo=true;_user={id:'demo',email:'demo@amkm.local',name:'Demo User',role:'operator'};launchApp();}
 async function forgotPass(e){
   e&&e.preventDefault();var email=document.getElementById('loginEmail').value.trim();
   if(!email){showLoginAlert('err','Enter your email first.');return;}if(!_sb){showLoginAlert('err','Connect Supabase first.');return;}
@@ -894,14 +894,14 @@ async function launchApp(){
 function startRealtime(){
   if(!_sb||_demo)return;
   if(_realtimeChannel){_sb.removeChannel(_realtimeChannel);_realtimeChannel=null;}
-  _realtimeChannel=_sb.channel('wiretrack-live-v5')
+  _realtimeChannel=_sb.channel('amkm-live-v5')
   .on('postgres_changes',{event:'INSERT',schema:'public',table:'special_orders'},function(payload){
     var row=payload.new;
     if(!orders.find(function(o){return o.id===row.id;})){
       orders.unshift({id:row.id,ref:row.ref_code,proj:row.project_name,type:row.wire_type,wire:row.wire_name,qty:row.quantity,from:row.order_from,to:row.order_to,go:row.destination,at:row.created_at,by:row.created_by});
       renderSidebar();if(curView==='orders')renderOrdersPage(document.getElementById('viewContainer'));
-      addNotif('order','New Order Received',row.project_name+' — '+row.wire_name+' (Qty: '+row.quantity+') by '+row.created_by);
-      toast('New order: '+row.project_name+' — '+row.wire_name,'info');
+      addNotif('order','New Kit Order',row.project_name+' — '+row.wire_name+' (Qty: '+row.quantity+') by '+row.created_by);
+      toast('New kit order: '+row.project_name+' — '+row.wire_name,'info');
     }
   })
   .on('postgres_changes',{event:'UPDATE',schema:'public',table:'special_orders'},function(payload){
@@ -939,16 +939,16 @@ function checkRefComplete(rid){
     if(!alreadyInHistory){
       var hEntry={refId:rid,refNum:ref?ref.refNum:'#'+rid,proj:projName,at:new Date().toISOString()};
       completedHistory.push(hEntry);saveHistoryToStorage();
-      addNotif('complete','Reference 100% Complete!',(ref?ref.refNum:'Ref #'+rid)+(projName?' ('+projName+')':'')+' — All '+items.length+' wires done!');
-      toast((ref?ref.refNum:'Reference')+' is 100% complete! 🎉','success');
+      addNotif('complete','Kit 100% Complete!',(ref?ref.refNum:'Kit #'+rid)+(projName?' ('+projName+')':'')+' — All '+items.length+' components done!');
+      toast((ref?ref.refNum:'Kit')+' is 100% complete! 🎉','success');
     }
   }
 }
-function saveHistoryToStorage(){try{localStorage.setItem('wt_completed_history',JSON.stringify(completedHistory));}catch(e){}}
-function loadHistoryFromStorage(){try{var s=localStorage.getItem('wt_completed_history');if(s)completedHistory=JSON.parse(s);}catch(e){}}
-function saveProjectsToStorage(){try{localStorage.setItem('wt_custom_projects',JSON.stringify(projects.filter(function(p){return p.id>=100;})));}catch(e){}}
+function saveHistoryToStorage(){try{localStorage.setItem('amkm_completed_history',JSON.stringify(completedHistory));}catch(e){}}
+function loadHistoryFromStorage(){try{var s=localStorage.getItem('amkm_completed_history');if(s)completedHistory=JSON.parse(s);}catch(e){}}
+function saveProjectsToStorage(){try{localStorage.setItem('amkm_custom_projects',JSON.stringify(projects.filter(function(p){return p.id>=100;})));}catch(e){}}
 function loadProjectsFromStorage(){
-  try{var s=localStorage.getItem('wt_custom_projects');if(s){var cps=JSON.parse(s);cps.forEach(function(cp){if(!P(cp.id))projects.push(cp);if(cp.id>=nProjId)nProjId=cp.id+1;});}}
+  try{var s=localStorage.getItem('amkm_custom_projects');if(s){var cps=JSON.parse(s);cps.forEach(function(cp){if(!P(cp.id))projects.push(cp);if(cp.id>=nProjId)nProjId=cp.id+1;});}}
   catch(e){}
 }
 
@@ -975,7 +975,7 @@ function confirmRemoveProject(id){
   var p=P(id);if(!p)return;
   _confirmCallback=function(){doRemoveProject(id);};
   document.getElementById('confirmTitle').textContent='Remove Project?';
-  document.getElementById('confirmMsg').textContent='Remove "'+p.name+'"? All its references and data will be removed from view. This cannot be undone.';
+  document.getElementById('confirmMsg').textContent='Remove "'+p.name+'"? All its kits and data will be removed from view. This cannot be undone.';
   document.getElementById('confirmDo').textContent='Remove';
   openOverlay('confirmOverlay');
 }
@@ -993,24 +993,24 @@ function doRemoveProject(id){
 // REFERENCE MANAGEMENT (Admin)
 // ══════════════════════════
 function openAddRef(pid){
-  if(!isSuperAdmin()){toast('Only super admin can add references','error');return;}
+  if(!isSuperAdmin()){toast('Only super admin can add kit references','error');return;}
   document.getElementById('nr_num').value='';document.getElementById('nr_pid').value=pid;
   openOverlay('addRefOverlay');
 }
 function doAddRef(){
-  var num=document.getElementById('nr_num').value.trim();if(!num){toast('Enter a reference number','error');return;}
+  var num=document.getElementById('nr_num').value.trim();if(!num){toast('Enter a kit reference number','error');return;}
   var pid=parseInt(document.getElementById('nr_pid').value);
   var newRef={id:nRefId++,refNum:num,extra:null,at:new Date()};
   if(!refs[pid])refs[pid]=[];refs[pid].push(newRef);
   dbSaveRef(pid,newRef);
-  closeOverlay('addRefOverlay');toast('Reference "'+num+'" added','success');render();
+  closeOverlay('addRefOverlay');toast('Kit "'+num+'" added','success');render();
 }
 function confirmRemoveRef(refId,pid){
-  if(!isSuperAdmin()){toast('Only super admin can remove references','error');return;}
+  if(!isSuperAdmin()){toast('Only super admin can remove kit references','error');return;}
   var r=findRef(refId);
   _confirmCallback=function(){doRemoveRef(refId,pid);};
-  document.getElementById('confirmTitle').textContent='Remove Reference?';
-  document.getElementById('confirmMsg').textContent='Remove reference "'+( r?r.refNum:'#'+refId)+'"? All wire checklist data will be lost.';
+  document.getElementById('confirmTitle').textContent='Remove Kit?';
+  document.getElementById('confirmMsg').textContent='Remove kit "'+( r?r.refNum:'#'+refId)+'"? All component data will be lost.';
   document.getElementById('confirmDo').textContent='Remove';
   openOverlay('confirmOverlay');
 }
@@ -1019,13 +1019,13 @@ function doRemoveRef(refId,pid){
   delete checklists[refId];
   // Remove from history — only admin can do this via separate confirm
   if(_sb&&!_demo){_sb.from('references').delete().eq('id',refId).then(function(){});_sb.from('wire_items').delete().eq('reference_id',refId).then(function(){});}
-  toast('Reference removed','info');if(curRefId===refId){curRefId=null;}render();
+  toast('Kit removed','info');if(curRefId===refId){curRefId=null;}render();
 }
 function confirmRemoveHistory(refId){
   if(!isSuperAdmin()){toast('Only super admin can remove history','error');return;}
   _confirmCallback=function(){completedHistory=completedHistory.filter(function(h){return h.refId!==refId;});saveHistoryToStorage();toast('History entry removed','info');render();};
   document.getElementById('confirmTitle').textContent='Remove History Entry?';
-  document.getElementById('confirmMsg').textContent='Remove this completed reference from history? Only admins can do this.';
+  document.getElementById('confirmMsg').textContent='Remove this completed kit from history? Only admins can do this.';
   document.getElementById('confirmDo').textContent='Remove';
   openOverlay('confirmOverlay');
 }
@@ -1140,8 +1140,8 @@ function renderSidebar(){
   var isOrders=curView==='orders';var isHistory=curView==='history';
   var html='<div class="sb-section">Operations</div>';
   html+='<div class="sb-item '+((!curProjId&&!isOrders&&!isHistory)?'active':'')+'" onclick="gotoHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>All Projects<span class="sb-count">'+topLevel().length+'</span></div>';
-  html+='<div class="sb-item '+(isOrders?'active':'')+'" onclick="gotoOrders()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Assembly Special Orders<span class="sb-count">'+orders.length+'</span></div>';
-  html+='<div class="sb-item '+(isHistory?'active':'')+'" onclick="gotoHistory()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Completed History<span class="sb-count">'+completedHistory.length+'</span></div>';
+  html+='<div class="sb-item '+(isOrders?'active':'')+'" onclick="gotoOrders()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Kit Orders<span class="sb-count">'+orders.length+'</span></div>';
+  html+='<div class="sb-item '+(isHistory?'active':'')+'" onclick="gotoHistory()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Completed Kits<span class="sb-count">'+completedHistory.length+'</span></div>';
   html+='<div class="sb-section">Projects</div>';
   if(isSuperAdmin())html+='<div class="sb-item" onclick="openAddProject()" style="color:var(--green);opacity:.8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Project</div>';
   topLevel().forEach(function(p){
@@ -1165,16 +1165,16 @@ function renderTopbar(){
   var svgPlus='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
   var svgImp='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>';
   var act='';
-  if(curView==='orders'){act='<button class="btn btn-primary" onclick="openNewOrder()">'+svgPlus+(isMob?'Order':'New Order')+'</button>';}
-  else if(curRefId!==null){if(isSuperAdmin())act='<button class="btn btn-success" onclick="triggerCkUpload('+curRefId+')">'+svgImp+(isMob?'Import':'Import Checklist')+'</button>';}
+  if(curView==='orders'){act='<button class="btn btn-primary" onclick="openNewOrder()">'+svgPlus+(isMob?'Order':'New Kit')+'</button>';}
+  else if(curRefId!==null){if(isSuperAdmin())act='<button class="btn btn-success" onclick="triggerCkUpload('+curRefId+')">'+svgImp+(isMob?'Import':'Import Components')+'</button>';}
   else if(curProjId!==null&&!hasKids(curProjId)){
-    if(isSuperAdmin())act='<button class="btn btn-ghost" onclick="openAddRef('+curProjId+')" style="margin-right:4px">'+svgPlus+(isMob?'Ref':'Add Ref')+'</button><button class="btn btn-success" onclick="triggerRefUpload('+curProjId+')">'+svgImp+(isMob?'Import':'Import Excel')+'</button>';
+    if(isSuperAdmin())act='<button class="btn btn-ghost" onclick="openAddRef('+curProjId+')" style="margin-right:4px">'+svgPlus+(isMob?'Kit':'Add Kit')+'</button><button class="btn btn-success" onclick="triggerRefUpload('+curProjId+')">'+svgImp+(isMob?'Import':'Import Excel')+'</button>';
   }
   document.getElementById('tbActions').innerHTML=act;
 }
 function buildCrumbs(){
-  if(curView==='orders')return[{label:'PROJECTS',fn:'gotoHome()'},{label:'ASSEMBLY SPECIAL ORDERS'}];
-  if(curView==='history')return[{label:'PROJECTS',fn:'gotoHome()'},{label:'COMPLETED HISTORY'}];
+  if(curView==='orders')return[{label:'PROJECTS',fn:'gotoHome()'},{label:'KIT ORDERS'}];
+  if(curView==='history')return[{label:'PROJECTS',fn:'gotoHome()'},{label:'COMPLETED KITS'}];
   var crumbs=[{label:'PROJECTS',fn:'gotoHome()'}];
   if(curProjId!==null){var chain=[];var id=curProjId;while(id!==null){chain.unshift(P(id));id=parentOf(id);}chain.forEach(function(p,i){var last=i===chain.length-1&&curRefId===null;crumbs.push({label:p.name,fn:last?null:'gotoProj('+p.id+')'});});}
   if(curRefId!==null){var r=findRef(curRefId);if(r)crumbs.push({label:r.refNum});}
@@ -1190,13 +1190,13 @@ function renderHome(vc){
   var tRefs=Object.values(refs).reduce(function(a,b){return a+b.length;},0);
   var tWires=Object.values(checklists).reduce(function(a,b){return a+b.length;},0);
   var dWires=Object.values(checklists).reduce(function(a,b){return a+b.filter(function(i){return i.cutting==='done';}).length;},0);
-  vc.innerHTML='<div class="pg-header fade-in"><div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px"><div><div class="pg-title">Wire Harness Projects</div><div class="pg-sub">Select a project to manage references and wire checklists</div></div>'+(isSuperAdmin()?'<button class="btn btn-ghost" onclick="openAddProject()" style="margin-top:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Project</button>':'')+'</div></div>'
+  vc.innerHTML='<div class="pg-header fade-in"><div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px"><div><div class="pg-title">Aftermarket Kits</div><div class="pg-sub">Select a project to manage kit references and components</div></div>'+(isSuperAdmin()?'<button class="btn btn-ghost" onclick="openAddProject()" style="margin-top:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Project</button>':'')+'</div></div>'
   +'<div class="stats-row fade-in">'
   +'<div class="stat-card blue"><div class="stat-val">'+top.length+'</div><div class="stat-lbl">Projects</div><div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div></div>'
-  +'<div class="stat-card green"><div class="stat-val">'+tRefs+'</div><div class="stat-lbl">References</div><div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div></div>'
-  +'<div class="stat-card amber"><div class="stat-val">'+tWires+'</div><div class="stat-lbl">Total Wires</div><div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M22 12H18L15 21L9 3L6 12H2"/></svg></div></div>'
+  +'<div class="stat-card green"><div class="stat-val">'+tRefs+'</div><div class="stat-lbl">Kits</div><div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div></div>'
+  +'<div class="stat-card amber"><div class="stat-val">'+tWires+'</div><div class="stat-lbl">Components</div><div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M22 12H18L15 21L9 3L6 12H2"/></svg></div></div>'
   +'<div class="stat-card cyan"><div class="stat-val">'+(tWires?Math.round(dWires/tWires*100):0)+'%</div><div class="stat-lbl">Completed</div><div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><polyline points="20 6 9 17 4 12"/></svg></div></div>'
-  +'<div class="stat-card purple"><div class="stat-val">'+completedHistory.length+'</div><div class="stat-lbl">Done History</div><div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div></div>'
+  +'<div class="stat-card purple"><div class="stat-val">'+completedHistory.length+'</div><div class="stat-lbl">Done Kits</div><div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div></div>'
   +'</div>'
   +'<div class="sec-lbl">Active Projects</div><div class="proj-grid" id="projGrid"></div>';
   var grid=document.getElementById('projGrid');
@@ -1204,7 +1204,7 @@ function renderHome(vc){
     var rc=(refs[p.id]||[]).length;var isP=hasKids(p.id);
     grid.innerHTML+='<div class="proj-card'+(isP?' parent':'')+' fade-in" style="animation-delay:'+i*25+'ms" onclick="gotoProj('+p.id+')">'
     +'<div class="proj-ico '+(isP?'sub':'folder')+'"><svg viewBox="0 0 24 24" fill="none" stroke="'+(isP?'var(--cyan)':'var(--blue)')+'" stroke-width="1.8" width="17" height="17"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>'
-    +'<div style="flex:1;min-width:0"><div class="proj-name">'+p.name+'</div><div class="proj-meta">'+(isP?kids(p.id).length+' sections':rc+' references')+'</div></div>'
+    +'<div style="flex:1;min-width:0"><div class="proj-name">'+p.name+'</div><div class="proj-meta">'+(isP?kids(p.id).length+' sections':rc+' kits')+'</div></div>'
     +'<div class="proj-actions">'
     +(!isP&&isSuperAdmin()?'<button class="icon-btn" onclick="event.stopPropagation();triggerRefUpload('+p.id+')" title="Import Excel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button>':'')
     +(isSuperAdmin()?'<button class="icon-btn del" onclick="event.stopPropagation();confirmRemoveProject('+p.id+')" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>':'')
@@ -1221,7 +1221,7 @@ function renderChildren(vc){
     var rc=(refs[c.id]||[]).length;
     grid.innerHTML+='<div class="proj-card fade-in" style="animation-delay:'+i*25+'ms" onclick="gotoProj('+c.id+')">'
     +'<div class="proj-ico folder"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" width="17" height="17"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>'
-    +'<div style="flex:1;min-width:0"><div class="proj-name">'+c.name+'</div><div class="proj-meta">'+rc+' references</div></div>'
+    +'<div style="flex:1;min-width:0"><div class="proj-name">'+c.name+'</div><div class="proj-meta">'+rc+' kits</div></div>'
     +'<div class="proj-actions">'+(isSuperAdmin()?'<button class="icon-btn" onclick="event.stopPropagation();triggerRefUpload('+c.id+')" title="Import Excel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button>':'')
     +(isSuperAdmin()?'<button class="icon-btn del" onclick="event.stopPropagation();confirmRemoveProject('+c.id+')" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>':'')
     +'<div class="arrow-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div></div>';
@@ -1239,29 +1239,29 @@ function renderRefs(vc){
   var pct=totalWires?Math.round(doneWires/totalWires*100):0;
   var completedRefs=rList.filter(function(r){var ck=checklists[r.id]||[];return ck.length>0&&ck.every(function(i){return i.cutting==='done';});}).length;
 
-  vc.innerHTML='<div class="pg-header fade-in"><div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px"><div><div class="pg-title">'+p.name+'</div><div class="pg-sub">'+rList.length+' references</div></div>'
-  +(isSuperAdmin()?'<div style="display:flex;gap:6px"><button class="btn btn-ghost" onclick="openAddRef('+curProjId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Ref</button><button class="btn btn-success" onclick="triggerRefUpload('+curProjId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import</button></div>':'')
+  vc.innerHTML='<div class="pg-header fade-in"><div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px"><div><div class="pg-title">'+p.name+'</div><div class="pg-sub">'+rList.length+' kits</div></div>'
+  +(isSuperAdmin()?'<div style="display:flex;gap:6px"><button class="btn btn-ghost" onclick="openAddRef('+curProjId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Kit</button><button class="btn btn-success" onclick="triggerRefUpload('+curProjId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import</button></div>':'')
   +'</div></div>'
 
   // KPI cards
   +'<div class="dash-kpi-grid fade-in">'
-  +'<div class="kpi-card blue"><div class="kpi-val" style="color:var(--blue)">'+rList.length+'</div><div class="kpi-lbl">Total References</div></div>'
+  +'<div class="kpi-card blue"><div class="kpi-val" style="color:var(--blue)">'+rList.length+'</div><div class="kpi-lbl">Total Kits</div></div>'
   +'<div class="kpi-card green"><div class="kpi-val" style="color:var(--green)">'+completedRefs+'</div><div class="kpi-lbl">Completed</div></div>'
   +'<div class="kpi-card amber"><div class="kpi-val" style="color:var(--amber)">'+(rList.length-completedRefs)+'</div><div class="kpi-lbl">In Progress</div></div>'
   +'<div class="kpi-card purple"><div class="kpi-val" style="color:var(--purple)">'+pct+'%</div><div class="kpi-lbl">Overall Done</div></div>'
   +'</div>'
 
   // Progress bar
-  +(totalWires?'<div class="prog-wrap fade-in"><div class="prog-lbl"><span>Total Cutting Progress</span><span style="color:var(--text1);font-weight:600">'+doneWires+'/'+totalWires+' wires</span></div><div class="prog-bar"><div class="prog-fill" style="width:'+pct+'%"></div></div></div>':'')
+  +(totalWires?'<div class="prog-wrap fade-in"><div class="prog-lbl"><span>Total Assembly Progress</span><span style="color:var(--text1);font-weight:600">'+doneWires+'/'+totalWires+' components</span></div><div class="prog-bar"><div class="prog-fill" style="width:'+pct+'%"></div></div></div>':'')
 
   // Kit progress list
-  +(rList.length?'<div class="sec-lbl" style="margin-top:16px">Reference Kit Progress</div><div class="kit-progress-list" id="kitList"></div>':'')
+  +(rList.length?'<div class="sec-lbl" style="margin-top:16px">Kit Progress</div><div class="kit-progress-list" id="kitList"></div>':'')
 
-  +(rList.length===0?emptyState('No References','Import an Excel file or use Add Ref to create references.')
-  :'<div class="sec-lbl" style="margin-top:16px">Reference List</div><div class="tbl-wrap fade-in"><div class="tbl-toolbar"><div class="tbl-title">References</div>'
+  +(rList.length===0?emptyState('No Kits','Import an Excel file or use Add Kit to create kits.')
+  :'<div class="sec-lbl" style="margin-top:16px">Kit List</div><div class="tbl-wrap fade-in"><div class="tbl-toolbar"><div class="tbl-title">Kits</div>'
   +'<div class="search-box"><div class="search-box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>'
-  +'<input id="refSearchInp" placeholder="Filter references..." oninput="filterRefList()" autocomplete="off"></div></div>'
-  +'<table><thead><tr><th>Reference #</th><th>Progress</th><th>Status</th><th>Imported</th><th></th></tr></thead><tbody id="refTbody"></tbody></table></div>');
+  +'<input id="refSearchInp" placeholder="Filter kits..." oninput="filterRefList()" autocomplete="off"></div></div>'
+  +'<table><thead><tr><th>Kit #</th><th>Progress</th><th>Status</th><th>Imported</th><th></th></tr></thead><tbody id="refTbody"></tbody></table></div>');
 
   if(rList.length>0){renderKitList(rList);renderRefRows(rList);}
 }
@@ -1275,7 +1275,7 @@ function renderKitList(list){
     return'<div class="kit-item" onclick="gotoRef('+r.id+')">'
     +'<div class="kit-item-hd"><span class="kit-name">'+r.refNum+'</span>'+(isComp?'<span class="ref-status-badge completed">✓ DONE</span>':'<span class="ref-status-badge active">IN PROGRESS</span>')+'<span class="kit-pct" style="color:'+clr+'">'+pct+'%</span></div>'
     +'<div class="kit-bar"><div class="kit-fill" style="width:'+pct+'%;background:'+clr+'"></div></div>'
-    +'<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--text3);margin-top:5px">'+done+' / '+(total||'?')+' wires done</div>'
+    +'<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--text3);margin-top:5px">'+done+' / '+(total||'?')+' components done</div>'
     +'</div>';
   }).join('');
 }
@@ -1285,7 +1285,7 @@ function renderRefRows(list){
     var ck=checklists[r.id]||[];var done=ck.filter(function(i){return i.cutting==='done';}).length;
     var total=ck.length;var pct=total?Math.round(done/total*100):0;var isComp=total>0&&done===total;
     return'<tr onclick="gotoRef('+r.id+')">'
-    +'<td data-label="Ref #"><span class="ref-code">'+r.refNum+'</span></td>'
+    +'<td data-label="Kit #"><span class="ref-code">'+r.refNum+'</span></td>'
     +'<td data-label="Progress"><div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+(isComp?'var(--green)':'var(--blue)')+';border-radius:2px"></div></div><span class="mono-sm">'+pct+'%</span></div></td>'
     +'<td data-label="Status">'+(isComp?'<span class="ref-status-badge completed">Complete</span>':total?'<span class="ref-status-badge active">In Progress</span>':'<span class="mono-sm">No data</span>')+'</td>'
     +'<td data-label="Date"><span class="mono-sm">'+new Date(r.at).toLocaleDateString('fr-MA')+'</span></td>'
@@ -1320,27 +1320,27 @@ function renderChecklist(vc){
   vc.innerHTML='<div class="pg-header fade-in">'
   +'<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px"><div>'
   +'<div class="pg-title">'+(ref?ref.refNum:'—')+'</div>'
-  +'<div class="pg-sub" id="ckSub">'+items.length+' wires · '+done+' done · '+pct+'% · '+cSP+' SP / '+cXE+' XE in WPA</div>'
-  +'</div>'+(isSuperAdmin()&&ref?'<button class="btn btn-success" onclick="triggerCkUpload('+curRefId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Checklist</button>':'')+'</div></div>'
+  +'<div class="pg-sub" id="ckSub">'+items.length+' components · '+done+' done · '+pct+'% · '+cSP+' SP / '+cXE+' XE in progress</div>'
+  +'</div>'+(isSuperAdmin()&&ref?'<button class="btn btn-success" onclick="triggerCkUpload('+curRefId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Components</button>':'')+'</div></div>'
 
   // Completion banner
-  +(isCompleted?'<div class="history-banner fade-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>✅ Reference 100% Complete!'+(histEntry?' — Completed '+new Date(histEntry.at).toLocaleDateString('fr-MA')+' at '+new Date(histEntry.at).toLocaleTimeString('fr-MA',{hour:'2-digit',minute:'2-digit'}):'')+'</span></div>':'')
+  +(isCompleted?'<div class="history-banner fade-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>✅ Kit 100% Complete!'+(histEntry?' — Completed '+new Date(histEntry.at).toLocaleDateString('fr-MA')+' at '+new Date(histEntry.at).toLocaleTimeString('fr-MA',{hour:'2-digit',minute:'2-digit'}):'')+'</span></div>':'')
 
   // KPI mini
   +'<div class="dash-kpi-grid fade-in" style="margin-bottom:16px">'
-  +'<div class="kpi-card blue"><div class="kpi-val" style="color:var(--blue)">'+items.length+'</div><div class="kpi-lbl">Total Wires</div></div>'
+  +'<div class="kpi-card blue"><div class="kpi-val" style="color:var(--blue)">'+items.length+'</div><div class="kpi-lbl">Components</div></div>'
   +'<div class="kpi-card green"><div class="kpi-val" style="color:var(--green)">'+done+'</div><div class="kpi-lbl">Done</div></div>'
   +'<div class="kpi-card amber"><div class="kpi-val" style="color:var(--amber)">'+(items.length-done)+'</div><div class="kpi-lbl">Remaining</div></div>'
   +'<div class="kpi-card purple"><div class="kpi-val" style="color:var(--purple)">'+pct+'%</div><div class="kpi-lbl">Progress</div></div>'
   +'</div>'
 
-  +(items.length?'<div class="prog-wrap fade-in"><div class="prog-lbl"><span>Cutting Progress</span><span style="color:var(--text1);font-weight:600">'+done+'/'+items.length+'</span></div><div class="prog-bar"><div class="prog-fill" id="progFill" style="width:'+pct+'%"></div></div></div>':'')
+  +(items.length?'<div class="prog-wrap fade-in"><div class="prog-lbl"><span>Assembly Progress</span><span style="color:var(--text1);font-weight:600">'+done+'/'+items.length+' components</span></div><div class="prog-bar"><div class="prog-fill" id="progFill" style="width:'+pct+'%"></div></div></div>':'')
 
-  +(items.length===0?emptyState('No Wire Checklist','Import an Excel file with Wire ID and Type columns.')
+  +(items.length===0?emptyState('No Components','Import an Excel file with Component ID and Type columns.')
   :'<div class="tbl-wrap fade-in">'
-  +'<div class="tbl-toolbar"><div class="tbl-title">Wire Checklist</div>'
+  +'<div class="tbl-toolbar"><div class="tbl-title">Component Checklist</div>'
   +'<div class="search-box"><div class="search-box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>'
-  +'<input id="ckSearchInp" type="text" placeholder="Search wire ID..." value="'+ckFilt.q+'" oninput="onCkSearch(this.value)" autocomplete="off">'
+  +'<input id="ckSearchInp" type="text" placeholder="Search component ID..." value="'+ckFilt.q+'" oninput="onCkSearch(this.value)" autocomplete="off">'
   +'<button class="search-box-clear'+(ckFilt.q?' show':'')+'" id="ckClearBtn" onclick="clearCkSearch()">×</button></div>'
   +'<div class="res-badge" id="resBadge"></div></div>'
   +'<div class="filter-bar"><span class="filter-lbl">Type</span><div class="filter-grp">'
@@ -1357,7 +1357,7 @@ function renderChecklist(vc){
   +mkChip('done',ckFilt.status==='done','a-done',"setCkFilt('status','done')",'Done',cDone,'var(--green)')
   +mkChip('prog',ckFilt.status==='in_progress','a-prog',"setCkFilt('status','in_progress')",'In Progress',cProg,'var(--amber)')
   +'</div></div>'
-  +'<table><thead><tr><th>Wire ID</th><th>Type</th><th>Cutting</th><th>WPA (XE/SP)</th><th>Twist (TW)</th></tr></thead><tbody id="ckTbody"></tbody></table></div>');
+  +'<table><thead><tr><th>Component ID</th><th>Type</th><th>Assembly</th><th>Special (XE/SP)</th><th>Twist (TW)</th></tr></thead><tbody id="ckTbody"></tbody></table></div>');
   if(items.length>0)applyCheckFilt();
 }
 
@@ -1370,11 +1370,11 @@ function applyCheckFilt(){
   var items=checklists[curRefId]||[];var q=ckFilt.q.toLowerCase().trim();
   var filt=items.filter(function(i){return(ckFilt.type==='all'||i.type===ckFilt.type)&&(ckFilt.status==='all'||i.cutting===ckFilt.status)&&(!q||i.wireId.toLowerCase().includes(q));});
   renderCkRows(filt,q);
-  var b=document.getElementById('resBadge');if(b)b.innerHTML=filt.length<items.length?'Showing <b>'+filt.length+'</b> of '+items.length:'<b>'+items.length+'</b> wires';
+  var b=document.getElementById('resBadge');if(b)b.innerHTML=filt.length<items.length?'Showing <b>'+filt.length+'</b> of '+items.length:'<b>'+items.length+'</b> components';
 }
 function renderCkRows(filt,q){
   var tb=document.getElementById('ckTbody');if(!tb)return;
-  if(!filt.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:30px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--text3)">No wires match filters</td></tr>';return;}
+  if(!filt.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:30px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--text3)">No components match filters</td></tr>';return;}
   tb.innerHTML=filt.map(function(item){
     var wid=item.wireId;
     if(q){var ix=wid.toLowerCase().indexOf(q);if(ix!==-1)wid=wid.slice(0,ix)+'<mark style="background:rgba(59,130,246,.3);color:var(--text1);border-radius:2px;padding:0 1px">'+wid.slice(ix,ix+q.length)+'</mark>'+wid.slice(ix+q.length);}
@@ -1382,10 +1382,10 @@ function renderCkRows(filt,q){
     var cSel='<select class="status-sel '+item.cutting+'" onchange="updStatus('+item.id+',\'cutting\',this)"><option value="in_progress"'+(item.cutting==='in_progress'?' selected':'')+'>In Progress</option><option value="done"'+(item.cutting==='done'?' selected':'')+'>Done</option></select>';
     var wpaSel=(item.type==='xe'||item.type==='sp')?'<select class="status-sel '+(item.wpa||'')+'" onchange="updStatus('+item.id+',\'wpa\',this)"><option value="in_progress"'+(item.wpa==='in_progress'?' selected':'')+'>In Progress</option><option value="done"'+(item.wpa==='done'?' selected':'')+'>Done</option></select>':'<span class="status-na">—</span>';
     var twSel=(item.type==='tw')?'<select class="status-sel '+(item.twist||'')+'" onchange="updStatus('+item.id+',\'twist\',this)"><option value="in_progress"'+(item.twist==='in_progress'?' selected':'')+'>In Progress</option><option value="done"'+(item.twist==='done'?' selected':'')+'>Done</option></select>':'<span class="status-na">—</span>';
-    return'<tr><td data-label="Wire ID"><span style="font-family:\'JetBrains Mono\',monospace;font-size:12px;font-weight:600">'+wid+'</span></td>'
+    return'<tr><td data-label="Component ID"><span style="font-family:\'JetBrains Mono\',monospace;font-size:12px;font-weight:600">'+wid+'</span></td>'
     +'<td data-label="Type"><span class="w-badge '+wc+'">'+wl+'</span></td>'
-    +'<td data-label="Cutting">'+cSel+'</td>'
-    +'<td data-label="WPA">'+wpaSel+'</td>'
+    +'<td data-label="Assembly">'+cSel+'</td>'
+    +'<td data-label="Special">'+wpaSel+'</td>'
     +'<td data-label="Twist">'+twSel+'</td></tr>';
   }).join('');
 }
@@ -1398,7 +1398,7 @@ function updStatus(itemId,field,sel){
   sel.className='status-sel '+val;dbSave(itemId,field,val);
   var items=checklists[curRefId]||[];var done=items.filter(function(i){return i.cutting==='done';}).length;var pct=items.length?Math.round(done/items.length*100):0;
   var sub=document.getElementById('ckSub');var fill=document.getElementById('progFill');
-  if(sub)sub.textContent=items.length+' wires · '+done+' done · '+pct+'% · '+items.filter(function(i){return i.type==='sp';}).length+' SP / '+items.filter(function(i){return i.type==='xe';}).length+' XE in WPA';
+  if(sub)sub.textContent=items.length+' components · '+done+' done · '+pct+'% · '+items.filter(function(i){return i.type==='sp';}).length+' SP / '+items.filter(function(i){return i.type==='xe';}).length+' XE in progress';
   if(fill)fill.style.width=pct+'%';
   toast(val==='done'?'Marked as Done':'Status updated',val==='done'?'success':'info');
 }
@@ -1407,16 +1407,16 @@ function updStatus(itemId,field,sel){
 // COMPLETED HISTORY PAGE
 // ══════════════════════════
 function renderHistoryPage(vc){
-  vc.innerHTML='<div class="pg-header fade-in"><div class="pg-title">Completed References History</div><div class="pg-sub">Immutable record of all completed references</div></div>'
-  +(completedHistory.length===0?emptyState('No Completed References','References that reach 100% completion will appear here automatically.')
+  vc.innerHTML='<div class="pg-header fade-in"><div class="pg-title">Completed Kits History</div><div class="pg-sub">Record of all completed kits</div></div>'
+  +(completedHistory.length===0?emptyState('No Completed Kits','Kits that reach 100% completion will appear here automatically.')
   :'<div class="tbl-wrap fade-in">'
-  +'<div class="tbl-toolbar"><div class="tbl-title">Completion History</div><div class="mono-sm">'+completedHistory.length+' completed references</div></div>'
-  +'<table><thead><tr><th>#</th><th>Reference</th><th>Project</th><th>Completed At</th>'+(isSuperAdmin()?'<th>Actions</th>':'')+'</tr></thead>'
+  +'<div class="tbl-toolbar"><div class="tbl-title">Completion History</div><div class="mono-sm">'+completedHistory.length+' completed kits</div></div>'
+  +'<table><thead><tr><th>#</th><th>Kit</th><th>Project</th><th>Completed At</th>'+(isSuperAdmin()?'<th>Actions</th>':'')+'</tr></thead>'
   +'<tbody>'+completedHistory.slice().reverse().map(function(h,i){
     var dt=new Date(h.at);var ds=dt.toLocaleDateString('fr-MA',{day:'2-digit',month:'2-digit',year:'numeric'});var ts=dt.toLocaleTimeString('fr-MA',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
     return'<tr>'
     +'<td data-label="#"><span class="mono-sm">#'+String(i+1).padStart(3,'0')+'</span></td>'
-    +'<td data-label="Reference"><span class="ref-code">'+h.refNum+'</span></td>'
+    +'<td data-label="Kit"><span class="ref-code">'+h.refNum+'</span></td>'
     +'<td data-label="Project"><strong>'+h.proj+'</strong></td>'
     +'<td data-label="Completed"><div class="order-meta"><div><span>'+ds+'</span></div><div>'+ts+'</div></div></td>'
     +(isSuperAdmin()?'<td data-label="Actions"><button class="del-btn" onclick="confirmRemoveHistory('+h.refId+')" title="Remove from history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></td>':'')
@@ -1425,7 +1425,7 @@ function renderHistoryPage(vc){
 }
 
 // ══════════════════════════
-// SPECIAL ORDERS
+// KIT ORDERS PAGE
 // ══════════════════════════
 function renderOrdersPage(vc){
   var isAdmin=isSuperAdmin();
@@ -1433,8 +1433,8 @@ function renderOrdersPage(vc){
   var totalQty=orders.reduce(function(s,o){return s+(parseInt(o.qty)||0);},0);
   var isMob=window.innerWidth<=600;
   vc.innerHTML='<div class="pg-header fade-in">'
-  +'<div class="pg-title">Assembly Special Orders</div>'
-  +'<div class="pg-sub">'+orders.length+' orders · immutable records</div>'
+  +'<div class="pg-title">Kit Orders</div>'
+  +'<div class="pg-sub">'+orders.length+' orders · kit requests</div>'
   +(isMob?'':'<div style="margin-top:12px"><button class="btn btn-primary" onclick="openNewOrder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Order</button></div>')
   +'</div>'
   +'<div class="sum-row fade-in">'
@@ -1458,7 +1458,7 @@ function renderOrdersPage(vc){
   +mkChip('gs',ordFilt.type==='gs','a-gs',"setOrdFilt('gs')",'Grande Sec.',cnt.gs,'#f43f5e')
   +mkChip('complete',ordFilt.type==='complete','a-complete',"setOrdFilt('complete')",'Complete',cnt.complete,'var(--purple)')
   +'</div></div>'
-  +'<table><thead><tr><th>#</th><th>Reference</th><th>Project</th><th>Wire Name</th><th>Type</th><th>Qty</th><th>From → To</th><th>Go</th><th>Date &amp; Time</th>'+(isAdmin?'<th>Actions</th>':'')+'</tr></thead><tbody id="ordTbody"></tbody></table>'
+  +'<table><thead><tr><th>#</th><th>Reference</th><th>Project</th><th>Kit Name</th><th>Type</th><th>Qty</th><th>From → To</th><th>Go</th><th>Date &amp; Time</th>'+(isAdmin?'<th>Actions</th>':'')+'</tr></thead><tbody id="ordTbody"></tbody></table>'
   +'</div>';
   renderOrdRows();
 }
@@ -1478,7 +1478,7 @@ function renderOrdRows(){
     +'<td data-label="#"><span class="mono-sm">#'+String(idx+1).padStart(3,'0')+'</span></td>'
     +'<td data-label="Ref"><span class="ref-code">'+(o.ref||'—')+'</span></td>'
     +'<td data-label="Project"><strong>'+o.proj+'</strong></td>'
-    +'<td data-label="Wire"><span class="order-meta"><span>'+o.wire+'</span></span></td>'
+    +'<td data-label="Kit"><span class="order-meta"><span>'+o.wire+'</span></span></td>'
     +'<td data-label="Type"><span class="w-badge '+wc+'">'+wl+'</span></td>'
     +'<td data-label="Qty"><span class="qty-num">'+o.qty+'</span></td>'
     +'<td data-label="From→To"><div class="order-meta"><div>↑ <span>'+o.from+'</span></div><div>↓ <span>'+o.to+'</span></div></div></td>'
@@ -1519,7 +1519,7 @@ async function submitOrder(){
   if(!ref)errs.push('o_ref');if(!proj)errs.push('o_proj');if(!wire)errs.push('o_wire');
   if(!qty||isNaN(qty)||parseInt(qty)<1)errs.push('o_qty');if(!from)errs.push('o_from');if(!to)errs.push('o_to');
   document.querySelectorAll('#newOrderOverlay .m-input').forEach(function(el){el.classList.remove('err');});
-  if(!type){toast('Please select a wire type','error');return;}
+  if(!type){toast('Please select a kit type','error');return;}
   if(errs.length){errs.forEach(function(id){var el=document.getElementById(id);if(el)el.classList.add('err');});toast('Fill in all required fields','error');return;}
   var orderData={ref:ref,proj:proj,type:type,wire:wire,qty:parseInt(qty),from:from,to:to,go:go,at:new Date().toISOString(),by:_user?_user.name:'Unknown'};
   if(_sb&&!_demo){
@@ -1597,7 +1597,7 @@ function triggerRefUpload(pid){
   inp.onchange=function(e){var f=e.target.files[0];if(f)parseXL(f,function(rows){importRefs(pid,rows);});};inp.click();
 }
 function triggerCkUpload(rid){
-  if(!isSuperAdmin()){toast('Only the super admin can import checklists','error');return;}
+  if(!isSuperAdmin()){toast('Only the super admin can import component checklists','error');return;}
   var inp=document.getElementById('fileChecklist');inp.value='';
   inp.onchange=function(e){var f=e.target.files[0];if(f)parseXL(f,function(rows){importChecklist(rid,rows);});};inp.click();
 }
@@ -1609,16 +1609,16 @@ function parseXL(file,cb){
 function importRefs(pid,rows){
   if(rows.length<2){toast('Empty file','error');return;}
   var hdrs=rows[0].map(function(h){return String(h).toLowerCase().trim();});
-  var rc=hdrs.findIndex(function(h){return h.includes('ref')||h.includes('reference')||h==='id';});if(rc===-1)rc=0;
+  var rc=hdrs.findIndex(function(h){return h.includes('ref')||h.includes('reference')||h.includes('kit')||h==='id';});if(rc===-1)rc=0;
   var added=[];
   for(var i=1;i<rows.length;i++){var row=rows[i];if(!row.length)continue;var rn=String(row[rc]||'').trim();if(!rn)continue;var extra={};hdrs.forEach(function(h,idx){if(idx!==rc&&row[idx]!==undefined&&row[idx]!=='')extra[h]=row[idx];});added.push({id:nRefId++,refNum:rn,extra:Object.keys(extra).length?extra:null,at:new Date()});}
   if(!refs[pid])refs[pid]=[];refs[pid].push.apply(refs[pid],added);
-  added.forEach(function(r){dbSaveRef(pid,r);});toast(added.length+' references imported','success');render();
+  added.forEach(function(r){dbSaveRef(pid,r);});toast(added.length+' kits imported','success');render();
 }
 function importChecklist(rid,rows){
   if(rows.length<2){toast('Empty file','error');return;}
   var hdrs=rows[0].map(function(h){return String(h).toLowerCase().trim();});
-  var wc=hdrs.findIndex(function(h){return h.includes('wire')||h.includes('id');});if(wc===-1)wc=0;
+  var wc=hdrs.findIndex(function(h){return h.includes('wire')||h.includes('component')||h.includes('id');});if(wc===-1)wc=0;
   var tc=hdrs.findIndex(function(h){return h.includes('type');});if(tc===-1)tc=1;
   var added=[];
   for(var i=1;i<rows.length;i++){var row=rows[i];if(!row.length)continue;var wid=String(row[wc]||'').trim();if(!wid)continue;
@@ -1626,7 +1626,7 @@ function importChecklist(rid,rows){
     if(t.includes('xe'))t='xe';else if(t.includes('sp'))t='sp';else if(t.includes('twist')||t.includes('tw'))t='tw';else if(t.includes('multi')||t.includes('mc'))t='mc';else if(t.includes('grand')||t.includes('gs'))t='gs';else if(t.includes('complet'))t='complete';else t='simple';
     added.push({id:nCkId++,wireId:wid,type:t,cutting:'in_progress',wpa:(t==='xe'||t==='sp')?'in_progress':null,twist:t==='tw'?'in_progress':null});}
   if(!checklists[rid])checklists[rid]=[];checklists[rid].push.apply(checklists[rid],added);
-  dbSaveItems(rid,added);toast(added.length+' wires imported','success');render();
+  dbSaveItems(rid,added);toast(added.length+' components imported','success');render();
 }
 
 // ══════════════════════════
@@ -1653,7 +1653,7 @@ function generateIcon(size){
   try{
     var i32=generateIcon(32),i180=generateIcon(180),i192=generateIcon(192),i512=generateIcon(512);
     document.getElementById('appleTouchIcon').href=i180;document.getElementById('faviconIcon').href=i32;
-    var manifest={name:'WireTrack V.5 — Miloud Ezzaky Industry',short_name:'WireTrack',description:'Wire Harness Digital Checklist System V.5',start_url:'./',id:'wiretrack-v5',display:'standalone',display_override:['standalone','minimal-ui'],orientation:'any',background_color:'#0b0f1a',theme_color:'#0b0f1a',lang:'fr',categories:['productivity','business'],icons:[{src:i192,sizes:'192x192',type:'image/png',purpose:'any'},{src:i192,sizes:'192x192',type:'image/png',purpose:'maskable'},{src:i512,sizes:'512x512',type:'image/png',purpose:'any'},{src:i512,sizes:'512x512',type:'image/png',purpose:'maskable'}],prefer_related_applications:false};
+    var manifest={name:'AMKM V.5 — Miloud Ezzaky Industry',short_name:'AMKM',description:'Aftermarket Kits Manager System V.5',start_url:'./',id:'amkm-v5',display:'standalone',display_override:['standalone','minimal-ui'],orientation:'any',background_color:'#0b0f1a',theme_color:'#0b0f1a',lang:'fr',categories:['productivity','business'],icons:[{src:i192,sizes:'192x192',type:'image/png',purpose:'any'},{src:i192,sizes:'192x192',type:'image/png',purpose:'maskable'},{src:i512,sizes:'512x512',type:'image/png',purpose:'any'},{src:i512,sizes:'512x512',type:'image/png',purpose:'maskable'}],prefer_related_applications:false};
     var blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});document.querySelector('link[rel="manifest"]').href=URL.createObjectURL(blob);
   }catch(e){console.warn('Manifest generation failed:',e);}
 })();
@@ -1664,15 +1664,15 @@ function generateIcon(size){
 var _deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',function(e){
   e.preventDefault();_deferredPrompt=e;
-  try{if(!localStorage.getItem('wt_pwa_ok'))setTimeout(function(){document.getElementById('pwaBanner').classList.add('show');},3000);}catch(e){}
+  try{if(!localStorage.getItem('amkm_pwa_ok'))setTimeout(function(){document.getElementById('pwaBanner').classList.add('show');},3000);}catch(e){}
 });
 document.getElementById('pwaInstBtn').addEventListener('click',async function(){
   if(!_deferredPrompt){var isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;if(isIOS)alert('📱 iPhone/iPad: Tap Share → "Add to Home Screen"');else alert('📱 Android: Menu → "Add to Home Screen"\n💻 Desktop: Click install icon in address bar');return;}
   _deferredPrompt.prompt();var r=await _deferredPrompt.userChoice;
-  if(r.outcome==='accepted'){document.getElementById('pwaBanner').classList.remove('show');try{localStorage.setItem('wt_pwa_ok','1');}catch(e){}}
+  if(r.outcome==='accepted'){document.getElementById('pwaBanner').classList.remove('show');try{localStorage.setItem('amkm_pwa_ok','1');}catch(e){}}
   _deferredPrompt=null;
 });
-function dismissPWA(){document.getElementById('pwaBanner').classList.remove('show');try{localStorage.setItem('wt_pwa_ok','1');}catch(e){}}
+function dismissPWA(){document.getElementById('pwaBanner').classList.remove('show');try{localStorage.setItem('amkm_pwa_ok','1');}catch(e){}}
 window.addEventListener('appinstalled',function(){document.getElementById('pwaBanner').classList.remove('show');});
 
 // ══════════════════════════
@@ -1680,7 +1680,7 @@ window.addEventListener('appinstalled',function(){document.getElementById('pwaBa
 // ══════════════════════════
 if('serviceWorker' in navigator){
   var SW_CODE=`
-const CACHE_STATIC='wt-static-v5',CACHE_DYNAMIC='wt-dynamic-v5';
+const CACHE_STATIC='amkm-static-v5',CACHE_DYNAMIC='amkm-dynamic-v5';
 const STATIC_ASSETS=['https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE_STATIC).then(cache=>Promise.allSettled(STATIC_ASSETS.map(url=>fetch(url).then(r=>cache.put(url,r)).catch(()=>{})))));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_STATIC&&k!==CACHE_DYNAMIC).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
