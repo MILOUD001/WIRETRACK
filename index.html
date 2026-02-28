@@ -320,7 +320,7 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 .chatbot-send{width:34px;height:34px;background:var(--blue);border:none;border-radius:8px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
 .chatbot-send:hover{background:#2563eb}.chatbot-send svg{width:14px;height:14px}
 
-/* DASHBOARD — KPI for individual ref */
+/* DASHBOARD KPI */
 .dash-kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:16px}
 .kpi-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:12px 14px;position:relative;overflow:hidden}
 .kpi-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
@@ -669,20 +669,14 @@ function loadSavedConfig(){
 // ══════════════════════════
 function addNotif(type,title,msg){
   var n={id:Date.now()+'_'+Math.random().toString(36).slice(2),type:type,title:title,msg:msg,time:new Date(),unread:true};
-  notifications.unshift(n);
-  updateNotifBadge();renderNotifList();
-  // OS notification if permission granted
-  if(window.Notification&&Notification.permission==='granted'){
-    try{new Notification('AMKM: '+title,{body:msg,icon:'data:image/png;base64,iVBORw0KGgo='});}catch(e){}
-  }
+  notifications.unshift(n);updateNotifBadge();renderNotifList();
+  if(window.Notification&&Notification.permission==='granted'){try{new Notification('AMKM: '+title,{body:msg});}catch(e){}}
   return n;
 }
 function updateNotifBadge(){
   var cnt=notifications.filter(function(n){return n.unread;}).length;
-  var badge=document.getElementById('notifBadge');
-  if(!badge)return;
-  if(cnt>0){badge.textContent=cnt>9?'9+':cnt;badge.classList.add('show');}
-  else{badge.classList.remove('show');}
+  var badge=document.getElementById('notifBadge');if(!badge)return;
+  if(cnt>0){badge.textContent=cnt>9?'9+':cnt;badge.classList.add('show');}else{badge.classList.remove('show');}
 }
 function renderNotifList(){
   var list=document.getElementById('notifList');if(!list)return;
@@ -698,109 +692,40 @@ function renderNotifList(){
     +'<div style="flex:1;min-width:0"><div class="notif-title">'+n.title+'</div><div class="notif-msg">'+n.msg+'</div><div class="notif-time">'+ts+'</div></div></div>';
   }).join('');
 }
-function markNotifRead(id){
-  var n=notifications.find(function(x){return x.id===id;});
-  if(n)n.unread=false;
-  updateNotifBadge();renderNotifList();
-}
-function clearNotifs(){
-  notifications=[];updateNotifBadge();renderNotifList();
-  document.getElementById('notifPanel').classList.remove('show');
-}
+function markNotifRead(id){var n=notifications.find(function(x){return x.id===id;});if(n)n.unread=false;updateNotifBadge();renderNotifList();}
+function clearNotifs(){notifications=[];updateNotifBadge();renderNotifList();document.getElementById('notifPanel').classList.remove('show');}
 function toggleNotifPanel(){
-  var panel=document.getElementById('notifPanel');
-  var showing=panel.classList.toggle('show');
+  var panel=document.getElementById('notifPanel');var showing=panel.classList.toggle('show');
   if(showing){notifications.forEach(function(n){n.unread=false;});updateNotifBadge();renderNotifList();}
-  // Close chatbot if open
   document.getElementById('chatbotPanel').classList.remove('show');
 }
-// Request notification permission
-function requestNotifPermission(){
-  if(window.Notification&&Notification.permission==='default'){Notification.requestPermission();}
-}
+function requestNotifPermission(){if(window.Notification&&Notification.permission==='default'){Notification.requestPermission();}}
 
 // ══════════════════════════
 // CHATBOT
 // ══════════════════════════
 var _chatOpen=false;
 function toggleChatbot(){
-  _chatOpen=!_chatOpen;
-  document.getElementById('chatbotPanel').classList.toggle('show',_chatOpen);
+  _chatOpen=!_chatOpen;document.getElementById('chatbotPanel').classList.toggle('show',_chatOpen);
   document.getElementById('notifPanel').classList.remove('show');
-  if(_chatOpen&&document.getElementById('chatMessages').children.length===0){
-    addBotMsg('👋 Hi! I\'m KitBot. Ask me about any kit progress, component stats, or project completion rates!');
-    renderChatSuggestions();
-  }
+  if(_chatOpen&&document.getElementById('chatMessages').children.length===0){addBotMsg('👋 Hi! I\'m KitBot. Ask me about any kit progress, component stats, or project completion rates!');renderChatSuggestions();}
 }
-function addBotMsg(text){
-  var el=document.createElement('div');el.className='chat-msg bot';el.textContent=text;
-  document.getElementById('chatMessages').appendChild(el);
-  document.getElementById('chatMessages').scrollTop=9999;
-}
-function addUserMsg(text){
-  var el=document.createElement('div');el.className='chat-msg user';el.textContent=text;
-  document.getElementById('chatMessages').appendChild(el);
-  document.getElementById('chatMessages').scrollTop=9999;
-}
+function addBotMsg(text){var el=document.createElement('div');el.className='chat-msg bot';el.textContent=text;document.getElementById('chatMessages').appendChild(el);document.getElementById('chatMessages').scrollTop=9999;}
+function addUserMsg(text){var el=document.createElement('div');el.className='chat-msg user';el.textContent=text;document.getElementById('chatMessages').appendChild(el);document.getElementById('chatMessages').scrollTop=9999;}
 function renderChatSuggestions(){
   var sugs=['Show all projects','Top incomplete kits','Overall progress','Orders today','Completed kits'];
-  document.getElementById('chatSuggestions').innerHTML=sugs.map(function(s){
-    return '<button class="chat-sug" onclick="chatQuery(\''+s+'\')">'+''+s+'</button>';
-  }).join('');
+  document.getElementById('chatSuggestions').innerHTML=sugs.map(function(s){return '<button class="chat-sug" onclick="chatQuery(\''+s+'\')">'+''+s+'</button>';}).join('');
 }
-function sendChat(){
-  var inp=document.getElementById('chatInput');var q=(inp.value||'').trim();if(!q)return;
-  inp.value='';chatQuery(q);
-}
+function sendChat(){var inp=document.getElementById('chatInput');var q=(inp.value||'').trim();if(!q)return;inp.value='';chatQuery(q);}
 function chatQuery(q){
-  addUserMsg(q);
-  document.getElementById('chatSuggestions').innerHTML='';
-  var ql=q.toLowerCase();
-  var reply='';
-
-  // All projects summary
-  if(ql.includes('all project')||ql.includes('projects')){
-    var top=topLevel();reply='📂 Projects ('+top.length+' total):\n';
-    top.forEach(function(p){var rc=(refs[p.id]||[]).length;reply+='• '+p.name+(hasKids(p.id)?' ('+kids(p.id).length+' sections)':' — '+rc+' refs')+'\n';});
-  }
-  // Overall progress
-  else if(ql.includes('overall')||ql.includes('progress')){
-    var tW=0,dW=0;
-    Object.values(checklists).forEach(function(arr){tW+=arr.length;dW+=arr.filter(function(i){return i.cutting==='done';}).length;});
-    var pct=tW?Math.round(dW/tW*100):0;
-    reply='📊 Overall Progress:\n• Total components: '+tW+'\n• Done: '+dW+'\n• Completion: '+pct+'%\n• Total orders: '+orders.length;
-  }
-  // Orders today
-  else if(ql.includes('order')){
-    var today=new Date().toDateString();var tod=orders.filter(function(o){return new Date(o.at).toDateString()===today;});
-    reply='📋 Orders today: '+tod.length+' / Total: '+orders.length;
-    if(tod.length){reply+='\n';tod.slice(0,5).forEach(function(o){reply+='• '+o.proj+' — '+o.wire+' ('+o.qty+')\n';});}
-  }
-  // Completed references
-  else if(ql.includes('complet')){
-    var cmp=completedHistory;reply='✅ Completed Kits: '+cmp.length;
-    if(cmp.length){reply+='\n';cmp.slice(0,5).forEach(function(h){reply+='• '+h.refNum+' ('+h.proj+') — '+new Date(h.at).toLocaleDateString('fr-MA')+'\n';});}
-  }
-  // Top incomplete
-  else if(ql.includes('incomplet')||ql.includes('top')){
-    var incs=[];
-    for(var rid in checklists){var arr=checklists[rid];if(!arr.length)continue;var d=arr.filter(function(i){return i.cutting==='done';}).length;var pct=Math.round(d/arr.length*100);if(pct<100){var r=findRef(parseInt(rid));incs.push({ref:r?r.refNum:'#'+rid,pct:pct,done:d,total:arr.length});}}
-    incs.sort(function(a,b){return a.pct-b.pct;});
-    reply='⚠️ Top Incomplete Kits:\n';
-    incs.slice(0,6).forEach(function(x){reply+='• '+x.ref+': '+x.pct+'% ('+x.done+'/'+x.total+' components)\n';});
-    if(!incs.length)reply='🎉 All kits are complete!';
-  }
-  // Specific ref query
-  else if(ql.includes('ref')||ql.includes('kit')||ql.includes('#')){
-    var term=ql.replace(/ref(erence)?/i,'').replace(/kit/i,'').replace('#','').trim();
-    var found=[];
-    for(var k in refs){refs[k].forEach(function(r){if(r.refNum.toLowerCase().includes(term)){var ck=checklists[r.id]||[];var d=ck.filter(function(i){return i.cutting==='done';}).length;found.push({ref:r.refNum,total:ck.length,done:d,pct:ck.length?Math.round(d/ck.length*100):0});}});}
-    if(found.length){reply='🔍 Found '+found.length+' kit(s):\n';found.slice(0,6).forEach(function(f){reply+='• '+f.ref+': '+f.pct+'% done ('+f.done+'/'+f.total+' components)\n';});}
-    else reply='No kit matching "'+term+'" found.';
-  }
-  else{
-    reply='I can help with:\n• "All projects" — project list\n• "Overall progress" — completion stats\n• "Orders today" — today\'s orders\n• "Completed kits" — history\n• "Top incomplete" — kits needing work\n• "kit [name]" — specific kit status';
-  }
+  addUserMsg(q);document.getElementById('chatSuggestions').innerHTML='';var ql=q.toLowerCase();var reply='';
+  if(ql.includes('all project')||ql.includes('projects')){var top=topLevel();reply='📂 Projects ('+top.length+' total):\n';top.forEach(function(p){var rc=(refs[p.id]||[]).length;reply+='• '+p.name+(hasKids(p.id)?' ('+kids(p.id).length+' sections)':' — '+rc+' refs')+'\n';});}
+  else if(ql.includes('overall')||ql.includes('progress')){var tW=0,dW=0;Object.values(checklists).forEach(function(arr){tW+=arr.length;dW+=arr.filter(function(i){return i.cutting==='done';}).length;});var pct=tW?Math.round(dW/tW*100):0;reply='📊 Overall Progress:\n• Total components: '+tW+'\n• Done: '+dW+'\n• Completion: '+pct+'%\n• Total orders: '+orders.length;}
+  else if(ql.includes('order')){var today=new Date().toDateString();var tod=orders.filter(function(o){return new Date(o.at).toDateString()===today;});reply='📋 Orders today: '+tod.length+' / Total: '+orders.length;if(tod.length){reply+='\n';tod.slice(0,5).forEach(function(o){reply+='• '+o.proj+' — '+o.wire+' ('+o.qty+')\n';});}}
+  else if(ql.includes('complet')){var cmp=completedHistory;reply='✅ Completed Kits: '+cmp.length;if(cmp.length){reply+='\n';cmp.slice(0,5).forEach(function(h){reply+='• '+h.refNum+' ('+h.proj+') — '+new Date(h.at).toLocaleDateString('fr-MA')+'\n';});}}
+  else if(ql.includes('incomplet')||ql.includes('top')){var incs=[];for(var rid in checklists){var arr=checklists[rid];if(!arr.length)continue;var d=arr.filter(function(i){return i.cutting==='done';}).length;var pct2=Math.round(d/arr.length*100);if(pct2<100){var r=findRef(parseInt(rid));incs.push({ref:r?r.refNum:'#'+rid,pct:pct2,done:d,total:arr.length});}}incs.sort(function(a,b){return a.pct-b.pct;});reply='⚠️ Top Incomplete Kits:\n';incs.slice(0,6).forEach(function(x){reply+='• '+x.ref+': '+x.pct+'% ('+x.done+'/'+x.total+' components)\n';});if(!incs.length)reply='🎉 All kits are complete!';}
+  else if(ql.includes('ref')||ql.includes('kit')||ql.includes('#')){var term=ql.replace(/ref(erence)?/i,'').replace(/kit/i,'').replace('#','').trim();var found=[];for(var k in refs){refs[k].forEach(function(r){if(r.refNum.toLowerCase().includes(term)){var ck=checklists[r.id]||[];var d2=ck.filter(function(i){return i.cutting==='done';}).length;found.push({ref:r.refNum,total:ck.length,done:d2,pct:ck.length?Math.round(d2/ck.length*100):0});}});}if(found.length){reply='🔍 Found '+found.length+' kit(s):\n';found.slice(0,6).forEach(function(f){reply+='• '+f.ref+': '+f.pct+'% done ('+f.done+'/'+f.total+' components)\n';});}else reply='No kit matching "'+term+'" found.';}
+  else{reply='I can help with:\n• "All projects" — project list\n• "Overall progress" — completion stats\n• "Orders today" — today\'s orders\n• "Completed kits" — history\n• "Top incomplete" — kits needing work\n• "kit [name]" — specific kit status';}
   setTimeout(function(){addBotMsg(reply);renderChatSuggestions();},300);
 }
 
@@ -810,14 +735,10 @@ function chatQuery(q){
 var _authMode='signin';
 function switchTab(mode){
   _authMode=mode;var isSI=mode==='signin';
-  document.getElementById('tabSignin').classList.toggle('active',isSI);
-  document.getElementById('tabRegister').classList.toggle('active',!isSI);
-  document.getElementById('nameGroup').style.display=isSI?'none':'block';
-  document.getElementById('confirmGroup').style.display=isSI?'none':'block';
-  document.getElementById('rememberGroup').style.display=isSI?'block':'none';
-  document.getElementById('forgotLink').style.display=isSI?'inline':'none';
-  document.getElementById('loginBtnTxt').textContent=isSI?'Sign In':'Create Account';
-  document.getElementById('loginPass').autocomplete=isSI?'current-password':'new-password';
+  document.getElementById('tabSignin').classList.toggle('active',isSI);document.getElementById('tabRegister').classList.toggle('active',!isSI);
+  document.getElementById('nameGroup').style.display=isSI?'none':'block';document.getElementById('confirmGroup').style.display=isSI?'none':'block';
+  document.getElementById('rememberGroup').style.display=isSI?'block':'none';document.getElementById('forgotLink').style.display=isSI?'inline':'none';
+  document.getElementById('loginBtnTxt').textContent=isSI?'Sign In':'Create Account';document.getElementById('loginPass').autocomplete=isSI?'current-password':'new-password';
   var tabs=document.getElementById('authTabs');var activeBtn=document.getElementById(isSI?'tabSignin':'tabRegister');var slider=document.getElementById('authSlider');
   if(slider&&tabs&&activeBtn){var tabsRect=tabs.getBoundingClientRect();var btnRect=activeBtn.getBoundingClientRect();slider.style.left=(btnRect.left-tabsRect.left-4)+'px';slider.style.width=activeBtn.offsetWidth+'px';}
   clearLoginAlerts();
@@ -854,8 +775,7 @@ async function doRegister(){
   setLoading(true);
   try{
     var r=await _sb.auth.signUp({email:email,password:pass,options:{data:{full_name:name}}});
-    if(r.error)throw r.error;
-    setLoading(false);
+    if(r.error)throw r.error;setLoading(false);
     if(r.data&&r.data.user&&!r.data.session){showLoginAlert('ok','Account created! Check your email to confirm, then sign in.');switchTab('signin');}
     else if(r.data&&r.data.session){var u=r.data.user;_user={id:u.id,email:u.email,name:name,role:'operator'};showLoginAlert('ok','Account created! Welcome, '+name+'!');setTimeout(launchApp,700);}
   }catch(err){setLoading(false);showLoginAlert('err',(err&&err.message)||'Registration failed.');}
@@ -880,12 +800,13 @@ async function launchApp(){
   document.getElementById('loginPage').style.display='none';
   var ap=document.getElementById('appPage');ap.style.display='flex';
   document.getElementById('chatbotFab').classList.add('show');
-  renderUserBox();setSyncStatus('syncing');render();
-  await dbLoadAll();render();startRealtime();
-  requestNotifPermission();
-  // Load saved projects from localStorage
+  renderUserBox();setSyncStatus('syncing');
+  // Load storage first so projects/history are ready before first render
   loadProjectsFromStorage();
   loadHistoryFromStorage();
+  render();
+  await dbLoadAll();render();startRealtime();
+  requestNotifPermission();
 }
 
 // ══════════════════════════
@@ -933,8 +854,8 @@ function checkRefComplete(rid){
   var items=checklists[rid];if(!items||!items.length)return;
   var done=items.filter(function(i){return i.cutting==='done';}).length;
   if(done===items.length){
-    var ref=findRef(rid);
-    var projName='';if(ref){for(var k in refs){if(refs[k].find(function(r){return r.id===rid;})){var p=P(parseInt(k));if(p)projName=p.name;break;}}}
+    var ref=findRef(rid);var projName='';
+    if(ref){for(var k in refs){if(refs[k].find(function(r){return r.id===rid;})){var p=P(parseInt(k));if(p)projName=p.name;break;}}}
     var alreadyInHistory=completedHistory.find(function(h){return h.refId===rid;});
     if(!alreadyInHistory){
       var hEntry={refId:rid,refNum:ref?ref.refNum:'#'+rid,proj:projName,at:new Date().toISOString()};
@@ -946,47 +867,96 @@ function checkRefComplete(rid){
 }
 function saveHistoryToStorage(){try{localStorage.setItem('amkm_completed_history',JSON.stringify(completedHistory));}catch(e){}}
 function loadHistoryFromStorage(){try{var s=localStorage.getItem('amkm_completed_history');if(s)completedHistory=JSON.parse(s);}catch(e){}}
-function saveProjectsToStorage(){try{localStorage.setItem('amkm_custom_projects',JSON.stringify(projects.filter(function(p){return p.id>=100;})));}catch(e){}}
+
+// ══════════════════════════
+// ✅ FIXED: PROJECT STORAGE
+// ══════════════════════════
+function saveProjectsToStorage(){
+  // Only save projects with id >= 100 (custom/admin-added ones)
+  try{
+    var custom=projects.filter(function(p){return p.id>=100;});
+    localStorage.setItem('amkm_custom_projects',JSON.stringify(custom));
+  }catch(e){console.warn('saveProjectsToStorage error:',e);}
+}
 function loadProjectsFromStorage(){
-  try{var s=localStorage.getItem('amkm_custom_projects');if(s){var cps=JSON.parse(s);cps.forEach(function(cp){if(!P(cp.id))projects.push(cp);if(cp.id>=nProjId)nProjId=cp.id+1;});}}
-  catch(e){}
+  try{
+    var s=localStorage.getItem('amkm_custom_projects');
+    if(!s)return;
+    var cps=JSON.parse(s);
+    cps.forEach(function(cp){
+      // Only add if not already in projects array
+      if(!P(cp.id)){
+        projects.push(cp);
+      }
+      // Track highest ID so new ones don't collide
+      if(cp.id>=nProjId)nProjId=cp.id+1;
+    });
+  }catch(e){console.warn('loadProjectsFromStorage error:',e);}
 }
 
 // ══════════════════════════
-// PROJECT MANAGEMENT (Admin)
+// ✅ FIXED: PROJECT MANAGEMENT
 // ══════════════════════════
 function openAddProject(){
   if(!isSuperAdmin()){toast('Only super admin can add projects','error');return;}
   document.getElementById('np_name').value='';
+  // Rebuild parent dropdown with ALL current top-level projects
   var sel=document.getElementById('np_parent');
   sel.innerHTML='<option value="">— None (Top Level) —</option>';
-  topLevel().forEach(function(p){sel.innerHTML+='<option value="'+p.id+'">'+p.name+'</option>';});
+  projects.forEach(function(p){
+    // Show all projects as potential parents (not just top-level)
+    sel.innerHTML+='<option value="'+p.id+'">'+('&nbsp;'.repeat(p.pid?4:0))+p.name+'</option>';
+  });
   openOverlay('addProjOverlay');
+  // Focus the name input
+  setTimeout(function(){var el=document.getElementById('np_name');if(el)el.focus();},150);
 }
+
 function doAddProject(){
-  var name=document.getElementById('np_name').value.trim();if(!name){toast('Enter a project name','error');return;}
-  var pid=document.getElementById('np_parent').value;pid=pid?parseInt(pid):null;
+  var name=document.getElementById('np_name').value.trim();
+  if(!name){toast('Enter a project name','error');return;}
+  // Parse parent ID correctly — empty string means no parent (top-level)
+  var pidRaw=document.getElementById('np_parent').value;
+  var pid=(pidRaw&&pidRaw!=='')?parseInt(pidRaw,10):null;
+  // Validate parent exists if one was selected
+  if(pid!==null&&!P(pid)){toast('Selected parent project not found','error');return;}
   var newP={id:nProjId++,name:name.toUpperCase(),pid:pid};
-  projects.push(newP);saveProjectsToStorage();
-  closeOverlay('addProjOverlay');toast('Project "'+newP.name+'" added','success');render();
+  projects.push(newP);
+  saveProjectsToStorage();
+  closeOverlay('addProjOverlay');
+  toast('Project "'+newP.name+'" added','success');
+  // ✅ FIX: Always navigate to home and re-render so new project is visible
+  curView='home';curProjId=null;curRefId=null;
+  render();
 }
+
 function confirmRemoveProject(id){
   if(!isSuperAdmin()){toast('Only super admin can remove projects','error');return;}
   var p=P(id);if(!p)return;
   _confirmCallback=function(){doRemoveProject(id);};
   document.getElementById('confirmTitle').textContent='Remove Project?';
-  document.getElementById('confirmMsg').textContent='Remove "'+p.name+'"? All its kits and data will be removed from view. This cannot be undone.';
+  document.getElementById('confirmMsg').textContent='Remove "'+p.name+'"? All its kits and data will be removed. This cannot be undone.';
   document.getElementById('confirmDo').textContent='Remove';
   openOverlay('confirmOverlay');
 }
+
 function doRemoveProject(id){
-  // Remove refs under this project
-  delete refs[id];delete checklists[id];
-  // Remove children recursively
+  // Recursively remove all children first
   kids(id).forEach(function(c){doRemoveProject(c.id);});
-  var idx=projects.findIndex(function(p){return p.id===id;});if(idx>-1)projects.splice(idx,1);
-  saveProjectsToStorage();toast('Project removed','info');
-  if(curProjId===id){curProjId=null;curView='home';}render();
+  // Remove refs and checklists for this project
+  if(refs[id]){
+    refs[id].forEach(function(r){delete checklists[r.id];});
+    delete refs[id];
+  }
+  // Remove the project itself from the array
+  var idx=projects.findIndex(function(p){return p.id===id;});
+  if(idx>-1)projects.splice(idx,1);
+  // Persist updated custom projects
+  saveProjectsToStorage();
+  toast('Project removed','info');
+  // ✅ FIX: Always navigate to home after deletion
+  curView='home';curProjId=null;curRefId=null;
+  render();
 }
 
 // ══════════════════════════
@@ -996,6 +966,7 @@ function openAddRef(pid){
   if(!isSuperAdmin()){toast('Only super admin can add kit references','error');return;}
   document.getElementById('nr_num').value='';document.getElementById('nr_pid').value=pid;
   openOverlay('addRefOverlay');
+  setTimeout(function(){var el=document.getElementById('nr_num');if(el)el.focus();},150);
 }
 function doAddRef(){
   var num=document.getElementById('nr_num').value.trim();if(!num){toast('Enter a kit reference number','error');return;}
@@ -1017,7 +988,6 @@ function confirmRemoveRef(refId,pid){
 function doRemoveRef(refId,pid){
   if(refs[pid])refs[pid]=refs[pid].filter(function(r){return r.id!==refId;});
   delete checklists[refId];
-  // Remove from history — only admin can do this via separate confirm
   if(_sb&&!_demo){_sb.from('references').delete().eq('id',refId).then(function(){});_sb.from('wire_items').delete().eq('reference_id',refId).then(function(){});}
   toast('Kit removed','info');if(curRefId===refId){curRefId=null;}render();
 }
@@ -1025,11 +995,19 @@ function confirmRemoveHistory(refId){
   if(!isSuperAdmin()){toast('Only super admin can remove history','error');return;}
   _confirmCallback=function(){completedHistory=completedHistory.filter(function(h){return h.refId!==refId;});saveHistoryToStorage();toast('History entry removed','info');render();};
   document.getElementById('confirmTitle').textContent='Remove History Entry?';
-  document.getElementById('confirmMsg').textContent='Remove this completed kit from history? Only admins can do this.';
+  document.getElementById('confirmMsg').textContent='Remove this completed kit from history?';
   document.getElementById('confirmDo').textContent='Remove';
   openOverlay('confirmOverlay');
 }
-function doConfirmAction(){if(_confirmCallback){_confirmCallback();_confirmCallback=null;}closeOverlay('confirmOverlay');}
+function doConfirmAction(){
+  closeOverlay('confirmOverlay');
+  // ✅ FIX: Close overlay FIRST, then run callback to avoid rendering issues
+  if(_confirmCallback){
+    var cb=_confirmCallback;
+    _confirmCallback=null;
+    setTimeout(cb,50);
+  }
+}
 
 // ══════════════════════════
 // AUTH HELPERS
@@ -1233,36 +1211,27 @@ function renderChildren(vc){
 // ══════════════════════════
 function renderRefs(vc){
   var p=P(curProjId);var rList=refs[curProjId]||[];
-  // KPI calc
-  var totalWires=0,doneWires=0,xeWires=0,spWires=0;
-  rList.forEach(function(r){var ck=checklists[r.id]||[];totalWires+=ck.length;doneWires+=ck.filter(function(i){return i.cutting==='done';}).length;xeWires+=ck.filter(function(i){return i.type==='xe';}).length;spWires+=ck.filter(function(i){return i.type==='sp';}).length;});
+  var totalWires=0,doneWires=0;
+  rList.forEach(function(r){var ck=checklists[r.id]||[];totalWires+=ck.length;doneWires+=ck.filter(function(i){return i.cutting==='done';}).length;});
   var pct=totalWires?Math.round(doneWires/totalWires*100):0;
   var completedRefs=rList.filter(function(r){var ck=checklists[r.id]||[];return ck.length>0&&ck.every(function(i){return i.cutting==='done';});}).length;
 
   vc.innerHTML='<div class="pg-header fade-in"><div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px"><div><div class="pg-title">'+p.name+'</div><div class="pg-sub">'+rList.length+' kits</div></div>'
   +(isSuperAdmin()?'<div style="display:flex;gap:6px"><button class="btn btn-ghost" onclick="openAddRef('+curProjId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Kit</button><button class="btn btn-success" onclick="triggerRefUpload('+curProjId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import</button></div>':'')
   +'</div></div>'
-
-  // KPI cards
   +'<div class="dash-kpi-grid fade-in">'
   +'<div class="kpi-card blue"><div class="kpi-val" style="color:var(--blue)">'+rList.length+'</div><div class="kpi-lbl">Total Kits</div></div>'
   +'<div class="kpi-card green"><div class="kpi-val" style="color:var(--green)">'+completedRefs+'</div><div class="kpi-lbl">Completed</div></div>'
   +'<div class="kpi-card amber"><div class="kpi-val" style="color:var(--amber)">'+(rList.length-completedRefs)+'</div><div class="kpi-lbl">In Progress</div></div>'
   +'<div class="kpi-card purple"><div class="kpi-val" style="color:var(--purple)">'+pct+'%</div><div class="kpi-lbl">Overall Done</div></div>'
   +'</div>'
-
-  // Progress bar
   +(totalWires?'<div class="prog-wrap fade-in"><div class="prog-lbl"><span>Total Assembly Progress</span><span style="color:var(--text1);font-weight:600">'+doneWires+'/'+totalWires+' components</span></div><div class="prog-bar"><div class="prog-fill" style="width:'+pct+'%"></div></div></div>':'')
-
-  // Kit progress list
   +(rList.length?'<div class="sec-lbl" style="margin-top:16px">Kit Progress</div><div class="kit-progress-list" id="kitList"></div>':'')
-
   +(rList.length===0?emptyState('No Kits','Import an Excel file or use Add Kit to create kits.')
   :'<div class="sec-lbl" style="margin-top:16px">Kit List</div><div class="tbl-wrap fade-in"><div class="tbl-toolbar"><div class="tbl-title">Kits</div>'
   +'<div class="search-box"><div class="search-box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>'
   +'<input id="refSearchInp" placeholder="Filter kits..." oninput="filterRefList()" autocomplete="off"></div></div>'
   +'<table><thead><tr><th>Kit #</th><th>Progress</th><th>Status</th><th>Imported</th><th></th></tr></thead><tbody id="refTbody"></tbody></table></div>');
-
   if(rList.length>0){renderKitList(rList);renderRefRows(rList);}
 }
 function renderKitList(list){
@@ -1270,8 +1239,7 @@ function renderKitList(list){
   el.innerHTML=list.map(function(r){
     var ck=checklists[r.id]||[];var done=ck.filter(function(i){return i.cutting==='done';}).length;
     var total=ck.length;var pct=total?Math.round(done/total*100):0;
-    var clr=pct===100?'var(--green)':pct>50?'var(--blue)':'var(--amber)';
-    var isComp=total>0&&done===total;
+    var clr=pct===100?'var(--green)':pct>50?'var(--blue)':'var(--amber)';var isComp=total>0&&done===total;
     return'<div class="kit-item" onclick="gotoRef('+r.id+')">'
     +'<div class="kit-item-hd"><span class="kit-name">'+r.refNum+'</span>'+(isComp?'<span class="ref-status-badge completed">✓ DONE</span>':'<span class="ref-status-badge active">IN PROGRESS</span>')+'<span class="kit-pct" style="color:'+clr+'">'+pct+'%</span></div>'
     +'<div class="kit-bar"><div class="kit-fill" style="width:'+pct+'%;background:'+clr+'"></div></div>'
@@ -1306,8 +1274,6 @@ function renderChecklist(vc){
   var pct=items.length?Math.round(done/items.length*100):0;
   var isCompleted=items.length>0&&done===items.length;
   var histEntry=completedHistory.find(function(h){return h.refId===curRefId;});
-
-  // Type counts
   var cXE=items.filter(function(i){return i.type==='xe';}).length;
   var cSP=items.filter(function(i){return i.type==='sp';}).length;
   var cTW=items.filter(function(i){return i.type==='tw';}).length;
@@ -1322,20 +1288,14 @@ function renderChecklist(vc){
   +'<div class="pg-title">'+(ref?ref.refNum:'—')+'</div>'
   +'<div class="pg-sub" id="ckSub">'+items.length+' components · '+done+' done · '+pct+'% · '+cSP+' SP / '+cXE+' XE in progress</div>'
   +'</div>'+(isSuperAdmin()&&ref?'<button class="btn btn-success" onclick="triggerCkUpload('+curRefId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Components</button>':'')+'</div></div>'
-
-  // Completion banner
   +(isCompleted?'<div class="history-banner fade-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>✅ Kit 100% Complete!'+(histEntry?' — Completed '+new Date(histEntry.at).toLocaleDateString('fr-MA')+' at '+new Date(histEntry.at).toLocaleTimeString('fr-MA',{hour:'2-digit',minute:'2-digit'}):'')+'</span></div>':'')
-
-  // KPI mini
   +'<div class="dash-kpi-grid fade-in" style="margin-bottom:16px">'
   +'<div class="kpi-card blue"><div class="kpi-val" style="color:var(--blue)">'+items.length+'</div><div class="kpi-lbl">Components</div></div>'
   +'<div class="kpi-card green"><div class="kpi-val" style="color:var(--green)">'+done+'</div><div class="kpi-lbl">Done</div></div>'
   +'<div class="kpi-card amber"><div class="kpi-val" style="color:var(--amber)">'+(items.length-done)+'</div><div class="kpi-lbl">Remaining</div></div>'
   +'<div class="kpi-card purple"><div class="kpi-val" style="color:var(--purple)">'+pct+'%</div><div class="kpi-lbl">Progress</div></div>'
   +'</div>'
-
   +(items.length?'<div class="prog-wrap fade-in"><div class="prog-lbl"><span>Assembly Progress</span><span style="color:var(--text1);font-weight:600">'+done+'/'+items.length+' components</span></div><div class="prog-bar"><div class="prog-fill" id="progFill" style="width:'+pct+'%"></div></div></div>':'')
-
   +(items.length===0?emptyState('No Components','Import an Excel file with Component ID and Type columns.')
   :'<div class="tbl-wrap fade-in">'
   +'<div class="tbl-toolbar"><div class="tbl-title">Component Checklist</div>'
@@ -1533,7 +1493,6 @@ async function submitOrder(){
       var newOrd=Object.assign({id:'ord'+nOrdId++},orderData);orders.unshift(newOrd);setTimeout(function(){setSyncStatus('synced');},2000);
     }
   } else {var newOrd=Object.assign({id:'ord'+nOrdId++},orderData);orders.unshift(newOrd);}
-  // Notification for the submitter too
   addNotif('order','Order Submitted','You submitted: '+proj+' — '+wire+' (Qty: '+parseInt(qty)+')');
   clearInterval(_tsInt);closeOverlay('newOrderOverlay');toast('Order submitted!','success');
   if(curView==='orders')renderOrdersPage(document.getElementById('viewContainer'));
@@ -1582,10 +1541,9 @@ function closeOverlay(id){document.getElementById(id).classList.remove('show');i
 ['newOrderOverlay','editOrderOverlay','confirmOverlay','addProjOverlay','addRefOverlay'].forEach(function(id){
   var el=document.getElementById(id);if(el)el.addEventListener('click',function(e){if(e.target===this)closeOverlay(id);});
 });
-// Close notif/chatbot on outside click
 document.addEventListener('click',function(e){
   var np=document.getElementById('notifPanel');var nb=document.getElementById('notifBtn');
-  if(np.classList.contains('show')&&!np.contains(e.target)&&!nb.contains(e.target))np.classList.remove('show');
+  if(np&&np.classList.contains('show')&&!np.contains(e.target)&&!nb.contains(e.target))np.classList.remove('show');
 });
 
 // ══════════════════════════
@@ -1653,7 +1611,7 @@ function generateIcon(size){
   try{
     var i32=generateIcon(32),i180=generateIcon(180),i192=generateIcon(192),i512=generateIcon(512);
     document.getElementById('appleTouchIcon').href=i180;document.getElementById('faviconIcon').href=i32;
-    var manifest={name:'AMKM V.5 — Miloud Ezzaky Industry',short_name:'AMKM',description:'Aftermarket Kits Manager System V.5',start_url:'./',id:'amkm-v5',display:'standalone',display_override:['standalone','minimal-ui'],orientation:'any',background_color:'#0b0f1a',theme_color:'#0b0f1a',lang:'fr',categories:['productivity','business'],icons:[{src:i192,sizes:'192x192',type:'image/png',purpose:'any'},{src:i192,sizes:'192x192',type:'image/png',purpose:'maskable'},{src:i512,sizes:'512x512',type:'image/png',purpose:'any'},{src:i512,sizes:'512x512',type:'image/png',purpose:'maskable'}],prefer_related_applications:false};
+    var manifest={name:'AMKM V.5 — Miloud Ezzaky Industry',short_name:'AMKM',description:'Aftermarket Kits Manager System V.5',start_url:'./',id:'amkm-v5',display:'standalone',background_color:'#0b0f1a',theme_color:'#0b0f1a',lang:'fr',categories:['productivity','business'],icons:[{src:i192,sizes:'192x192',type:'image/png',purpose:'any'},{src:i192,sizes:'192x192',type:'image/png',purpose:'maskable'},{src:i512,sizes:'512x512',type:'image/png',purpose:'any'}],prefer_related_applications:false};
     var blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});document.querySelector('link[rel="manifest"]').href=URL.createObjectURL(blob);
   }catch(e){console.warn('Manifest generation failed:',e);}
 })();
@@ -1679,18 +1637,12 @@ window.addEventListener('appinstalled',function(){document.getElementById('pwaBa
 // SERVICE WORKER
 // ══════════════════════════
 if('serviceWorker' in navigator){
-  var SW_CODE=`
-const CACHE_STATIC='amkm-static-v5',CACHE_DYNAMIC='amkm-dynamic-v5';
-const STATIC_ASSETS=['https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap'];
-self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE_STATIC).then(cache=>Promise.allSettled(STATIC_ASSETS.map(url=>fetch(url).then(r=>cache.put(url,r)).catch(()=>{})))));});
+  var SW_CODE=`const CACHE_STATIC='amkm-static-v5',CACHE_DYNAMIC='amkm-dynamic-v5';
+self.addEventListener('install',e=>{self.skipWaiting();});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_STATIC&&k!==CACHE_DYNAMIC).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
-self.addEventListener('fetch',e=>{const url=new URL(e.request.url);if(e.request.method!=='GET')return;if(url.hostname.includes('supabase.co')||url.hostname.includes('supabase.io'))return;if(url.hostname.includes('googleapis.com')||url.hostname.includes('gstatic.com')||url.hostname.includes('jsdelivr.net')||url.hostname.includes('sheetjs.com')){return e.respondWith(caches.match(e.request).then(cached=>{if(cached)return cached;return fetch(e.request).then(r=>{const c=r.clone();caches.open(CACHE_STATIC).then(cache=>cache.put(e.request,c));return r;}).catch(()=>cached);}));}
-e.respondWith(fetch(e.request).then(r=>{if(r.ok){const c=r.clone();caches.open(CACHE_DYNAMIC).then(cache=>cache.put(e.request,c));}return r;}).catch(()=>caches.match(e.request)));});
-`;
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;const url=new URL(e.request.url);if(url.hostname.includes('supabase.co'))return;e.respondWith(fetch(e.request).then(r=>{if(r.ok){const c=r.clone();caches.open(CACHE_DYNAMIC).then(cache=>cache.put(e.request,c));}return r;}).catch(()=>caches.match(e.request)));});`;
   var swBlob=new Blob([SW_CODE],{type:'application/javascript'});
-  navigator.serviceWorker.register(URL.createObjectURL(swBlob),{scope:'./'})
-    .then(function(reg){setInterval(function(){if(document.visibilityState==='visible')reg.update();},60000);})
-    .catch(function(err){console.warn('SW failed:',err);});
+  navigator.serviceWorker.register(URL.createObjectURL(swBlob),{scope:'./'}).catch(function(err){console.warn('SW failed:',err);});
 }
 
 // ══════════════════════════
