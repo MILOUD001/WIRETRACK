@@ -189,9 +189,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .chip.a-complete{border-color:var(--purple);color:var(--purple);background:rgba(139,92,246,.1)}
 .chip.a-done{border-color:var(--green);color:var(--green);background:var(--green-g)}
 .chip.a-prog{border-color:var(--amber);color:var(--amber);background:var(--amber-g)}
+.chip.a-issue{border-color:var(--red);color:var(--red);background:rgba(239,68,68,.1)}
 .chip-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
 .chip-cnt{background:var(--bg4);color:var(--text3);font-size:9px;padding:1px 5px;border-radius:7px;margin-left:2px}
-.chip.a-all .chip-cnt,.chip.a-xe .chip-cnt,.chip.a-sp .chip-cnt,.chip.a-tw .chip-cnt,.chip.a-simple .chip-cnt,.chip.a-mc .chip-cnt,.chip.a-gs .chip-cnt,.chip.a-complete .chip-cnt,.chip.a-done .chip-cnt,.chip.a-prog .chip-cnt{background:currentColor;color:var(--bg)}
+.chip.a-all .chip-cnt,.chip.a-xe .chip-cnt,.chip.a-sp .chip-cnt,.chip.a-tw .chip-cnt,.chip.a-simple .chip-cnt,.chip.a-mc .chip-cnt,.chip.a-gs .chip-cnt,.chip.a-complete .chip-cnt,.chip.a-done .chip-cnt,.chip.a-prog .chip-cnt,.chip.a-issue .chip-cnt{background:currentColor;color:var(--bg)}
 table{width:100%;border-collapse:collapse}
 thead th{padding:10px 14px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:1.5px;color:var(--text3);text-transform:uppercase;background:var(--bg3);border-bottom:1px solid var(--border);white-space:nowrap}
 tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
@@ -204,8 +205,10 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 .w-sp{background:rgba(16,185,129,.15);color:var(--green)}.w-tw{background:rgba(6,182,212,.15);color:var(--cyan)}
 .w-mc{background:rgba(245,158,11,.15);color:var(--amber)}.w-gs{background:rgba(244,63,94,.12);color:#f43f5e}
 .w-complete{background:rgba(139,92,246,.15);color:var(--purple)}
+/* STATUS SELECTS — 3-option version (Done / In Progress / Issue) */
 .status-sel{appearance:none;-webkit-appearance:none;background:var(--bg3);border:1px solid var(--border2);color:var(--text1);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:6px 28px 6px 10px;border-radius:8px;cursor:pointer;transition:border-color .15s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%234a6280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;min-width:130px;min-height:36px}
 .status-sel:focus{outline:none;border-color:var(--blue)}.status-sel.done{border-color:var(--green);background-color:var(--green-g);color:var(--green)}.status-sel.in_progress{border-color:var(--amber);background-color:var(--amber-g);color:var(--amber)}
+.status-sel.issue{border-color:var(--red);background-color:rgba(239,68,68,.12);color:var(--red)}
 .status-na{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)}
 .prog-wrap{margin-bottom:18px}.prog-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;transition:width .4s ease}
@@ -219,7 +222,7 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 .toast.show{transform:translateY(0);opacity:1}.toast-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .toast.success .toast-dot{background:var(--green)}.toast.error .toast-dot{background:var(--red)}.toast.info .toast-dot{background:var(--blue)}
 
-/* IN-APP NOTIFICATION BELL */
+/* NOTIFICATION BELL */
 .notif-btn{position:relative;width:36px;height:36px;background:none;border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
 .notif-btn:hover{border-color:var(--blue);color:var(--blue)}
 .notif-btn svg{width:16px;height:16px}
@@ -295,6 +298,29 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 .fade-in{animation:fadeUp .2s ease both}
 .sb-mask{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:99}.sb-mask.show{display:block}
 
+/* ══════════════════════════
+   KITS STATUS PAGE — NEW
+══════════════════════════ */
+.ks-upload-zone{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:48px 24px;border:2px dashed var(--border2);border-radius:var(--r2);
+  cursor:pointer;transition:all .2s;margin-bottom:20px;background:var(--bg2);
+  gap:12px;text-align:center;
+}
+.ks-upload-zone:hover{border-color:var(--blue);background:var(--blue-g);}
+.ks-upload-icon{width:56px;height:56px;background:var(--bg3);border-radius:14px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border2);}
+.ks-upload-icon svg{width:26px;height:26px;stroke:var(--blue);}
+.ks-upload-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text1);}
+.ks-upload-sub{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;}
+/* responsive overflow table */
+.ks-tbl-outer{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;}
+.ks-tbl-outer table{min-width:900px;}
+/* status badge for summary cards in kits status */
+.ks-stat-done{color:var(--green);}
+.ks-stat-prog{color:var(--amber);}
+.ks-stat-issue{color:var(--red);}
+.ks-refname-cell{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--cyan);white-space:nowrap;}
+
 /* CHATBOT */
 .chatbot-fab{position:fixed;bottom:max(80px,calc(env(safe-area-inset-bottom,0px)+80px));right:20px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(59,130,246,.5);z-index:400;transition:all .2s;display:none}
 .chatbot-fab.show{display:flex}.chatbot-fab:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(59,130,246,.6)}
@@ -326,6 +352,7 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 .kpi-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
 .kpi-card.blue::after{background:var(--blue)}.kpi-card.green::after{background:var(--green)}
 .kpi-card.amber::after{background:var(--amber)}.kpi-card.purple::after{background:var(--purple)}
+.kpi-card.red::after{background:var(--red)}
 .kpi-val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;line-height:1;margin-bottom:4px}
 .kpi-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px}
 .kit-progress-list{margin-bottom:16px}
@@ -503,6 +530,8 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 <div class="toast" id="toast"><div class="toast-dot"></div><span id="toastMsg"></span></div>
 <input type="file" id="fileRef" accept=".xlsx,.xls,.csv" style="display:none">
 <input type="file" id="fileChecklist" accept=".xlsx,.xls,.csv" style="display:none">
+<!-- NEW: Kits Status upload input -->
+<input type="file" id="fileKsUpload" accept=".xlsx,.xls,.csv" style="display:none">
 
 <!-- NEW ORDER MODAL -->
 <div class="overlay" id="newOrderOverlay">
@@ -627,6 +656,28 @@ var _confirmCallback=null;
 var _realtimeChannel=null;
 
 // ══════════════════════════
+// KITS STATUS STATE (NEW)
+// ══════════════════════════
+// Each entry: { id, excelData:{col:val,...}, cuttingStatus, wpaStatus, twistStatus, _typeKey }
+var ksRows = [];         // flat array of all rows from uploaded Excel(s)
+var ksHeaders = [];      // column headers from the last upload (preserved for display)
+var ksFilt = { q: '', status: 'all' };
+var ksTypeColIdx = -1;   // index of the detected "type" column in ksHeaders
+var ksRowCounter = 1;
+
+function saveKsToStorage(){
+  try{localStorage.setItem('amkm_ks_rows',JSON.stringify(ksRows));localStorage.setItem('amkm_ks_headers',JSON.stringify(ksHeaders));}
+  catch(e){console.warn('saveKs:',e);}
+}
+function loadKsFromStorage(){
+  try{
+    var r=localStorage.getItem('amkm_ks_rows');var h=localStorage.getItem('amkm_ks_headers');
+    if(r)ksRows=JSON.parse(r);if(h)ksHeaders=JSON.parse(h);
+    if(ksRows.length)ksRowCounter=Math.max.apply(null,ksRows.map(function(x){return x.id||0;}))+1;
+  }catch(e){console.warn('loadKs:',e);}
+}
+
+// ══════════════════════════
 // PROJECTS (initial data)
 // ══════════════════════════
 var projects=[
@@ -642,7 +693,6 @@ function hasKids(pid){return kids(pid).length>0}
 function parentOf(id){var p=P(id);return p?p.pid:null}
 function topLevel(){return projects.filter(function(p){return p.pid===null;})}
 function isDesc(childId,ancId){var p=parentOf(childId);while(p!==null){if(p===ancId)return true;p=parentOf(p);}return false;}
-function allLeafProjects(){return projects.filter(function(p){return !hasKids(p.id);});}
 
 var WT_LABEL={simple:'SIMPLE',xe:'XE',sp:'SP',tw:'TWIST',mc:'MULTICORE',gs:'GRANDE SECTION',complete:'COMPLETE KIT'};
 var WT_CLASS={simple:'w-simple',xe:'w-xe',sp:'w-sp',tw:'w-tw',mc:'w-mc',gs:'w-gs',complete:'w-complete'};
@@ -724,7 +774,6 @@ function chatQuery(q){
   else if(ql.includes('order')){var today=new Date().toDateString();var tod=orders.filter(function(o){return new Date(o.at).toDateString()===today;});reply='📋 Orders today: '+tod.length+' / Total: '+orders.length;if(tod.length){reply+='\n';tod.slice(0,5).forEach(function(o){reply+='• '+o.proj+' — '+o.wire+' ('+o.qty+')\n';});}}
   else if(ql.includes('complet')){var cmp=completedHistory;reply='✅ Completed Kits: '+cmp.length;if(cmp.length){reply+='\n';cmp.slice(0,5).forEach(function(h){reply+='• '+h.refNum+' ('+h.proj+') — '+new Date(h.at).toLocaleDateString('fr-MA')+'\n';});}}
   else if(ql.includes('incomplet')||ql.includes('top')){var incs=[];for(var rid in checklists){var arr=checklists[rid];if(!arr.length)continue;var d=arr.filter(function(i){return i.cutting==='done';}).length;var pct2=Math.round(d/arr.length*100);if(pct2<100){var r=findRef(parseInt(rid));incs.push({ref:r?r.refNum:'#'+rid,pct:pct2,done:d,total:arr.length});}}incs.sort(function(a,b){return a.pct-b.pct;});reply='⚠️ Top Incomplete Kits:\n';incs.slice(0,6).forEach(function(x){reply+='• '+x.ref+': '+x.pct+'% ('+x.done+'/'+x.total+' components)\n';});if(!incs.length)reply='🎉 All kits are complete!';}
-  else if(ql.includes('ref')||ql.includes('kit')||ql.includes('#')){var term=ql.replace(/ref(erence)?/i,'').replace(/kit/i,'').replace('#','').trim();var found=[];for(var k in refs){refs[k].forEach(function(r){if(r.refNum.toLowerCase().includes(term)){var ck=checklists[r.id]||[];var d2=ck.filter(function(i){return i.cutting==='done';}).length;found.push({ref:r.refNum,total:ck.length,done:d2,pct:ck.length?Math.round(d2/ck.length*100):0});}});}if(found.length){reply='🔍 Found '+found.length+' kit(s):\n';found.slice(0,6).forEach(function(f){reply+='• '+f.ref+': '+f.pct+'% done ('+f.done+'/'+f.total+' components)\n';});}else reply='No kit matching "'+term+'" found.';}
   else{reply='I can help with:\n• "All projects" — project list\n• "Overall progress" — completion stats\n• "Orders today" — today\'s orders\n• "Completed kits" — history\n• "Top incomplete" — kits needing work\n• "kit [name]" — specific kit status';}
   setTimeout(function(){addBotMsg(reply);renderChatSuggestions();},300);
 }
@@ -801,9 +850,9 @@ async function launchApp(){
   var ap=document.getElementById('appPage');ap.style.display='flex';
   document.getElementById('chatbotFab').classList.add('show');
   renderUserBox();setSyncStatus('syncing');
-  // Load storage first so projects/history are ready before first render
   loadProjectsFromStorage();
   loadHistoryFromStorage();
+  loadKsFromStorage();
   render();
   await dbLoadAll();render();startRealtime();
   requestNotifPermission();
@@ -869,67 +918,40 @@ function saveHistoryToStorage(){try{localStorage.setItem('amkm_completed_history
 function loadHistoryFromStorage(){try{var s=localStorage.getItem('amkm_completed_history');if(s)completedHistory=JSON.parse(s);}catch(e){}}
 
 // ══════════════════════════
-// ✅ FIXED: PROJECT STORAGE
+// PROJECT STORAGE
 // ══════════════════════════
 function saveProjectsToStorage(){
-  // Only save projects with id >= 100 (custom/admin-added ones)
-  try{
-    var custom=projects.filter(function(p){return p.id>=100;});
-    localStorage.setItem('amkm_custom_projects',JSON.stringify(custom));
-  }catch(e){console.warn('saveProjectsToStorage error:',e);}
+  try{var custom=projects.filter(function(p){return p.id>=100;});localStorage.setItem('amkm_custom_projects',JSON.stringify(custom));}
+  catch(e){console.warn('saveProjectsToStorage error:',e);}
 }
 function loadProjectsFromStorage(){
   try{
-    var s=localStorage.getItem('amkm_custom_projects');
-    if(!s)return;
+    var s=localStorage.getItem('amkm_custom_projects');if(!s)return;
     var cps=JSON.parse(s);
-    cps.forEach(function(cp){
-      // Only add if not already in projects array
-      if(!P(cp.id)){
-        projects.push(cp);
-      }
-      // Track highest ID so new ones don't collide
-      if(cp.id>=nProjId)nProjId=cp.id+1;
-    });
+    cps.forEach(function(cp){if(!P(cp.id)){projects.push(cp);}if(cp.id>=nProjId)nProjId=cp.id+1;});
   }catch(e){console.warn('loadProjectsFromStorage error:',e);}
 }
 
 // ══════════════════════════
-// ✅ FIXED: PROJECT MANAGEMENT
+// PROJECT MANAGEMENT
 // ══════════════════════════
 function openAddProject(){
   if(!isSuperAdmin()){toast('Only super admin can add projects','error');return;}
   document.getElementById('np_name').value='';
-  // Rebuild parent dropdown with ALL current top-level projects
   var sel=document.getElementById('np_parent');
   sel.innerHTML='<option value="">— None (Top Level) —</option>';
-  projects.forEach(function(p){
-    // Show all projects as potential parents (not just top-level)
-    sel.innerHTML+='<option value="'+p.id+'">'+('&nbsp;'.repeat(p.pid?4:0))+p.name+'</option>';
-  });
+  projects.forEach(function(p){sel.innerHTML+='<option value="'+p.id+'">'+('&nbsp;'.repeat(p.pid?4:0))+p.name+'</option>';});
   openOverlay('addProjOverlay');
-  // Focus the name input
   setTimeout(function(){var el=document.getElementById('np_name');if(el)el.focus();},150);
 }
-
 function doAddProject(){
-  var name=document.getElementById('np_name').value.trim();
-  if(!name){toast('Enter a project name','error');return;}
-  // Parse parent ID correctly — empty string means no parent (top-level)
-  var pidRaw=document.getElementById('np_parent').value;
-  var pid=(pidRaw&&pidRaw!=='')?parseInt(pidRaw,10):null;
-  // Validate parent exists if one was selected
+  var name=document.getElementById('np_name').value.trim();if(!name){toast('Enter a project name','error');return;}
+  var pidRaw=document.getElementById('np_parent').value;var pid=(pidRaw&&pidRaw!=='')?parseInt(pidRaw,10):null;
   if(pid!==null&&!P(pid)){toast('Selected parent project not found','error');return;}
   var newP={id:nProjId++,name:name.toUpperCase(),pid:pid};
-  projects.push(newP);
-  saveProjectsToStorage();
-  closeOverlay('addProjOverlay');
-  toast('Project "'+newP.name+'" added','success');
-  // ✅ FIX: Always navigate to home and re-render so new project is visible
-  curView='home';curProjId=null;curRefId=null;
-  render();
+  projects.push(newP);saveProjectsToStorage();closeOverlay('addProjOverlay');toast('Project "'+newP.name+'" added','success');
+  curView='home';curProjId=null;curRefId=null;render();
 }
-
 function confirmRemoveProject(id){
   if(!isSuperAdmin()){toast('Only super admin can remove projects','error');return;}
   var p=P(id);if(!p)return;
@@ -939,42 +961,27 @@ function confirmRemoveProject(id){
   document.getElementById('confirmDo').textContent='Remove';
   openOverlay('confirmOverlay');
 }
-
 function doRemoveProject(id){
-  // Recursively remove all children first
   kids(id).forEach(function(c){doRemoveProject(c.id);});
-  // Remove refs and checklists for this project
-  if(refs[id]){
-    refs[id].forEach(function(r){delete checklists[r.id];});
-    delete refs[id];
-  }
-  // Remove the project itself from the array
-  var idx=projects.findIndex(function(p){return p.id===id;});
-  if(idx>-1)projects.splice(idx,1);
-  // Persist updated custom projects
-  saveProjectsToStorage();
-  toast('Project removed','info');
-  // ✅ FIX: Always navigate to home after deletion
-  curView='home';curProjId=null;curRefId=null;
-  render();
+  if(refs[id]){refs[id].forEach(function(r){delete checklists[r.id];});delete refs[id];}
+  var idx=projects.findIndex(function(p){return p.id===id;});if(idx>-1)projects.splice(idx,1);
+  saveProjectsToStorage();toast('Project removed','info');curView='home';curProjId=null;curRefId=null;render();
 }
 
 // ══════════════════════════
-// REFERENCE MANAGEMENT (Admin)
+// REFERENCE MANAGEMENT
 // ══════════════════════════
 function openAddRef(pid){
   if(!isSuperAdmin()){toast('Only super admin can add kit references','error');return;}
   document.getElementById('nr_num').value='';document.getElementById('nr_pid').value=pid;
-  openOverlay('addRefOverlay');
-  setTimeout(function(){var el=document.getElementById('nr_num');if(el)el.focus();},150);
+  openOverlay('addRefOverlay');setTimeout(function(){var el=document.getElementById('nr_num');if(el)el.focus();},150);
 }
 function doAddRef(){
   var num=document.getElementById('nr_num').value.trim();if(!num){toast('Enter a kit reference number','error');return;}
   var pid=parseInt(document.getElementById('nr_pid').value);
   var newRef={id:nRefId++,refNum:num,extra:null,at:new Date()};
   if(!refs[pid])refs[pid]=[];refs[pid].push(newRef);
-  dbSaveRef(pid,newRef);
-  closeOverlay('addRefOverlay');toast('Kit "'+num+'" added','success');render();
+  dbSaveRef(pid,newRef);closeOverlay('addRefOverlay');toast('Kit "'+num+'" added','success');render();
 }
 function confirmRemoveRef(refId,pid){
   if(!isSuperAdmin()){toast('Only super admin can remove kit references','error');return;}
@@ -1001,12 +1008,7 @@ function confirmRemoveHistory(refId){
 }
 function doConfirmAction(){
   closeOverlay('confirmOverlay');
-  // ✅ FIX: Close overlay FIRST, then run callback to avoid rendering issues
-  if(_confirmCallback){
-    var cb=_confirmCallback;
-    _confirmCallback=null;
-    setTimeout(cb,50);
-  }
+  if(_confirmCallback){var cb=_confirmCallback;_confirmCallback=null;setTimeout(cb,50);}
 }
 
 // ══════════════════════════
@@ -1092,11 +1094,12 @@ function toast(msg,type){type=type||'info';var el=document.getElementById('toast
 function gotoHome(){curView='home';curProjId=null;curRefId=null;render();closeSidebar();}
 function gotoOrders(){curView='orders';curProjId=null;curRefId=null;render();closeSidebar();}
 function gotoHistory(){curView='history';curProjId=null;curRefId=null;render();closeSidebar();}
+function gotoKitsStatus(){curView='kitsstatus';curProjId=null;curRefId=null;ksFilt={q:'',status:'all'};render();closeSidebar();}
 function gotoProj(id){curView='project';curProjId=id;curRefId=null;render();closeSidebar();}
 function gotoRef(id){curRefId=id;render();}
 function goBack(){
   if(curRefId!==null){curRefId=null;ckFilt={type:'all',status:'all',q:''};render();}
-  else if(curView==='orders'||curView==='history'){gotoHome();}
+  else if(curView==='orders'||curView==='history'||curView==='kitsstatus'){gotoHome();}
   else if(curProjId!==null){curProjId=parentOf(curProjId);if(curProjId===null)curView='home';render();}
 }
 
@@ -1108,6 +1111,7 @@ function render(){
   var vc=document.getElementById('viewContainer');
   if(curView==='orders')renderOrdersPage(vc);
   else if(curView==='history')renderHistoryPage(vc);
+  else if(curView==='kitsstatus')renderKitsStatusPage(vc);
   else if(curRefId!==null)renderChecklist(vc);
   else if(curProjId!==null&&hasKids(curProjId))renderChildren(vc);
   else if(curProjId!==null)renderRefs(vc);
@@ -1115,15 +1119,21 @@ function render(){
 }
 
 function renderSidebar(){
-  var isOrders=curView==='orders';var isHistory=curView==='history';
+  var isOrders=curView==='orders';var isHistory=curView==='history';var isKS=curView==='kitsstatus';
   var html='<div class="sb-section">Operations</div>';
-  html+='<div class="sb-item '+((!curProjId&&!isOrders&&!isHistory)?'active':'')+'" onclick="gotoHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>All Projects<span class="sb-count">'+topLevel().length+'</span></div>';
+  html+='<div class="sb-item '+((!curProjId&&!isOrders&&!isHistory&&!isKS)?'active':'')+'" onclick="gotoHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>All Projects<span class="sb-count">'+topLevel().length+'</span></div>';
   html+='<div class="sb-item '+(isOrders?'active':'')+'" onclick="gotoOrders()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Kit Orders<span class="sb-count">'+orders.length+'</span></div>';
   html+='<div class="sb-item '+(isHistory?'active':'')+'" onclick="gotoHistory()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Completed Kits<span class="sb-count">'+completedHistory.length+'</span></div>';
+
+  // ✅ NEW: Kits Status sidebar item
+  html+='<div class="sb-item '+(isKS?'active':'')+'" onclick="gotoKitsStatus()" title="Kits Status Checklist">'
+  +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><polyline points="9 12 11 14 15 10"/></svg>'
+  +'Kits Status<span class="sb-count">'+ksRows.length+'</span></div>';
+
   html+='<div class="sb-section">Projects</div>';
   if(isSuperAdmin())html+='<div class="sb-item" onclick="openAddProject()" style="color:var(--green);opacity:.8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Project</div>';
   topLevel().forEach(function(p){
-    var active=!isOrders&&!isHistory&&(curProjId===p.id||isDesc(curProjId,p.id));
+    var active=!isOrders&&!isHistory&&!isKS&&(curProjId===p.id||isDesc(curProjId,p.id));
     html+='<div class="sb-item '+(active?'active':'')+'" onclick="gotoProj('+p.id+')" title="'+p.name+'">'
     +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>'
     +'<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+p.name+'</span>'
@@ -1144,6 +1154,10 @@ function renderTopbar(){
   var svgImp='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>';
   var act='';
   if(curView==='orders'){act='<button class="btn btn-primary" onclick="openNewOrder()">'+svgPlus+(isMob?'Order':'New Kit')+'</button>';}
+  else if(curView==='kitsstatus'){
+    act='<button class="btn btn-success" onclick="triggerKsUpload()">'+svgImp+(isMob?'Import':'Import Excel')+'</button>';
+    if(ksRows.length)act+='<button class="btn btn-ghost" onclick="clearKsData()" style="margin-left:4px" title="Clear all Kits Status data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>'+(isMob?'':'Clear')+'</button>';
+  }
   else if(curRefId!==null){if(isSuperAdmin())act='<button class="btn btn-success" onclick="triggerCkUpload('+curRefId+')">'+svgImp+(isMob?'Import':'Import Components')+'</button>';}
   else if(curProjId!==null&&!hasKids(curProjId)){
     if(isSuperAdmin())act='<button class="btn btn-ghost" onclick="openAddRef('+curProjId+')" style="margin-right:4px">'+svgPlus+(isMob?'Kit':'Add Kit')+'</button><button class="btn btn-success" onclick="triggerRefUpload('+curProjId+')">'+svgImp+(isMob?'Import':'Import Excel')+'</button>';
@@ -1153,12 +1167,265 @@ function renderTopbar(){
 function buildCrumbs(){
   if(curView==='orders')return[{label:'PROJECTS',fn:'gotoHome()'},{label:'KIT ORDERS'}];
   if(curView==='history')return[{label:'PROJECTS',fn:'gotoHome()'},{label:'COMPLETED KITS'}];
+  if(curView==='kitsstatus')return[{label:'PROJECTS',fn:'gotoHome()'},{label:'KITS STATUS'}];
   var crumbs=[{label:'PROJECTS',fn:'gotoHome()'}];
   if(curProjId!==null){var chain=[];var id=curProjId;while(id!==null){chain.unshift(P(id));id=parentOf(id);}chain.forEach(function(p,i){var last=i===chain.length-1&&curRefId===null;crumbs.push({label:p.name,fn:last?null:'gotoProj('+p.id+')'});});}
   if(curRefId!==null){var r=findRef(curRefId);if(r)crumbs.push({label:r.refNum});}
   return crumbs;
 }
 function findRef(id){id=parseInt(id);for(var k in refs){var f=refs[k].find(function(r){return r.id===id;});if(f)return f;}return null;}
+
+// ══════════════════════════════════════
+// ✅ KITS STATUS PAGE (NEW FEATURE)
+// ══════════════════════════════════════
+
+// Detect wire type from cell value
+function detectWireType(val){
+  var v=String(val||'').toLowerCase().trim();
+  if(v.includes('xe'))return'xe';
+  if(v.includes('sp'))return'sp';
+  if(v.includes('twist')||v===('tw')||v===('tc'))return'tw';
+  if(v.includes('multi')||v.includes('mc'))return'mc';
+  if(v.includes('grand')||v.includes('gs'))return'gs';
+  if(v.includes('complet'))return'complete';
+  if(v.includes('simple')||v==='si')return'simple';
+  return'';
+}
+
+// Determine which extra status columns apply based on wire type key
+function ksShowWpa(typeKey){return typeKey==='xe'||typeKey==='sp';}
+function ksShowTwist(typeKey){return typeKey==='tw';}
+
+// Import Excel into Kits Status — EXACT columns preserved + status columns added
+function triggerKsUpload(){
+  var inp=document.getElementById('fileKsUpload');inp.value='';
+  inp.onchange=function(e){
+    var f=e.target.files[0];if(!f)return;
+    parseXL(f,function(rows){importKsExcel(f.name,rows);});
+  };
+  inp.click();
+}
+
+function importKsExcel(filename,rows){
+  if(!rows||rows.length<2){toast('File is empty or has no data rows','error');return;}
+  // First row = headers
+  var hdrs=rows[0].map(function(h){return h===null||h===undefined?'':String(h);});
+  // Remove trailing empty headers
+  while(hdrs.length&&!hdrs[hdrs.length-1].trim())hdrs.pop();
+
+  // Detect type column index (search for common names)
+  var typeColIdx=-1;
+  hdrs.forEach(function(h,i){
+    var hl=h.toLowerCase().trim();
+    if(hl==='type'||hl==='wire type'||hl==='kit type'||hl==='wiring type'||hl==='wire_type'||hl==='type_fil')typeColIdx=i;
+  });
+
+  // Build rows
+  var added=0;
+  for(var i=1;i<rows.length;i++){
+    var rawRow=rows[i];
+    // Skip fully empty rows
+    var isEmpty=rawRow.every(function(c){return c===null||c===undefined||String(c).trim()==='';});
+    if(isEmpty)continue;
+    // Build data object preserving ALL columns
+    var data={};
+    hdrs.forEach(function(h,ci){
+      data[h]=(rawRow[ci]===null||rawRow[ci]===undefined)?'':String(rawRow[ci]);
+    });
+    // Detect type
+    var typeVal=typeColIdx>=0?(rawRow[typeColIdx]||''):'';
+    var typeKey=detectWireType(typeVal);
+    ksRows.push({
+      id:ksRowCounter++,
+      _file:filename,
+      _data:data,
+      _typeKey:typeKey,
+      cuttingStatus:'in_progress',
+      wpaStatus: ksShowWpa(typeKey)?'in_progress':null,
+      twistStatus: ksShowTwist(typeKey)?'in_progress':null
+    });
+    added++;
+  }
+  ksHeaders=hdrs;
+  saveKsToStorage();
+  toast(added+' rows imported from '+filename,'success');
+  render();
+}
+
+function clearKsData(){
+  _confirmCallback=function(){ksRows=[];ksHeaders=[];ksRowCounter=1;saveKsToStorage();toast('Kits Status data cleared','info');render();};
+  document.getElementById('confirmTitle').textContent='Clear All Kits Status Data?';
+  document.getElementById('confirmMsg').textContent='This will remove all '+ksRows.length+' imported rows and their statuses. This cannot be undone.';
+  document.getElementById('confirmDo').textContent='Clear All';
+  openOverlay('confirmOverlay');
+}
+
+function updKsStatus(rowId,field,selectEl){
+  var val=selectEl.value;
+  var row=ksRows.find(function(r){return r.id===rowId;});
+  if(!row)return;
+  if(field==='cutting')row.cuttingStatus=val;
+  else if(field==='wpa')row.wpaStatus=val;
+  else if(field==='twist')row.twistStatus=val;
+  selectEl.className='status-sel '+val;
+  saveKsToStorage();
+  // Update summary chips live
+  updateKsSummary();
+  var lbl=val==='done'?'Done ✓':val==='issue'?'Issue ⚠':'In Progress';
+  toast('Status → '+lbl, val==='done'?'success':val==='issue'?'error':'info');
+}
+
+function updateKsSummary(){
+  var total=ksRows.length;
+  var done=ksRows.filter(function(r){return r.cuttingStatus==='done';}).length;
+  var issue=ksRows.filter(function(r){return r.cuttingStatus==='issue';}).length;
+  var prog=total-done-issue;
+  var el=document.getElementById('ksSummaryRow');
+  if(!el)return;
+  el.innerHTML=ksSummaryHTML(total,done,prog,issue);
+}
+
+function ksSummaryHTML(total,done,prog,issue){
+  return '<div class="sum-chip"><div class="sum-val">'+total+'</div><div class="sum-lbl">Total Wires</div></div>'
+  +'<div class="sum-chip"><div class="sum-val ks-stat-done">'+done+'</div><div class="sum-lbl">Done</div></div>'
+  +'<div class="sum-chip"><div class="sum-val ks-stat-prog">'+prog+'</div><div class="sum-lbl">In Progress</div></div>'
+  +'<div class="sum-chip"><div class="sum-val ks-stat-issue">'+issue+'</div><div class="sum-lbl">Issue</div></div>';
+}
+
+function getKsFiltered(){
+  var q=ksFilt.q.toLowerCase().trim();
+  return ksRows.filter(function(r){
+    var matchStatus=ksFilt.status==='all'||r.cuttingStatus===ksFilt.status;
+    var matchQ=!q||Object.values(r._data).join(' ').toLowerCase().includes(q);
+    return matchStatus&&matchQ;
+  });
+}
+
+function renderKitsStatusPage(vc){
+  var total=ksRows.length;
+  var done=ksRows.filter(function(r){return r.cuttingStatus==='done';}).length;
+  var issue=ksRows.filter(function(r){return r.cuttingStatus==='issue';}).length;
+  var prog=total-done-issue;
+  var pct=total?Math.round(done/total*100):0;
+
+  var html='<div class="pg-header fade-in">'
+  +'<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">'
+  +'<div><div class="pg-title">Kits Status</div>'
+  +'<div class="pg-sub">Import Excel · View &amp; track cutting, WPA and twist status</div></div>'
+  +'<button class="btn btn-success" onclick="triggerKsUpload()">'
+  +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>'
+  +(window.innerWidth<=600?'Import':'Import Excel')+'</button>'
+  +'</div></div>';
+
+  if(!total){
+    // Upload zone
+    html+='<div class="ks-upload-zone fade-in" onclick="triggerKsUpload()">'
+    +'<div class="ks-upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>'
+    +'<div class="ks-upload-title">Import Excel File</div>'
+    +'<div class="ks-upload-sub">Click here or drag &amp; drop your .xlsx / .xls / .csv file</div>'
+    +'<div style="margin-top:8px;font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--text3);line-height:1.7">'
+    +'All columns will be displayed exactly as in your file<br>'
+    +'Status columns are added automatically based on wire type<br>'
+    +'<span style="color:var(--blue)">Cutting Area</span> · <span style="color:var(--green)">WPA (XE/SP)</span> · <span style="color:var(--cyan)">Twist (TW/TC)</span>'
+    +'</div></div>';
+    vc.innerHTML=html;return;
+  }
+
+  // Summary row
+  html+='<div class="sum-row fade-in" id="ksSummaryRow">'+ksSummaryHTML(total,done,prog,issue)+'</div>';
+
+  // Progress bar
+  html+='<div class="prog-wrap fade-in"><div class="prog-lbl"><span>Cutting Area Overall Progress</span><span style="color:var(--text1);font-weight:600">'+done+'/'+total+' done</span></div><div class="prog-bar"><div class="prog-fill" style="width:'+pct+'%"></div></div></div>';
+
+  // KPI cards
+  html+='<div class="dash-kpi-grid fade-in">'
+  +'<div class="kpi-card blue"><div class="kpi-val" style="color:var(--blue)">'+total+'</div><div class="kpi-lbl">Total Wires</div></div>'
+  +'<div class="kpi-card green"><div class="kpi-val" style="color:var(--green)">'+done+'</div><div class="kpi-lbl">Done</div></div>'
+  +'<div class="kpi-card amber"><div class="kpi-val" style="color:var(--amber)">'+prog+'</div><div class="kpi-lbl">In Progress</div></div>'
+  +'<div class="kpi-card red"><div class="kpi-val" style="color:var(--red)">'+issue+'</div><div class="kpi-lbl">Issues</div></div>'
+  +'</div>';
+
+  // Table toolbar with search + filter
+  var filt=getKsFiltered();
+  html+='<div class="tbl-wrap fade-in">'
+  +'<div class="tbl-toolbar">'
+  +'<div class="tbl-title">Wire Checklist</div>'
+  +'<div class="search-box"><div class="search-box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>'
+  +'<input id="ksSearchInp" type="text" placeholder="Search any value…" value="'+escHtml(ksFilt.q)+'" oninput="onKsSearch(this.value)" autocomplete="off">'
+  +'<button class="search-box-clear'+(ksFilt.q?' show':'')+'" id="ksClearBtn" onclick="clearKsSearch()">×</button></div>'
+  +'<div class="res-badge" id="ksResBadge"><b>'+filt.length+'</b> / '+total+' rows</div>'
+  +'</div>'
+  // Status filter bar
+  +'<div class="filter-bar">'
+  +'<span class="filter-lbl">Status</span><div class="filter-grp">'
+  +mkChip('all',ksFilt.status==='all','a-all',"setKsFilt('all')",'All',total)
+  +mkChip('done',ksFilt.status==='done','a-done',"setKsFilt('done')",'Done',done,'var(--green)')
+  +mkChip('in_progress',ksFilt.status==='in_progress','a-prog',"setKsFilt('in_progress')",'In Progress',prog,'var(--amber)')
+  +mkChip('issue',ksFilt.status==='issue','a-issue',"setKsFilt('issue')",'Issue',issue,'var(--red)')
+  +'</div></div>';
+
+  // Table
+  html+='<div class="ks-tbl-outer"><table><thead><tr>';
+  // Row # column
+  html+='<th>#</th>';
+  // All Excel columns
+  ksHeaders.forEach(function(h){
+    html+='<th>'+escHtml(h)+'</th>';
+  });
+  // Status columns
+  html+='<th style="background:rgba(59,130,246,.08);color:var(--blue)">CUTTING AREA STATUS</th>';
+  html+='<th style="background:rgba(16,185,129,.08);color:var(--green)">WPA STATUS<br><span style="font-size:8px;opacity:.7">XE / SP only</span></th>';
+  html+='<th style="background:rgba(6,182,212,.08);color:var(--cyan)">TWIST STATUS<br><span style="font-size:8px;opacity:.7">TW / TC only</span></th>';
+  html+='</tr></thead><tbody id="ksTbody"></tbody></table></div></div>';
+
+  vc.innerHTML=html;
+  renderKsRows(filt);
+}
+
+function renderKsRows(filt){
+  var tb=document.getElementById('ksTbody');if(!tb)return;
+  if(!filt||!filt.length){
+    tb.innerHTML='<tr><td colspan="'+(ksHeaders.length+4)+'" style="text-align:center;padding:36px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--text3)">No rows match filters</td></tr>';
+    return;
+  }
+
+  function statusSel3(rowId,field,val,enabled,label){
+    if(!enabled)return '<span class="status-na">—</span>';
+    return '<select class="status-sel '+(val||'in_progress')+'" onchange="updKsStatus('+rowId+',\''+field+'\',this)">'
+    +'<option value="in_progress"'+(val==='in_progress'?' selected':'')+'>In Progress</option>'
+    +'<option value="done"'+(val==='done'?' selected':'')+'>Done</option>'
+    +'<option value="issue"'+(val==='issue'?' selected':'')+'>Issue</option>'
+    +'</select>';
+  }
+
+  tb.innerHTML=filt.map(function(row,i){
+    var cols='<td data-label="#"><span class="mono-sm">'+(i+1)+'</span></td>';
+    ksHeaders.forEach(function(h){
+      var v=row._data[h]||'';
+      // Render type values as badges if type column detected
+      var typeKey=detectWireType(v);
+      var cell=(typeKey&&WT_CLASS[typeKey])
+        ?'<span class="w-badge '+WT_CLASS[typeKey]+'">'+escHtml(v)+'</span>'
+        :'<span style="font-family:\'JetBrains Mono\',monospace;font-size:11px;word-break:break-word">'+escHtml(v)+'</span>';
+      cols+='<td data-label="'+escHtml(h)+'">'+cell+'</td>';
+    });
+    // Cutting Area Status — always shown
+    cols+='<td data-label="Cutting Area" style="background:rgba(59,130,246,.03)">'+statusSel3(row.id,'cutting',row.cuttingStatus,true)+'</td>';
+    // WPA — XE / SP only
+    cols+='<td data-label="WPA Status" style="background:rgba(16,185,129,.03)">'+statusSel3(row.id,'wpa',row.wpaStatus,ksShowWpa(row._typeKey))+'</td>';
+    // Twist — TW / TC only
+    cols+='<td data-label="Twist Status" style="background:rgba(6,182,212,.03)">'+statusSel3(row.id,'twist',row.twistStatus,ksShowTwist(row._typeKey))+'</td>';
+    return'<tr>'+cols+'</tr>';
+  }).join('');
+}
+
+function setKsFilt(status){ksFilt.status=status;renderKitsStatusPage(document.getElementById('viewContainer'));}
+function onKsSearch(v){ksFilt.q=v;var b=document.getElementById('ksClearBtn');if(b)b.classList.toggle('show',!!v);var filt=getKsFiltered();renderKsRows(filt);var badge=document.getElementById('ksResBadge');if(badge)badge.innerHTML='<b>'+filt.length+'</b> / '+ksRows.length+' rows';}
+function clearKsSearch(){ksFilt.q='';var i=document.getElementById('ksSearchInp');if(i){i.value='';i.focus();}var b=document.getElementById('ksClearBtn');if(b)b.classList.remove('show');var filt=getKsFiltered();renderKsRows(filt);var badge=document.getElementById('ksResBadge');if(badge)badge.innerHTML='<b>'+filt.length+'</b> / '+ksRows.length+' rows';}
+
+function escHtml(str){
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
 // ══════════════════════════
 // HOME
@@ -1207,7 +1474,7 @@ function renderChildren(vc){
 }
 
 // ══════════════════════════
-// REFS PAGE (with KPI dashboard)
+// REFS PAGE
 // ══════════════════════════
 function renderRefs(vc){
   var p=P(curProjId);var rList=refs[curProjId]||[];
@@ -1364,7 +1631,7 @@ function updStatus(itemId,field,sel){
 }
 
 // ══════════════════════════
-// COMPLETED HISTORY PAGE
+// HISTORY PAGE
 // ══════════════════════════
 function renderHistoryPage(vc){
   vc.innerHTML='<div class="pg-header fade-in"><div class="pg-title">Completed Kits History</div><div class="pg-sub">Record of all completed kits</div></div>'
@@ -1385,7 +1652,7 @@ function renderHistoryPage(vc){
 }
 
 // ══════════════════════════
-// KIT ORDERS PAGE
+// ORDERS PAGE
 // ══════════════════════════
 function renderOrdersPage(vc){
   var isAdmin=isSuperAdmin();
@@ -1547,7 +1814,7 @@ document.addEventListener('click',function(e){
 });
 
 // ══════════════════════════
-// EXCEL IMPORT
+// EXCEL IMPORT (original)
 // ══════════════════════════
 function triggerRefUpload(pid){
   if(!isSuperAdmin()){toast('Only the super admin can import Excel files','error');return;}
