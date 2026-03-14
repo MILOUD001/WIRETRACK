@@ -205,7 +205,7 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 .w-mc{background:rgba(245,158,11,.15);color:var(--amber)}.w-gs{background:rgba(244,63,94,.12);color:#f43f5e}
 .w-complete{background:rgba(139,92,246,.15);color:var(--purple)}
 .status-sel{appearance:none;-webkit-appearance:none;background:var(--bg3);border:1px solid var(--border2);color:var(--text1);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:6px 28px 6px 10px;border-radius:8px;cursor:pointer;transition:border-color .15s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%234a6280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;min-width:130px;min-height:36px}
-.status-sel:focus{outline:none;border-color:var(--blue)}.status-sel.done{border-color:var(--green);background-color:var(--green-g);color:var(--green)}.status-sel.in_progress{border-color:var(--amber);background-color:var(--amber-g);color:var(--amber)}
+.status-sel:focus{outline:none;border-color:var(--blue)}.status-sel.done{border-color:var(--green);background-color:var(--green-g);color:var(--green)}.status-sel.in_progress{border-color:var(--amber);background-color:var(--amber-g);color:var(--amber)}.status-sel.issue{border-color:var(--red);background-color:rgba(239,68,68,.1);color:var(--red)}
 .status-na{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)}
 .prog-wrap{margin-bottom:18px}.prog-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;transition:width .4s ease}
@@ -618,6 +618,7 @@ var _sb=null,_user=null,_demo=false;
 var SUPABASE_URL='https://kvdykwuccqcsaedmhndb.supabase.co';
 var SUPABASE_KEY='sb_publishable_NL-3xOQLa_vLIyJ4xF-q_g_i86mXl3s';
 var refs={},checklists={},orders=[],completedHistory=[];
+var wires={};
 var nRefId=1000,nCkId=2000,nOrdId=3000,nProjId=100;
 var curView='home',curProjId=null,curRefId=null;
 var ckFilt={type:'all',status:'all',q:''};
@@ -790,7 +791,7 @@ async function forgotPass(e){
 function doLogout(){
   if(_sb&&!_demo)_sb.auth.signOut();
   if(_realtimeChannel&&_sb){_sb.removeChannel(_realtimeChannel);_realtimeChannel=null;}
-  _user=null;_demo=false;refs={};checklists={};orders=[];notifications=[];completedHistory=[];
+  _user=null;_demo=false;refs={};checklists={};orders=[];notifications=[];completedHistory=[];wires={};
   curView='home';curProjId=null;curRefId=null;
   document.getElementById('appPage').style.display='none';document.getElementById('loginPage').style.display='flex';
   document.getElementById('loginEmail').value='';document.getElementById('loginPass').value='';
@@ -1065,8 +1066,13 @@ async function dbSaveItems(refId,items){
 }
 async function dbSaveRef(pid,refObj){
   if(!_sb||_demo)return;
-  try{var r=await _sb.from('references').upsert({id:refObj.id,project_id:pid,ref_num:refObj.refNum,extra_data:refObj.extra,created_at:new Date(refObj.at).toISOString()});if(r.error)throw r.error;}
+  try{var r=await _sb.from('references').upsert({id:refObj.id,project_id:pid,ref_num:refObj.refNum,extra_data:refObj.data||refObj.extra,created_at:new Date(refObj.at).toISOString()});if(r.error)throw r.error;}
   catch(e){console.warn('dbSaveRef:',e);}
+}
+async function dbUpdateRefData(pid,refObj){
+  if(!_sb||_demo)return;
+  try{var r=await _sb.from('references').update({extra_data:refObj.data}).eq('id',refObj.id);if(r.error)throw r.error;}
+  catch(e){console.warn('dbUpdateRefData:',e);}
 }
 async function dbSaveOrder(order){
   if(!_sb||_demo)return null;setSyncStatus('syncing');
@@ -1087,6 +1093,23 @@ var _toastT;
 function toast(msg,type){type=type||'info';var el=document.getElementById('toast');el.className='toast '+type;document.getElementById('toastMsg').textContent=msg;requestAnimationFrame(function(){el.classList.add('show');});clearTimeout(_toastT);_toastT=setTimeout(function(){el.classList.remove('show');},3500);}
 
 // ══════════════════════════
+// KITS STATUS (Reference Tracking)
+// ══════════════════════════
+function gotoKitsStatus(){curView='kits-status';curProjId=null;curRefId=null;render();closeSidebar();}
+function sortReferences(refList){
+  return refList.slice().sort(function(a,b){
+    var dateA=a.data&&a.data['Date de lancement']?new Date(a.data['Date de lancement']):new Date(9999,0,0);
+    var dateB=b.data&&b.data['Date de lancement']?new Date(b.data['Date de lancement']):new Date(9999,0,0);
+    if(dateA.getTime()===dateB.getTime()){
+      var recA=a.data&&a.data['Date prévue de récupération']?new Date(a.data['Date prévue de récupération']):new Date(9999,0,0);
+      var recB=b.data&&b.data['Date prévue de récupération']?new Date(b.data['Date prévue de récupération']):new Date(9999,0,0);
+      return recA.getTime()-recB.getTime();
+    }
+    return dateA.getTime()-dateB.getTime();
+  });
+}
+
+// ══════════════════════════
 // NAVIGATION
 // ══════════════════════════
 function gotoHome(){curView='home';curProjId=null;curRefId=null;render();closeSidebar();}
@@ -1094,8 +1117,10 @@ function gotoOrders(){curView='orders';curProjId=null;curRefId=null;render();clo
 function gotoHistory(){curView='history';curProjId=null;curRefId=null;render();closeSidebar();}
 function gotoProj(id){curView='project';curProjId=id;curRefId=null;render();closeSidebar();}
 function gotoRef(id){curRefId=id;render();}
+function gotoKitDetail(id){curRefId=id;render();}
 function goBack(){
-  if(curRefId!==null){curRefId=null;ckFilt={type:'all',status:'all',q:''};render();}
+  if(curView==='kits-status'){gotoHome();}
+  else if(curRefId!==null){curRefId=null;ckFilt={type:'all',status:'all',q:''};render();}
   else if(curView==='orders'||curView==='history'){gotoHome();}
   else if(curProjId!==null){curProjId=parentOf(curProjId);if(curProjId===null)curView='home';render();}
 }
@@ -1106,7 +1131,11 @@ function goBack(){
 function render(){
   renderSidebar();renderTopbar();
   var vc=document.getElementById('viewContainer');
-  if(curView==='orders')renderOrdersPage(vc);
+  if(curView==='kits-status'){
+    if(curRefId!==null)renderKitDetail(vc);
+    else renderKitsStatus(vc);
+  }
+  else if(curView==='orders')renderOrdersPage(vc);
   else if(curView==='history')renderHistoryPage(vc);
   else if(curRefId!==null)renderChecklist(vc);
   else if(curProjId!==null&&hasKids(curProjId))renderChildren(vc);
@@ -1115,15 +1144,16 @@ function render(){
 }
 
 function renderSidebar(){
-  var isOrders=curView==='orders';var isHistory=curView==='history';
+  var isOrders=curView==='orders';var isHistory=curView==='history';var isKitsStatus=curView==='kits-status';
   var html='<div class="sb-section">Operations</div>';
-  html+='<div class="sb-item '+((!curProjId&&!isOrders&&!isHistory)?'active':'')+'" onclick="gotoHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>All Projects<span class="sb-count">'+topLevel().length+'</span></div>';
+  html+='<div class="sb-item '+((!curProjId&&!isOrders&&!isHistory&&!isKitsStatus)?'active':'')+'" onclick="gotoHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>All Projects<span class="sb-count">'+topLevel().length+'</span></div>';
+  html+='<div class="sb-item '+(isKitsStatus?'active':'')+'" onclick="gotoKitsStatus()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Kits Status<span class="sb-count">'+Object.keys(wires).length+'</span></div>';
   html+='<div class="sb-item '+(isOrders?'active':'')+'" onclick="gotoOrders()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Kit Orders<span class="sb-count">'+orders.length+'</span></div>';
   html+='<div class="sb-item '+(isHistory?'active':'')+'" onclick="gotoHistory()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Completed Kits<span class="sb-count">'+completedHistory.length+'</span></div>';
   html+='<div class="sb-section">Projects</div>';
   if(isSuperAdmin())html+='<div class="sb-item" onclick="openAddProject()" style="color:var(--green);opacity:.8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Project</div>';
   topLevel().forEach(function(p){
-    var active=!isOrders&&!isHistory&&(curProjId===p.id||isDesc(curProjId,p.id));
+    var active=!isOrders&&!isHistory&&!isKitsStatus&&(curProjId===p.id||isDesc(curProjId,p.id));
     html+='<div class="sb-item '+(active?'active':'')+'" onclick="gotoProj('+p.id+')" title="'+p.name+'">'
     +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>'
     +'<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+p.name+'</span>'
@@ -1143,14 +1173,16 @@ function renderTopbar(){
   var svgPlus='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
   var svgImp='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>';
   var act='';
-  if(curView==='orders'){act='<button class="btn btn-primary" onclick="openNewOrder()">'+svgPlus+(isMob?'Order':'New Kit')+'</button>';}
-  else if(curRefId!==null){if(isSuperAdmin())act='<button class="btn btn-success" onclick="triggerCkUpload('+curRefId+')">'+svgImp+(isMob?'Import':'Import Components')+'</button>';}
+  if(curView==='kits-status'){if(isSuperAdmin())act='<button class="btn btn-success" onclick="triggerKitsStatusImport()">'+svgImp+(isMob?'Import':'Import References')+'</button>';}
+  else if(curView==='orders'){act='<button class="btn btn-primary" onclick="openNewOrder()">'+svgPlus+(isMob?'Order':'New Kit')+'</button>';}
+  else if(curRefId!==null){if(isSuperAdmin())act='<button class="btn btn-success" onclick="triggerCkUpload('+curRefId+')">'+svgImp+(isMob?'Import':'Import Wires')+'</button>';}
   else if(curProjId!==null&&!hasKids(curProjId)){
     if(isSuperAdmin())act='<button class="btn btn-ghost" onclick="openAddRef('+curProjId+')" style="margin-right:4px">'+svgPlus+(isMob?'Kit':'Add Kit')+'</button><button class="btn btn-success" onclick="triggerRefUpload('+curProjId+')">'+svgImp+(isMob?'Import':'Import Excel')+'</button>';
   }
   document.getElementById('tbActions').innerHTML=act;
 }
 function buildCrumbs(){
+  if(curView==='kits-status')return[{label:'PROJECTS',fn:'gotoHome()'},{label:'KITS STATUS'}];
   if(curView==='orders')return[{label:'PROJECTS',fn:'gotoHome()'},{label:'KIT ORDERS'}];
   if(curView==='history')return[{label:'PROJECTS',fn:'gotoHome()'},{label:'COMPLETED KITS'}];
   var crumbs=[{label:'PROJECTS',fn:'gotoHome()'}];
@@ -1204,6 +1236,152 @@ function renderChildren(vc){
     +(isSuperAdmin()?'<button class="icon-btn del" onclick="event.stopPropagation();confirmRemoveProject('+c.id+')" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>':'')
     +'<div class="arrow-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div></div>';
   });
+}
+
+// ══════════════════════════
+// KITS STATUS PAGE (Reference Tracking)
+// ══════════════════════════
+function renderKitsStatus(vc){
+  var allRefRows=[];
+  for(var pid in refs){
+    (refs[pid]||[]).forEach(function(ref){
+      allRefRows.push({
+        id:ref.id,projectId:pid,refObj:ref,
+        data:ref.data||{},
+        wires:(wires[ref.id]||[]),
+        stats:{totalWires:(wires[ref.id]||[]).length,remaining:((wires[ref.id]||[]).filter(function(w){return w.cuttingStatus!=='done';}).length)}
+      });
+    });
+  }
+  allRefRows=sortReferences(allRefRows);
+  var cols=['CPN','LPN','NBR des fils','Quantité demandée','Nbr fil reste à coupé','Date de lancement','Date prévue de récupération','Commentaire','L\'affectation / shift leads'];
+  vc.innerHTML='<div class="pg-header fade-in"><div><div class="pg-title">Kits Status</div><div class="pg-sub">Reference Tracking System for urgent kits</div></div></div>'
+  +(allRefRows.length===0?emptyState('No References','Import an Excel file to create references.')
+  :'<div class="tbl-wrap fade-in">'
+  +'<div class="tbl-toolbar"><div class="tbl-title">References</div><div class="res-badge"><b>'+allRefRows.length+'</b> references</div></div>'
+  +'<div style="overflow-x:auto"><table style="min-width:100%;white-space:nowrap"><thead><tr>'
+  +cols.map(function(col){return'<th>'+col+'</th>';}).join('')
+  +'<th style="min-width:80px">Actions</th></tr></thead>'
+  +'<tbody id="kitsStatusTbody"></tbody></table></div></div>');
+  if(allRefRows.length>0){
+    var tb=document.getElementById('kitsStatusTbody');
+    tb.innerHTML=allRefRows.map(function(row){
+      return'<tr style="cursor:pointer" onclick="gotoKitDetail('+row.id+')">'
+      +cols.map(function(col){
+        var val=row.data[col]||'—';
+        if(col==='Nbr fil reste à coupé'){val='<strong>'+row.stats.remaining+'</strong>';}
+        if(col==='Date de lancement'||col==='Date prévue de récupération'){
+          if(val!=='—'){try{var d=new Date(val);val=d.toLocaleDateString('fr-MA');}catch(e){}}
+        }
+        return'<td data-label="'+col+'" style="font-size:12px">'+val+'</td>';
+      }).join('')
+      +'<td style="font-size:12px"><div style="display:flex;gap:4px;align-items:center">'
+      +(isSuperAdmin()?'<button class="del-btn" onclick="event.stopPropagation();confirmRemoveKitRef('+row.id+','+row.projectId+')" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>':'')
+      +'<div class="arrow-chip" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div></td>'
+      +'</tr>';
+    }).join('');
+  }
+}
+
+// ══════════════════════════
+// KIT DETAIL PAGE (Wire Checklist)
+// ══════════════════════════
+function renderKitDetail(vc){
+  var ref=findRef(curRefId);
+  var refWires=wires[curRefId]||[];
+  var done=refWires.filter(function(w){return w.cuttingStatus==='done';}).length;
+  var total=refWires.length;
+  var pct=total?Math.round(done/total*100):0;
+  
+  var refData={};
+  for(var pid in refs){
+    var found=refs[pid].find(function(r){return r.id===curRefId;});
+    if(found){refData=found.data||{};break;}
+  }
+  
+  vc.innerHTML='<div class="pg-header fade-in">'
+  +'<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">'
+  +'<div><div class="pg-title">'+(ref?ref.refNum:'—')+'</div>'
+  +'<div class="pg-sub">CPN: '+(refData['CPN']||'—')+' · LPN: '+(refData['LPN']||'—')+'</div></div>'
+  +(isSuperAdmin()?'<button class="btn btn-success" onclick="triggerWireImport('+curRefId+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Wires</button>':'')
+  +'</div></div>'
+  +'<div class="dash-kpi-grid fade-in" style="margin-bottom:16px">'
+  +'<div class="kpi-card blue"><div class="kpi-val" style="color:var(--blue)">'+total+'</div><div class="kpi-lbl">Total Wires</div></div>'
+  +'<div class="kpi-card green"><div class="kpi-val" style="color:var(--green)">'+done+'</div><div class="kpi-lbl">Cut Done</div></div>'
+  +'<div class="kpi-card amber"><div class="kpi-val" style="color:var(--amber)">'+(total-done)+'</div><div class="kpi-lbl">Remaining</div></div>'
+  +'<div class="kpi-card purple"><div class="kpi-val" style="color:var(--purple)">'+pct+'%</div><div class="kpi-lbl">Progress</div></div>'
+  +'</div>'
+  +(total?'<div class="prog-wrap fade-in"><div class="prog-lbl"><span>Cutting Progress</span><span style="color:var(--text1);font-weight:600">'+done+'/'+total+' wires</span></div><div class="prog-bar"><div class="prog-fill" id="progFill" style="width:'+pct+'%"></div></div></div>':'')
+  +(total===0?emptyState('No Wires','Import an Excel file with Wire ID and Type columns.')
+  :'<div class="tbl-wrap fade-in">'
+  +'<div class="tbl-toolbar"><div class="tbl-title">Wire Checklist</div></div>'
+  +'<table><thead><tr><th>Wire ID</th><th>Type</th><th>Cutting Status</th><th>WPA Status (XE/SP)</th><th>Twist Status (TW)</th></tr></thead><tbody id="wireChecklistTbody"></tbody></table>'
+  +'</div>');
+  
+  if(total>0){
+    var tb=document.getElementById('wireChecklistTbody');
+    tb.innerHTML=refWires.map(function(w){
+      var cuttingSel='<select class="status-sel '+w.cuttingStatus+'" onchange="updWireStatus('+w.id+',\'cuttingStatus\',this.value);updateKitRemaining('+curRefId+')"><option value="in_progress"'+(w.cuttingStatus==='in_progress'?' selected':'')+'>In Progress</option><option value="done"'+(w.cuttingStatus==='done'?' selected':'')+'>Done</option><option value="issue">Issue</option></select>';
+      var wpaSel=(w.type==='xe'||w.type==='sp')?'<select class="status-sel '+(w.wpaStatus||'')+'" onchange="updWireStatus('+w.id+',\'wpaStatus\',this.value)"><option value="">—</option><option value="in_progress"'+(w.wpaStatus==='in_progress'?' selected':'')+'>In Progress</option><option value="done"'+(w.wpaStatus==='done'?' selected':'')+'>Done</option><option value="issue">Issue</option></select>':'<span class="status-na">—</span>';
+      var twSel=(w.type==='tw'||w.type==='tc')?'<select class="status-sel '+(w.twistStatus||'')+'" onchange="updWireStatus('+w.id+',\'twistStatus\',this.value)"><option value="">—</option><option value="in_progress"'+(w.twistStatus==='in_progress'?' selected':'')+'>In Progress</option><option value="done"'+(w.twistStatus==='done'?' selected':'')+'>Done</option><option value="issue">Issue</option></select>':'<span class="status-na">—</span>';
+      return'<tr><td data-label="Wire ID"><span style="font-family:\'JetBrains Mono\',monospace;font-size:12px;font-weight:600">'+w.wireId+'</span></td>'
+      +'<td data-label="Type"><span class="w-badge '+(WT_CLASS[w.type]||'w-simple')+'">'+((w.type||'').toUpperCase())+'</span></td>'
+      +'<td data-label="Cutting Status">'+cuttingSel+'</td>'
+      +'<td data-label="WPA Status">'+wpaSel+'</td>'
+      +'<td data-label="Twist Status">'+twSel+'</td></tr>';
+    }).join('');
+  }
+}
+
+function updWireStatus(wireId,field,val){
+  for(var rid in wires){
+    var w=wires[rid].find(function(x){return x.id===wireId;});
+    if(w){
+      if(field==='cuttingStatus')w.cuttingStatus=val;
+      else if(field==='wpaStatus')w.wpaStatus=val;
+      else if(field==='twistStatus')w.twistStatus=val;
+      break;
+    }
+  }
+  if(curView==='kits-status')renderKitDetail(document.getElementById('viewContainer'));
+  toast(val==='done'?'Marked as Done':'Status updated',val==='done'?'success':'info');
+}
+
+function updateKitRemaining(refId){
+  var refWires=wires[refId]||[];
+  var done=refWires.filter(function(w){return w.cuttingStatus==='done';}).length;
+  var remaining=refWires.length-done;
+  for(var pid in refs){
+    var ref=refs[pid].find(function(r){return r.id===refId;});
+    if(ref){
+      if(!ref.data)ref.data={};
+      ref.data['Nbr fil reste à coupé']=remaining;
+      dbUpdateRefData(pid,ref);
+      break;
+    }
+  }
+}
+
+function confirmRemoveKitRef(refId,pid){
+  if(!isSuperAdmin()){toast('Only super admin can remove references','error');return;}
+  var ref=findRef(refId);
+  _confirmCallback=function(){doRemoveKitRef(refId,pid);};
+  document.getElementById('confirmTitle').textContent='Remove Kit?';
+  document.getElementById('confirmMsg').textContent='Remove kit "'+( ref?ref.refNum:'#'+refId)+'"? All wire data will be lost.';
+  document.getElementById('confirmDo').textContent='Remove';
+  openOverlay('confirmOverlay');
+}
+
+function doRemoveKitRef(refId,pid){
+  if(refs[pid])refs[pid]=refs[pid].filter(function(r){return r.id!==refId;});
+  delete wires[refId];
+  if(_sb&&!_demo){
+    _sb.from('references').delete().eq('id',refId).then(function(){});
+    _sb.from('wire_items').delete().eq('reference_id',refId).then(function(){});
+  }
+  toast('Kit removed','info');
+  if(curRefId===refId){curRefId=null;}
+  render();
 }
 
 // ══════════════════════════
@@ -1554,6 +1732,16 @@ function triggerRefUpload(pid){
   var inp=document.getElementById('fileRef');inp.value='';
   inp.onchange=function(e){var f=e.target.files[0];if(f)parseXL(f,function(rows){importRefs(pid,rows);});};inp.click();
 }
+function triggerKitsStatusImport(){
+  if(!isSuperAdmin()){toast('Only the super admin can import Excel files','error');return;}
+  var inp=document.getElementById('fileRef');inp.value='';
+  inp.onchange=function(e){var f=e.target.files[0];if(f)parseXL(f,function(rows){importKitsStatusReferences(rows);});};inp.click();
+}
+function triggerWireImport(refId){
+  if(!isSuperAdmin()){toast('Only the super admin can import wires','error');return;}
+  var inp=document.getElementById('fileChecklist');inp.value='';
+  inp.onchange=function(e){var f=e.target.files[0];if(f)parseXL(f,function(rows){importWiresForReference(refId,rows);});};inp.click();
+}
 function triggerCkUpload(rid){
   if(!isSuperAdmin()){toast('Only the super admin can import component checklists','error');return;}
   var inp=document.getElementById('fileChecklist');inp.value='';
@@ -1585,6 +1773,68 @@ function importChecklist(rid,rows){
     added.push({id:nCkId++,wireId:wid,type:t,cutting:'in_progress',wpa:(t==='xe'||t==='sp')?'in_progress':null,twist:t==='tw'?'in_progress':null});}
   if(!checklists[rid])checklists[rid]=[];checklists[rid].push.apply(checklists[rid],added);
   dbSaveItems(rid,added);toast(added.length+' components imported','success');render();
+}
+
+// ════════════════════════════════════════════════════════════════════════════════════════════════════════
+// KITS STATUS IMPORT FUNCTIONS
+// ════════════════════════════════════════════════════════════════════════════════════════════════════════
+function importKitsStatusReferences(rows){
+  if(rows.length<2){toast('Empty file','error');return;}
+  var hdrs=rows[0].map(function(h){return String(h).trim();});
+  var expectedCols=['CPN','LPN','NBR des fils','Quantité demandée','Nbr fil reste à coupé','Date de lancement','Date prévue de récupération','Commentaire','L\'affectation / shift leads'];
+  var added=[];
+  for(var i=1;i<rows.length;i++){
+    var row=rows[i];if(!row.length)continue;
+    var refData={};
+    hdrs.forEach(function(h,idx){
+      if(row[idx]!==undefined&&row[idx]!==''){
+        refData[h]=row[idx];
+      }
+    });
+    var refNum=refData['CPN']||refData['LPN']||('REF-'+nRefId);
+    if(!refNum)continue;
+    var newRef={id:nRefId++,refNum:refNum,data:refData,at:new Date()};
+    if(!refs[1])refs[1]=[];
+    refs[1].push(newRef);
+    if(!wires[newRef.id])wires[newRef.id]=[];
+    added.push(newRef);
+    dbSaveRef(1,newRef);
+  }
+  toast(added.length+' references imported','success');gotoKitsStatus();
+}
+
+function importWiresForReference(refId,rows){
+  if(rows.length<2){toast('Empty file','error');return;}
+  var hdrs=rows[0].map(function(h){return String(h).toLowerCase().trim();});
+  var wc=hdrs.findIndex(function(h){return h.includes('wire')||h.includes('id');});if(wc===-1)wc=0;
+  var tc=hdrs.findIndex(function(h){return h.includes('type');});if(tc===-1)tc=1;
+  var added=[];
+  for(var i=1;i<rows.length;i++){
+    var row=rows[i];if(!row.length)continue;
+    var wireId=String(row[wc]||'').trim();if(!wireId)continue;
+    var type=String(row[tc]||'').toLowerCase().trim();
+    if(type.includes('xe'))type='xe';
+    else if(type.includes('sp'))type='sp';
+    else if(type.includes('twist')||type.includes('tw'))type='tw';
+    else if(type.includes('tc'))type='tc';
+    else if(type.includes('multi')||type.includes('mc'))type='mc';
+    else if(type.includes('grand')||type.includes('gs'))type='gs';
+    else if(type.includes('complet'))type='complete';
+    else type='simple';
+    var w={
+      id:nCkId++,
+      wireId:wireId,
+      type:type,
+      cuttingStatus:'in_progress',
+      wpaStatus:(type==='xe'||type==='sp')?'in_progress':null,
+      twistStatus:(type==='tw'||type==='tc')?'in_progress':null
+    };
+    added.push(w);
+  }
+  if(!wires[refId])wires[refId]=[];
+  wires[refId].push.apply(wires[refId],added);
+  toast(added.length+' wires imported','success');
+  render();
 }
 
 // ══════════════════════════
